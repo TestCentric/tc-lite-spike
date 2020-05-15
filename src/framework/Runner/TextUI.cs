@@ -96,8 +96,6 @@ namespace TCLite.Runner
             {
                 DisplayRuntimeEnvironment();
 
-                DisplayTestFiles(_options.Parameters);
-
                 if (_options.Wait && _options.OutFile != null)
                     _writer.WriteLine("Ignoring /wait option - only valid for Console");
 
@@ -124,6 +122,8 @@ namespace TCLite.Runner
 
                     if (_assemblies.Count == 0)
                         _assemblies.Add(callingAssembly);
+
+                    DisplayTestFiles(_assemblies);
 
                     // TODO: For now, ignore all but first assembly
                     Assembly assembly = _assemblies[0] as Assembly;
@@ -236,12 +236,12 @@ namespace TCLite.Runner
             _writer.WriteLine();
         }
 
-        public void DisplayTestFiles(IEnumerable<string> testFiles)
+        public void DisplayTestFiles(IEnumerable<Assembly> assemblies)
         {
             WriteSectionHeader("Test Files -");
 
-            foreach (string testFile in testFiles)
-                _writer.WriteLine(ColorStyle.Default, "    " + testFile);
+            foreach (var assembly in assemblies)
+                _writer.WriteLine(ColorStyle.Default, "    " + AssemblyHelper.GetAssemblyPath(assembly));
 
             _writer.WriteLine();
         }

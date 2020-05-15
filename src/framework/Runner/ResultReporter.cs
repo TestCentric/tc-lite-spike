@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using System.IO;
+using System.Globalization;
 using TCLite.Framework.Api;
 using TCLite.Framework.Internal;
 
@@ -15,7 +15,7 @@ namespace TCLite.Runner
     /// </summary>
     public class ResultReporter
     {
-        private TextWriter writer;
+        private ExtendedTextWriter writer;
         private ITestResult result;
         private ResultSummary summary;
         private int reportCount = 0;
@@ -25,7 +25,7 @@ namespace TCLite.Runner
         /// </summary>
         /// <param name="result">The top-level result being reported</param>
         /// <param name="writer">A TextWriter to which the report is written</param>
-        public ResultReporter(ITestResult result, TextWriter writer)
+        public ResultReporter(ITestResult result, ExtendedTextWriter writer)
         {
             this.result = result;
             this.writer = writer;
@@ -46,7 +46,7 @@ namespace TCLite.Runner
         /// </summary>
         public void ReportResults()
         {
-            PrintSummaryReport();
+            DisplaySummaryReport();
 
             if (summary.FailureCount > 0 || summary.ErrorCount > 0)
                 PrintErrorReport();
@@ -61,15 +61,65 @@ namespace TCLite.Runner
         /// <summary>
         /// Prints the Summary Report
         /// </summary>
-        public void PrintSummaryReport()
+        public void DisplaySummaryReport()
         {
-            writer.WriteLine(
-                "Tests run: {0}, Passed: {1}, Errors: {2}, Failures: {3}, Inconclusive: {4}",
-                summary.TestCount, summary.PassCount, summary.ErrorCount, summary.FailureCount, summary.InconclusiveCount);
-            writer.WriteLine(
-                "  Not run: {0}, Invalid: {1}, Ignored: {2}, Skipped: {3}",
-                summary.NotRunCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount);
-            writer.WriteLine("Elapsed time: {0}", result.Duration);
+            var status = summary.ResultState.Status;
+
+            var overallResult = status.ToString();
+            if (overallResult == "Skipped")
+                overallResult = "Warning";
+
+            ColorStyle overallStyle = status == TestStatus.Passed
+                ? ColorStyle.Pass
+                : status == TestStatus.Failed
+                    ? ColorStyle.Failure
+                    : status == TestStatus.Skipped
+                        ? ColorStyle.Warning
+                        : ColorStyle.Output;
+
+            // if (_testCreatedOutput)
+            //     Writer.WriteLine();
+
+            writer.WriteLine(ColorStyle.SectionHeader, "Test Run Summary");
+            writer.WriteLabelLine("  Overall result: ", overallResult, overallStyle);
+
+            WriteSummaryCount("  Test Count: ", summary.TestCount);
+            WriteSummaryCount(", Passed: ", summary.PassCount);
+            WriteSummaryCount(", Failed: ", summary.FailedCount, ColorStyle.Failure);
+            //WriteSummaryCount(", Warnings: ", summary.WarningCount, ColorStyle.Warning);
+            WriteSummaryCount(", Inconclusive: ", summary.InconclusiveCount);
+            //WriteSummaryCount(", Skipped: ", summary.TotalSkipCount);
+            writer.WriteLine();
+
+            if (summary.FailedCount > 0)
+            {
+                WriteSummaryCount("    Failed Tests - Failures: ", summary.FailureCount, ColorStyle.Failure);
+                WriteSummaryCount(", Errors: ", summary.ErrorCount, ColorStyle.Error);
+                WriteSummaryCount(", Invalid: ", summary.InvalidCount, ColorStyle.Error);
+                writer.WriteLine();
+            }
+            if (summary.NotRunCount > 0)
+            {
+                WriteSummaryCount("    Skipped Tests - Ignored: ", summary.IgnoreCount, ColorStyle.Warning);
+                //WriteSummaryCount(", Explicit: ", summary.ExplicitCount);
+                WriteSummaryCount(", Other: ", summary.SkipCount);
+                writer.WriteLine();
+            }
+
+            //writer.WriteLabelLine("  Start time: ", summary.StartTime.ToString("u"));
+            //writer.WriteLabelLine("    End time: ", summary.EndTime.ToString("u"));
+            writer.WriteLabelLine("    Duration: ", string.Format(NumberFormatInfo.InvariantInfo, "{0:0.000} seconds", summary.Duration));
+            writer.WriteLine();
+        }
+
+        private void WriteSummaryCount(string label, int count)
+        {
+            writer.WriteLabel(label, count.ToString(CultureInfo.CurrentUICulture));
+        }
+
+        private void WriteSummaryCount(string label, int count, ColorStyle color)
+        {
+            writer.WriteLabel(label, count.ToString(CultureInfo.CurrentUICulture), count > 0 ? color : ColorStyle.Value);
         }
 
         /// <summary>
