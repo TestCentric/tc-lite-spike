@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-16" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="TCLite.Tests.Assemblies.MockTestFixture" total="10" errors="1" failures="1" not-run="3" inconclusive="1" ignored="1" skipped="0" invalid="2" date="2020-05-14" time="17:32:04">
+  <environment nunit-version="1.0.0.0" clr-version="3.1.3" os-version="Unix 5.3.0.7648" platform="Unix" cwd="/home/charlie/dev/TestCentric/tc-lite/src/tests" machine-name="pop-os" user="charlie" user-domain="pop-os" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="MockTestFixture" description="Fake Test Fixture" executed="True" result="Failure" success="False" time="0.0018987" asserts="0">
+    <categories>
+      <category name="FixtureCategory" />
+    </categories>
+    <properties>
+      <property name="Description" value="Fake Test Fixture" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+      <stack-trace />
+    </failure>
+    <results>
+      <test-case name="MockTest1" description="Mock Test #1" executed="True" result="Success" success="True" time="3.76E-05" asserts="0">
+        <properties>
+          <property name="Description" value="Mock Test #1" />
+        </properties>
+      </test-case>
+      <test-case name="MockTest2" description="This is a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long description" executed="True" result="Success" success="True" time="3.07E-05" asserts="0">
+        <categories>
+          <category name="MockCategory" />
+        </categories>
+        <properties>
+          <property name="Severity" value="Critical" />
+          <property name="Description" value="This is a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long description" />
+        </properties>
+      </test-case>
+      <test-case name="MockTest3" executed="True" result="Success" success="True" time="0.000757" asserts="0">
+        <categories>
+          <category name="MockCategory" />
+          <category name="AnotherCategory" />
+        </categories>
+      </test-case>
+      <test-case name="MockTest5" executed="False" result="NotRunnable">
+        <properties>
+          <property name="_SKIPREASON" value="Method is not public" />
+        </properties>
+        <reason>
+          <message><![CDATA[Method is not public]]></message>
+        </reason>
+      </test-case>
+      <test-case name="FailingTest" executed="True" result="Failure" success="False" time="0.0003115" asserts="0">
+        <failure>
+          <message><![CDATA[Intentional failure]]></message>
+          <stack-trace><![CDATA[   at TCLite.Tests.Assemblies.MockTestFixture.FailingTest() in /home/charlie/dev/TestCentric/tc-lite/src/mock-assembly/MockAssembly.cs:line 124
+]]></stack-trace>
+        </failure>
+      </test-case>
+      <test-case name="TestWithManyProperties" executed="True" result="Success" success="True" time="4.59E-05" asserts="0">
+        <properties>
+          <property name="TargetMethod" value="SomeClassName" />
+          <property name="Size" value="5" />
+        </properties>
+      </test-case>
+      <test-case name="MockTest4" executed="False" result="Ignored">
+        <categories>
+          <category name="Foo" />
+        </categories>
+        <properties>
+          <property name="_SKIPREASON" value="ignoring this test method for now" />
+        </properties>
+        <reason>
+          <message><![CDATA[ignoring this test method for now]]></message>
+        </reason>
+      </test-case>
+      <test-case name="NotRunnableTest" executed="False" result="NotRunnable">
+        <properties>
+          <property name="_SKIPREASON" value="No arguments were provided" />
+        </properties>
+        <reason>
+          <message><![CDATA[No arguments were provided]]></message>
+        </reason>
+      </test-case>
+      <test-case name="InconclusiveTest" executed="True" result="Inconclusive" success="False" time="0.0002992" asserts="0" />
+      <test-case name="TestWithException" executed="True" result="Error" success="False" time="0.0002945" asserts="0">
+        <failure>
+          <message><![CDATA[System.Exception : Intentional Exception]]></message>
+          <stack-trace><![CDATA[   at TCLite.Tests.Assemblies.MockTestFixture.MethodThrowsException() in /home/charlie/dev/TestCentric/tc-lite/src/mock-assembly/MockAssembly.cs:line 161
+   at TCLite.Tests.Assemblies.MockTestFixture.TestWithException() in /home/charlie/dev/TestCentric/tc-lite/src/mock-assembly/MockAssembly.cs:line 156]]></stack-trace>
+        </failure>
+      </test-case>
+    </results>
+  </test-suite>
+</test-results>

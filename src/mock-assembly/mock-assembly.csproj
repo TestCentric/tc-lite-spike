@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>TCLite.Tests</RootNamespace>
+    <OutputPath>../../bin/$(Configuration/)</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\framework\tclite.csproj" />
+  </ItemGroup>
+
+</Project>

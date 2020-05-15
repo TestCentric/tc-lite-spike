@@ -1,0 +1,75 @@
+﻿// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
+
+using System;
+
+namespace TCLite.Framework.Syntax
+{
+    public class GreaterThanTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<greaterthan 7>";
+            staticSyntax = Is.GreaterThan(7);
+            builderSyntax = Builder().GreaterThan(7);
+        }
+    }
+
+    public class GreaterThanOrEqualTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<greaterthanorequal 7>";
+            staticSyntax = Is.GreaterThanOrEqualTo(7);
+            builderSyntax = Builder().GreaterThanOrEqualTo(7);
+        }
+    }
+
+    public class AtLeastTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<greaterthanorequal 7>";
+            staticSyntax = Is.AtLeast(7);
+            builderSyntax = Builder().AtLeast(7);
+        }
+    }
+
+    public class LessThanTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<lessthan 7>";
+            staticSyntax = Is.LessThan(7);
+            builderSyntax = Builder().LessThan(7);
+        }
+    }
+
+    public class LessThanOrEqualTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<lessthanorequal 7>";
+            staticSyntax = Is.LessThanOrEqualTo(7);
+            builderSyntax = Builder().LessThanOrEqualTo(7);
+        }
+    }
+
+    public class AtMostTest : SyntaxTest
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            parseTree = "<lessthanorequal 7>";
+            staticSyntax = Is.AtMost(7);
+            builderSyntax = Builder().AtMost(7);
+        }
+    }
+}
