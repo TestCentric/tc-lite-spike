@@ -48,7 +48,7 @@ namespace TCLite.Framework.Constraints.Tests
         [Test, TestCaseSource("FailureDelegates")]
         public void FailsWithBadDelegates(ActualValueDelegate del)
         {
-            Assert.IsFalse(theConstraint.Matches(del));
+            Assert.False(theConstraint.Matches(del));
         }
 
         [Test]

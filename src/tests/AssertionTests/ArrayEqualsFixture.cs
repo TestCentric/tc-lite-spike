@@ -42,7 +42,7 @@ namespace TCLite.Framework.AssertionTests
 		{
 			string[] array1 = { "one", "two", "three" };
 			string[] array2 = { "one", "two", "three" };
-			Assert.IsFalse( array1 == array2 );
+			Assert.False( array1 == array2 );
             Assert.AreEqual(array1, array2);
             Assert.AreEqual(array2, array1);
         }

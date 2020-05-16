@@ -17,26 +17,26 @@ namespace TCLite.Framework.Assertions
 		[Test]
 		public void IsTrue()
 		{
-			Assert.IsTrue(true);
+			Assert.True(true);
 		}
 
 		[Test]
 		public void IsFalse()
 		{
-			Assert.IsFalse(false);
+			Assert.False(false);
 		}
 
 		[Test]
 		public void IsNull()
 		{
-			Assert.IsNull(null);
+			Assert.Null(null);
 		}
 
 		[Test]
 		public void IsNotNull()
 		{
 			String s1 = "S1";
-			Assert.IsNotNull(s1);
+			Assert.NotNull(s1);
 		}
 
 #if NYI

@@ -30,8 +30,8 @@ namespace TCLite.Framework.Internal
 			SetUpAndTearDownFixture fixture = new SetUpAndTearDownFixture();
 			TestBuilder.RunTestFixture( fixture );
 
-			Assert.IsTrue(fixture.wasSetUpCalled);
-			Assert.IsTrue(fixture.wasTearDownCalled);
+			Assert.True(fixture.wasSetUpCalled);
+			Assert.True(fixture.wasTearDownCalled);
 		}
 
 		[Test]
@@ -40,8 +40,8 @@ namespace TCLite.Framework.Internal
 			InheritSetUpAndTearDown fixture = new InheritSetUpAndTearDown();
 			TestBuilder.RunTestFixture( fixture );
 
-			Assert.IsTrue(fixture.wasSetUpCalled);
-			Assert.IsTrue(fixture.wasTearDownCalled);
+			Assert.True(fixture.wasSetUpCalled);
+			Assert.True(fixture.wasTearDownCalled);
 		}
 
 		[Test]
@@ -50,10 +50,10 @@ namespace TCLite.Framework.Internal
 			DefineInheritSetUpAndTearDown fixture = new DefineInheritSetUpAndTearDown();
 			TestBuilder.RunTestFixture( fixture );
 
-			Assert.IsFalse(fixture.wasSetUpCalled);
-			Assert.IsFalse(fixture.wasTearDownCalled);
-			Assert.IsTrue(fixture.derivedSetUpCalled);
-			Assert.IsTrue(fixture.derivedTearDownCalled);
+			Assert.False(fixture.wasSetUpCalled);
+			Assert.False(fixture.wasTearDownCalled);
+			Assert.True(fixture.derivedSetUpCalled);
+			Assert.True(fixture.derivedTearDownCalled);
 		}
 
         [Test]
@@ -62,11 +62,11 @@ namespace TCLite.Framework.Internal
             MultipleSetUpTearDownFixture fixture = new MultipleSetUpTearDownFixture();
             TestBuilder.RunTestFixture(fixture);
 
-            Assert.IsTrue(fixture.wasSetUp1Called, "SetUp1");
-            Assert.IsTrue(fixture.wasSetUp2Called, "SetUp2");
-            Assert.IsTrue(fixture.wasSetUp3Called, "SetUp3");
-            Assert.IsTrue(fixture.wasTearDown1Called, "TearDown1");
-            Assert.IsTrue(fixture.wasTearDown2Called, "TearDown2");
+            Assert.True(fixture.wasSetUp1Called, "SetUp1");
+            Assert.True(fixture.wasSetUp2Called, "SetUp2");
+            Assert.True(fixture.wasSetUp3Called, "SetUp3");
+            Assert.True(fixture.wasTearDown1Called, "TearDown1");
+            Assert.True(fixture.wasTearDown2Called, "TearDown2");
         }
 
         [Test]
@@ -75,12 +75,12 @@ namespace TCLite.Framework.Internal
             DerivedClassWithSeparateSetUp fixture = new DerivedClassWithSeparateSetUp();
             TestBuilder.RunTestFixture(fixture);
 
-            Assert.IsTrue(fixture.wasSetUpCalled, "Base SetUp Called");
-            Assert.IsTrue(fixture.wasTearDownCalled, "Base TearDown Called");
-            Assert.IsTrue(fixture.wasDerivedSetUpCalled, "Derived SetUp Called");
-            Assert.IsTrue(fixture.wasDerivedTearDownCalled, "Derived TearDown Called");
-            Assert.IsTrue(fixture.wasBaseSetUpCalledFirst, "SetUp Order");
-            Assert.IsTrue(fixture.wasBaseTearDownCalledLast, "TearDown Order");
+            Assert.True(fixture.wasSetUpCalled, "Base SetUp Called");
+            Assert.True(fixture.wasTearDownCalled, "Base TearDown Called");
+            Assert.True(fixture.wasDerivedSetUpCalled, "Derived SetUp Called");
+            Assert.True(fixture.wasDerivedTearDownCalled, "Derived TearDown Called");
+            Assert.True(fixture.wasBaseSetUpCalledFirst, "SetUp Order");
+            Assert.True(fixture.wasBaseTearDownCalledLast, "TearDown Order");
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace TCLite.Framework.Internal
             SetupAndTearDownExceptionFixture fixture = new SetupAndTearDownExceptionFixture();
             fixture.setupException = e;
             TestResult suiteResult = TestBuilder.RunTestFixture(fixture);
-            Assert.IsTrue(suiteResult.HasChildren, "Fixture test should have child result.");
+            Assert.True(suiteResult.HasChildren, "Fixture test should have child result.");
             TestResult result = (TestResult)suiteResult.Children[0];
             Assert.AreEqual(result.ResultState, ResultState.Error, "Test should be in error state");
             string expected = string.Format("{0} : {1}", e.GetType().FullName, e.Message);

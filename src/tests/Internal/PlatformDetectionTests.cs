@@ -365,26 +365,26 @@ namespace TCLite.Framework.Internal
         [Test]
 		public void DetectExactVersion()
 		{
-			Assert.IsTrue( winXPHelper.IsPlatformSupported( "net-1.1.4322" ) );
-			Assert.IsTrue( winXPHelper.IsPlatformSupported( "net-1.1.4322.0" ) );
-			Assert.IsFalse( winXPHelper.IsPlatformSupported( "net-1.1.4323.0" ) );
-			Assert.IsFalse( winXPHelper.IsPlatformSupported( "net-1.1.4322.1" ) );
+			Assert.True( winXPHelper.IsPlatformSupported( "net-1.1.4322" ) );
+			Assert.True( winXPHelper.IsPlatformSupported( "net-1.1.4322.0" ) );
+			Assert.False( winXPHelper.IsPlatformSupported( "net-1.1.4323.0" ) );
+			Assert.False( winXPHelper.IsPlatformSupported( "net-1.1.4322.1" ) );
 		}
 
 		[Test]
 		public void ArrayOfPlatforms()
 		{
 			string[] platforms = new string[] { "NT4", "Win2K", "WinXP" };
-			Assert.IsTrue( winXPHelper.IsPlatformSupported( platforms ) );
-			Assert.IsFalse( win95Helper.IsPlatformSupported( platforms ) );
+			Assert.True( winXPHelper.IsPlatformSupported( platforms ) );
+			Assert.False( win95Helper.IsPlatformSupported( platforms ) );
 		}
 
 		[Test]
 		public void PlatformAttribute_Include()
 		{
 			PlatformAttribute attr = new PlatformAttribute( "Win2K,WinXP,NT4" );
-			Assert.IsTrue( winXPHelper.IsPlatformSupported( attr ) );
-			Assert.IsFalse( win95Helper.IsPlatformSupported( attr ) );
+			Assert.True( winXPHelper.IsPlatformSupported( attr ) );
+			Assert.False( win95Helper.IsPlatformSupported( attr ) );
 			Assert.AreEqual("Only supported on Win2K,WinXP,NT4", win95Helper.Reason);
 		}
 
@@ -393,9 +393,9 @@ namespace TCLite.Framework.Internal
 		{
 			PlatformAttribute attr = new PlatformAttribute();
 			attr.Exclude = "Win2K,WinXP,NT4";
-			Assert.IsFalse( winXPHelper.IsPlatformSupported( attr ) );
+			Assert.False( winXPHelper.IsPlatformSupported( attr ) );
 			Assert.AreEqual( "Not supported on Win2K,WinXP,NT4", winXPHelper.Reason );
-			Assert.IsTrue( win95Helper.IsPlatformSupported( attr ) );
+			Assert.True( win95Helper.IsPlatformSupported( attr ) );
 		}
 
 		[Test]
@@ -403,13 +403,13 @@ namespace TCLite.Framework.Internal
 		{
 			PlatformAttribute attr = new PlatformAttribute( "Win2K,WinXP,NT4" );
 			attr.Exclude = "Mono";
-			Assert.IsFalse( win95Helper.IsPlatformSupported( attr ) );
+			Assert.False( win95Helper.IsPlatformSupported( attr ) );
 			Assert.AreEqual( "Only supported on Win2K,WinXP,NT4", win95Helper.Reason );
-			Assert.IsTrue( winXPHelper.IsPlatformSupported( attr ) );
+			Assert.True( winXPHelper.IsPlatformSupported( attr ) );
 			attr.Exclude = "Net";
-			Assert.IsFalse( win95Helper.IsPlatformSupported( attr ) );
+			Assert.False( win95Helper.IsPlatformSupported( attr ) );
 			Assert.AreEqual( "Only supported on Win2K,WinXP,NT4", win95Helper.Reason );
-			Assert.IsFalse( winXPHelper.IsPlatformSupported( attr ) );
+			Assert.False( winXPHelper.IsPlatformSupported( attr ) );
 			Assert.AreEqual( "Not supported on Net", winXPHelper.Reason );
 		}
 
@@ -417,7 +417,7 @@ namespace TCLite.Framework.Internal
 		public void PlatformAttribute_InvalidPlatform()
 		{
 			PlatformAttribute attr = new PlatformAttribute( "Net-1.0,Net11,Mono" );
-			Assert.IsFalse( winXPHelper.IsPlatformSupported( attr ) );
+			Assert.False( winXPHelper.IsPlatformSupported( attr ) );
 			Assert.That( winXPHelper.Reason, Is.StringStarting("Invalid platform name"));
 			Assert.That( winXPHelper.Reason, Is.StringContaining("Net11"));
 		}

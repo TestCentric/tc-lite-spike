@@ -37,7 +37,7 @@ namespace TCLite.Framework.AssertionTests
 			ArgumentException ex = Assert.Throws(typeof(ArgumentException),
                 new TestDelegate(TestDelegates.ThrowsArgumentException)) as ArgumentException;
 
-            Assert.IsNotNull(ex, "No ArgumentException thrown");
+            Assert.NotNull(ex, "No ArgumentException thrown");
             Assert.That(ex.Message, Is.StringStarting("myMessage"));
 #if !NETCF && !SILVERLIGHT
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));
@@ -46,7 +46,7 @@ namespace TCLite.Framework.AssertionTests
             ex = Assert.Throws<ArgumentException>(
                 delegate { throw new ArgumentException("myMessage", "myParam"); }) as ArgumentException;
 
-            Assert.IsNotNull(ex, "No ArgumentException thrown");
+            Assert.NotNull(ex, "No ArgumentException thrown");
             Assert.That(ex.Message, Is.StringStarting("myMessage"));
 #if !NETCF && !SILVERLIGHT
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));
@@ -55,7 +55,7 @@ namespace TCLite.Framework.AssertionTests
 			ex = Assert.Throws(typeof(ArgumentException), 
                 delegate { throw new ArgumentException("myMessage", "myParam"); } ) as ArgumentException;
 
-            Assert.IsNotNull(ex, "No ArgumentException thrown");
+            Assert.NotNull(ex, "No ArgumentException thrown");
             Assert.That(ex.Message, Is.StringStarting("myMessage"));
 #if !NETCF && !SILVERLIGHT
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));
@@ -63,7 +63,7 @@ namespace TCLite.Framework.AssertionTests
 
             ex = Assert.Throws<ArgumentException>(TestDelegates.ThrowsArgumentException) as ArgumentException;
 
-            Assert.IsNotNull(ex, "No ArgumentException thrown");
+            Assert.NotNull(ex, "No ArgumentException thrown");
             Assert.That(ex.Message, Is.StringStarting("myMessage"));
 #if !NETCF && !SILVERLIGHT
             Assert.That(ex.ParamName, Is.EqualTo("myParam"));

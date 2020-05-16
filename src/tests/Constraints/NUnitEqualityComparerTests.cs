@@ -77,7 +77,7 @@ namespace TCLite.Framework.Constraints
             IEquatableWithoutEqualsOverridden x = new IEquatableWithoutEqualsOverridden(1);
             IEquatableWithoutEqualsOverridden y = new IEquatableWithoutEqualsOverridden(1);
 
-            Assert.IsTrue(comparer.AreEqual(x, y, ref tolerance));
+            Assert.True(comparer.AreEqual(x, y, ref tolerance));
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace TCLite.Framework.Constraints
 
             // y.Equals(x) is what gets actually called
             // TODO: This should work both ways
-            Assert.IsTrue(comparer.AreEqual(x, y, ref tolerance));
+            Assert.True(comparer.AreEqual(x, y, ref tolerance));
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace TCLite.Framework.Constraints
 
             // y.Equals(x) is what gets actually called
             // TODO: This should work both ways
-            Assert.IsTrue(comparer.AreEqual(y, x, ref tolerance));
+            Assert.True(comparer.AreEqual(y, x, ref tolerance));
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace TCLite.Framework.Constraints
             NeverEqualIEquatableWithOverriddenAlwaysTrueEquals x = new NeverEqualIEquatableWithOverriddenAlwaysTrueEquals();
             NeverEqualIEquatableWithOverriddenAlwaysTrueEquals y = new NeverEqualIEquatableWithOverriddenAlwaysTrueEquals();
 
-            Assert.IsFalse(comparer.AreEqual(x, y, ref tolerance));
+            Assert.False(comparer.AreEqual(x, y, ref tolerance));
         }
 #endif
 
@@ -117,7 +117,7 @@ namespace TCLite.Framework.Constraints
         {
             NeverEqualIEquatable z = new NeverEqualIEquatable();
 
-            Assert.IsTrue(comparer.AreEqual(z, z, ref tolerance));
+            Assert.True(comparer.AreEqual(z, z, ref tolerance));
         }
     }
 

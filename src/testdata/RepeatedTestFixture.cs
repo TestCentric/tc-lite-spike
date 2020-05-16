@@ -69,7 +69,7 @@ namespace TCLite.TestData.RepeatedTestFixture
 		public void RepeatSuccess()
 		{
 			count++;
-			Assert.IsTrue (true);
+			Assert.True (true);
 		}
 	}
 
@@ -79,7 +79,7 @@ namespace TCLite.TestData.RepeatedTestFixture
 		public void RepeatFailOnFirst()
 		{
 			count++;
-			Assert.IsFalse (true);
+			Assert.False (true);
 		}
 	}
 
@@ -91,7 +91,7 @@ namespace TCLite.TestData.RepeatedTestFixture
 			count++;
 
 			if (count == 3)
-				Assert.IsTrue (false);
+				Assert.True (false);
 		}
 	}
 
@@ -110,7 +110,7 @@ namespace TCLite.TestData.RepeatedTestFixture
         public void TestWithCategory()
         {
             count++;
-            Assert.IsTrue(true);
+            Assert.True(true);
         }
     }
 }

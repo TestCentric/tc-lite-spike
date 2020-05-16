@@ -383,7 +383,7 @@ namespace TCLite.Framework
 
         #endregion
 
-        #region True
+        #region Simple Condition Asserts
 
         /// <summary>
         /// Asserts that a condition is true. If the condition is false the method throws
@@ -398,22 +398,6 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Asserts that a condition is true. If the condition is false the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary>
-        /// <param name="condition">The evaluated condition</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsTrue(bool condition, string message=null, params object[] args)
-        {
-            Assert.That(condition, Is.True ,message, args);
-        }
-
-        #endregion
-
-        #region False
-
-        /// <summary>
         /// Asserts that a condition is false. If the condition is true the method throws
         /// an <see cref="AssertionException"/>
         /// </summary> 
@@ -424,22 +408,6 @@ namespace TCLite.Framework
         {
             Assert.That(condition, Is.False ,message, args);
         }
-
-        /// <summary>
-        /// Asserts that a condition is false. If the condition is true the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary> 
-        /// <param name="condition">The evaluated condition</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsFalse(bool condition, string message=null, params object[] args)
-        {
-            Assert.That(condition, Is.False ,message, args);
-        }
-
-        #endregion
-
-        #region NotNull
 
         /// <summary>
         /// Verifies that the object that is passed in is not equal to <code>null</code>
@@ -455,23 +423,6 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Verifies that the object that is passed in is not equal to <code>null</code>
-        /// If the object is <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotNull(object anObject, string message=null, params object[] args)
-        {
-            Assert.That(anObject, Is.Not.Null ,message, args);
-        }
-
-        #endregion
-
-        #region Null
-
-        /// <summary>
         /// Verifies that the object that is passed in is equal to <code>null</code>
         /// If the object is not <code>null</code> then an <see cref="AssertionException"/>
         /// is thrown.
@@ -480,19 +431,6 @@ namespace TCLite.Framework
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
         public static void Null(object anObject, string message=null, params object[] args)
-        {
-            Assert.That(anObject, Is.Null ,message, args);
-        }
-
-        /// <summary>
-        /// Verifies that the object that is passed in is equal to <code>null</code>
-        /// If the object is not <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNull(object anObject, string message=null, params object[] args)
         {
             Assert.That(anObject, Is.Null ,message, args);
         }

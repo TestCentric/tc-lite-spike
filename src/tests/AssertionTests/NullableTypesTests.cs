@@ -17,8 +17,8 @@ namespace TCLite.Framework.AssertionTests
             int? nullInt = null;
             int? five = 5;
 
-            Assert.IsNull(nullInt);
-            Assert.IsNotNull(five);
+            Assert.Null(nullInt);
+            Assert.NotNull(five);
             Assert.That(nullInt, Is.Null);
             Assert.That(five, Is.Not.Null);
         }

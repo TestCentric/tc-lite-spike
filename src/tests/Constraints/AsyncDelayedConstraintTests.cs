@@ -12,14 +12,14 @@ namespace TCLite.Framework.Constraints.Tests
 		[Test]
 		public void ConstraintSuccess()
 		{
-			Assert.IsTrue(new DelayedConstraint(new EqualConstraint(1), 100)
+			Assert.True(new DelayedConstraint(new EqualConstraint(1), 100)
 				.Matches(async () => await One()));
 		}
 
 		[Test]
 		public void ConstraintFailure()
 		{
-			Assert.IsFalse(new DelayedConstraint(new EqualConstraint(2), 100)
+			Assert.False(new DelayedConstraint(new EqualConstraint(2), 100)
 				.Matches(async () => await One()));
 		}
 
@@ -33,14 +33,14 @@ namespace TCLite.Framework.Constraints.Tests
 		[Test]
 		public void ConstraintVoidDelegateFailureAsDelegateIsNotCalled()
 		{
-			Assert.IsFalse(new DelayedConstraint(new EqualConstraint(1), 100)
+			Assert.False(new DelayedConstraint(new EqualConstraint(1), 100)
 				.Matches(new TestDelegate(async () => { await One(); })));
 		}
 
 		[Test]
 		public void ConstraintVoidDelegateExceptionIsFailureAsDelegateIsNotCalled()
 		{
-			Assert.IsFalse(new DelayedConstraint(new EqualConstraint(1), 100)
+			Assert.False(new DelayedConstraint(new EqualConstraint(1), 100)
 				.Matches(new TestDelegate(async () => { await Throw(); })));
 		}
 

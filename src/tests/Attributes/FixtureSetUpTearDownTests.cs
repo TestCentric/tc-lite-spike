@@ -129,7 +129,7 @@ namespace TCLite.Framework.Attributes
 
 			Assert.AreEqual(ResultState.Error, result.ResultState);
 			Assert.AreEqual("System.Exception : This was thrown from fixture setup", result.Message, "TestSuite Message");
-			Assert.IsNotNull(result.StackTrace, "TestSuite StackTrace should not be null");
+			Assert.NotNull(result.StackTrace, "TestSuite StackTrace should not be null");
 
             Assert.AreEqual(1, result.Children.Count, "Result should have one child");
             Assert.AreEqual(1, result.FailCount, "Failure count");
@@ -163,7 +163,7 @@ namespace TCLite.Framework.Attributes
 			// should have one suite and one fixture
             Assert.AreEqual(ResultState.Ignored, result.ResultState, "Suite should be ignored");
 			Assert.AreEqual("TestFixtureSetUp called Ignore", result.Message);
-			Assert.IsNotNull(result.StackTrace, "StackTrace should not be null");
+			Assert.NotNull(result.StackTrace, "StackTrace should not be null");
 
             Assert.AreEqual(1, result.Children.Count);
             Assert.AreEqual(1, result.SkipCount);
@@ -182,7 +182,7 @@ namespace TCLite.Framework.Attributes
 			Assert.AreEqual( 1, fixture.tearDownCount, "tearDownCOunt" );
 
 			Assert.AreEqual("TearDown : System.Exception : This was thrown from fixture teardown", result.Message);
-			Assert.IsNotNull(result.StackTrace, "StackTrace should not be null");
+			Assert.NotNull(result.StackTrace, "StackTrace should not be null");
 		}
 
 		[Test]
@@ -192,7 +192,7 @@ namespace TCLite.Framework.Attributes
 
 			Assert.AreEqual(ResultState.Error, result.ResultState);
 			Assert.AreEqual("System.Exception : This was thrown in constructor", result.Message, "TestSuite Message");
-			Assert.IsNotNull(result.StackTrace, "TestSuite StackTrace should not be null");
+			Assert.NotNull(result.StackTrace, "TestSuite StackTrace should not be null");
 
             Assert.AreEqual(1, result.Children.Count, "Result should have one child");
             Assert.AreEqual(1, result.FailCount, "Failure count");
@@ -247,16 +247,16 @@ namespace TCLite.Framework.Attributes
 			suite.Add( fixtureSuite );
 
             TestBuilder.RunTest(fixtureSuite, fixture);
-			Assert.IsFalse( fixture.setupCalled, "TestFixtureSetUp called running fixture" );
-			Assert.IsFalse( fixture.teardownCalled, "TestFixtureTearDown called running fixture" );
+			Assert.False( fixture.setupCalled, "TestFixtureSetUp called running fixture" );
+			Assert.False( fixture.teardownCalled, "TestFixtureTearDown called running fixture" );
 
             TestBuilder.RunTest(suite, fixture);
-			Assert.IsFalse( fixture.setupCalled, "TestFixtureSetUp called running enclosing suite" );
-			Assert.IsFalse( fixture.teardownCalled, "TestFixtureTearDown called running enclosing suite" );
+			Assert.False( fixture.setupCalled, "TestFixtureSetUp called running enclosing suite" );
+			Assert.False( fixture.teardownCalled, "TestFixtureTearDown called running enclosing suite" );
 
             TestBuilder.RunTest(test, fixture);
-			Assert.IsFalse( fixture.setupCalled, "TestFixtureSetUp called running a test case" );
-			Assert.IsFalse( fixture.teardownCalled, "TestFixtureTearDown called running a test case" );
+			Assert.False( fixture.setupCalled, "TestFixtureSetUp called running a test case" );
+			Assert.False( fixture.teardownCalled, "TestFixtureTearDown called running a test case" );
 		}
 
 		[Test]
@@ -275,7 +275,7 @@ namespace TCLite.Framework.Attributes
         {
             DisposableFixture fixture = new DisposableFixture();
             TestBuilder.RunTestFixture(fixture);
-            Assert.IsTrue(fixture.disposeCalled);
+            Assert.True(fixture.disposeCalled);
         }
 	}
 

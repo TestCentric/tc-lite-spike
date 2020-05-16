@@ -36,7 +36,7 @@ namespace TCLite.Framework.Attributes
 		public void NoDescription()
 		{
 			Test testCase = TestBuilder.MakeTestCase( FixtureType, "NoDescriptionMethod" );
-			Assert.IsNull(testCase.Properties.Get(PropertyNames.Description));
+			Assert.Null(testCase.Properties.Get(PropertyNames.Description));
 		}
 
 		[Test]

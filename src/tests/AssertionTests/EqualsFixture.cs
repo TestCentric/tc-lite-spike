@@ -19,7 +19,7 @@ namespace TCLite.Framework.AssertionTests
 			string expected = nunitString;
 			string actual = nunitString;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -144,7 +144,7 @@ namespace TCLite.Framework.AssertionTests
 			float expected = val;
 			float actual = val;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual, (float)0.0);
 		}
 
@@ -155,7 +155,7 @@ namespace TCLite.Framework.AssertionTests
 			byte expected = val;
 			byte actual = val;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -165,7 +165,7 @@ namespace TCLite.Framework.AssertionTests
 			string s1 = "test";
 			string s2 = new System.Text.StringBuilder(s1).ToString();
 
-			Assert.IsTrue(s1.Equals(s2));
+			Assert.True(s1.Equals(s2));
 			Assert.AreEqual(s1,s2);
 		}
 
@@ -176,7 +176,7 @@ namespace TCLite.Framework.AssertionTests
 			short expected = val;
 			short actual = val;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -187,7 +187,7 @@ namespace TCLite.Framework.AssertionTests
 			int expected = val;
 			int actual = val;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -198,7 +198,7 @@ namespace TCLite.Framework.AssertionTests
 			uint expected = val;
 			uint actual = val;
 
-			Assert.IsTrue(expected == actual);
+			Assert.True(expected == actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -209,11 +209,11 @@ namespace TCLite.Framework.AssertionTests
 			decimal actual = 100.0m;
 			int integer = 100;
 
-			Assert.IsTrue( expected == actual );
+			Assert.True( expected == actual );
 			Assert.AreEqual(expected, actual);
-			Assert.IsTrue(expected == integer);
+			Assert.True(expected == integer);
 			Assert.AreEqual(expected, integer);
-			Assert.IsTrue(actual == integer);
+			Assert.True(actual == integer);
 			Assert.AreEqual(actual, integer);
 		}
 

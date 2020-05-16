@@ -28,49 +28,49 @@ namespace TCLite.Framework.Assertions
 		[Test]
 		public void ThrowsConstraintVoid()
 		{
-			Assert.IsTrue(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncVoid));
+			Assert.True(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncVoid));
 		}
 
 		[Test]
 		public void ThrowsConstraintVoidRunSynchronously()
 		{
-			Assert.IsTrue(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsSyncVoid));
+			Assert.True(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsSyncVoid));
 		}
 
 		[Test]
 		public void ThrowsConstraintAsyncTask()
 		{
-			Assert.IsTrue(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncTask));
+			Assert.True(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncTask));
 		}
 
 		[Test]
 		public void ThrowsConstraintAsyncGenericTask()
 		{
-			Assert.IsTrue(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncGenericTask));
+			Assert.True(ThrowsInvalidOperationExceptionConstraint.Matches(_throwsAsyncGenericTask));
 		}
 
 		[Test]
 		public void ThrowsNothingConstraintVoidSuccess()
 		{
-			Assert.IsTrue(new ThrowsNothingConstraint().Matches(_noThrowsVoid));
+			Assert.True(new ThrowsNothingConstraint().Matches(_noThrowsVoid));
 		}
 
 		[Test]
 		public void ThrowsNothingConstraintVoidFailure()
 		{
-			Assert.IsFalse(new ThrowsNothingConstraint().Matches(_throwsAsyncVoid));
+			Assert.False(new ThrowsNothingConstraint().Matches(_throwsAsyncVoid));
 		}
 
 		[Test]
 		public void ThrowsNothingConstraintTaskVoidSuccess()
 		{
-			Assert.IsTrue(new ThrowsNothingConstraint().Matches(_noThrowsAsyncTask));
+			Assert.True(new ThrowsNothingConstraint().Matches(_noThrowsAsyncTask));
 		}
 
 		[Test]
 		public void ThrowsNothingConstraintTaskFailure()
 		{
-			Assert.IsFalse(new ThrowsNothingConstraint().Matches(_throwsAsyncTask));
+			Assert.False(new ThrowsNothingConstraint().Matches(_throwsAsyncTask));
 		}
 
 		[Test]

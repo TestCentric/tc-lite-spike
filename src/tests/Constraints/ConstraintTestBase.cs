@@ -47,7 +47,7 @@ namespace TCLite.Framework.Constraints.Tests
         {
             string NL = Environment.NewLine;
 
-            Assert.IsFalse(theConstraint.Matches(badValue));
+            Assert.False(theConstraint.Matches(badValue));
 
             TextMessageWriter writer = new TextMessageWriter();
             theConstraint.WriteMessageTo(writer);

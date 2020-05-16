@@ -33,11 +33,11 @@ namespace TCLite.Framework.Attributes
 		[Test]
 		public void RepeatSuccess()
 		{
-			Assert.IsNotNull (successMethod);
+			Assert.NotNull (successMethod);
 			RepeatSuccessFixture fixture = new RepeatSuccessFixture();
             ITestResult result = TestBuilder.RunTestFixture(fixture);
 
-            Assert.IsTrue(result.ResultState == ResultState.Success);
+            Assert.True(result.ResultState == ResultState.Success);
 			Assert.AreEqual(1, fixture.FixtureSetupCount);
 			Assert.AreEqual(1, fixture.FixtureTeardownCount);
 			Assert.AreEqual(3, fixture.SetupCount);
@@ -48,11 +48,11 @@ namespace TCLite.Framework.Attributes
 		[Test]
 		public void RepeatFailOnFirst()
 		{
-			Assert.IsNotNull (failOnFirstMethod);
+			Assert.eeNotNull (failOnFirstMethod);
 			RepeatFailOnFirstFixture fixture = new RepeatFailOnFirstFixture();
             ITestResult result = TestBuilder.RunTestFixture(fixture);
 
-            Assert.IsFalse(result.ResultState == ResultState.Success);
+            Assert.False(result.ResultState == ResultState.Success);
 			Assert.AreEqual(1, fixture.SetupCount);
 			Assert.AreEqual(1, fixture.TeardownCount);
 			Assert.AreEqual(1, fixture.Count);
@@ -61,11 +61,11 @@ namespace TCLite.Framework.Attributes
 		[Test]
 		public void RepeatFailOnThird()
 		{
-			Assert.IsNotNull (failOnThirdMethod);
+			Assert.NotNull (failOnThirdMethod);
 			RepeatFailOnThirdFixture fixture = new RepeatFailOnThirdFixture();
             ITestResult result = TestBuilder.RunTestFixture(fixture);
 
-            Assert.IsFalse(result.ResultState == ResultState.Success);
+            Assert.False(result.ResultState == ResultState.Success);
 			Assert.AreEqual(3, fixture.SetupCount);
 			Assert.AreEqual(3, fixture.TeardownCount);
 			Assert.AreEqual(3, fixture.Count);
@@ -88,7 +88,7 @@ namespace TCLite.Framework.Attributes
             TestSuite suite = TestBuilder.MakeFixture(typeof(RepeatedTestWithCategory));
             Test test = suite.Tests[0] as Test;
             System.Collections.IList categories = test.Properties["Category"];
-            Assert.IsNotNull(categories);
+            Assert.NotNull(categories);
             Assert.AreEqual(1, categories.Count);
             Assert.AreEqual("SAMPLE", categories[0]);
         }

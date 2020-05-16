@@ -5,9 +5,9 @@
     <property name="_APPDOMAIN" value="tclite.tests" />
   </properties>
   <test-suite type="TestFixture" id="1000" name="ConditionAssertTests" fullname="TCLite.Framework.Assertions.ConditionAssertTests" testcasecount="4">
-    <test-case id="1002" name="IsFalse" fullname="TCLite.Framework.Assertions.ConditionAssertTests.IsFalse" seed="1141604437" />
+    <test-case id="1002" name="IsFalse" fullname="TCLite.Framework.Assertions.ConditionAssertTests.False" seed="1141604437" />
     <test-case id="1004" name="IsNotNull" fullname="TCLite.Framework.Assertions.ConditionAssertTests.IsNotNull" seed="916042902" />
     <test-case id="1003" name="IsNull" fullname="TCLite.Framework.Assertions.ConditionAssertTests.IsNull" seed="1745329792" />
-    <test-case id="1001" name="IsTrue" fullname="TCLite.Framework.Assertions.ConditionAssertTests.IsTrue" seed="529875957" />
+    <test-case id="1001" name="IsTrue" fullname="TCLite.Framework.Assertions.ConditionAssertTests.True" seed="529875957" />
   </test-suite>
 </test-suite>

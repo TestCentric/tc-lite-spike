@@ -13,17 +13,17 @@ namespace TCLite.Framework.Constraints.Tests
         [Test]
         public void FloatEqualityWithUlps()
         {
-            Assert.IsTrue(
+            Assert.True(
                 FloatingPointNumerics.AreAlmostEqualUlps(0.00000001f, 0.0000000100000008f, 1)
             );
-            Assert.IsFalse(
+            Assert.False(
                 FloatingPointNumerics.AreAlmostEqualUlps(0.00000001f, 0.0000000100000017f, 1)
             );
 
-            Assert.IsTrue(
+            Assert.True(
                 FloatingPointNumerics.AreAlmostEqualUlps(1000000.00f, 1000000.06f, 1)
             );
-            Assert.IsFalse(
+            Assert.False(
                 FloatingPointNumerics.AreAlmostEqualUlps(1000000.00f, 1000000.13f, 1)
             );
         }
@@ -32,17 +32,17 @@ namespace TCLite.Framework.Constraints.Tests
         [Test]
         public void DoubleEqualityWithUlps()
         {
-            Assert.IsTrue(
+            Assert.True(
                 FloatingPointNumerics.AreAlmostEqualUlps(0.00000001, 0.000000010000000000000002, 1)
             );
-            Assert.IsFalse(
+            Assert.False(
                 FloatingPointNumerics.AreAlmostEqualUlps(0.00000001, 0.000000010000000000000004, 1)
             );
 
-            Assert.IsTrue(
+            Assert.True(
                 FloatingPointNumerics.AreAlmostEqualUlps(1000000.00, 1000000.0000000001, 1)
             );
-            Assert.IsFalse(
+            Assert.False(
                 FloatingPointNumerics.AreAlmostEqualUlps(1000000.00, 1000000.0000000002, 1)
             );
         }

@@ -260,7 +260,7 @@ namespace TCLite.TestData
         {
             var testName = await GetTestNameFromContext();
 
-            Assert.IsNotNull(testName);
+            Assert.NotNull(testName);
             Assert.AreEqual(testName, TestContext.CurrentContext.Test.Name);
         }
 
@@ -269,7 +269,7 @@ namespace TCLite.TestData
         {
             var testName = await GetTestNameFromContext();
 
-            Assert.IsNotNull(testName);
+            Assert.NotNull(testName);
             Assert.AreEqual(testName, TestContext.CurrentContext.Test.Name);
         }
 
@@ -280,7 +280,7 @@ namespace TCLite.TestData
 
             await ReturnOne();
 
-            Assert.IsNotNull(testName);
+            Assert.NotNull(testName);
             Assert.AreEqual(testName, TestContext.CurrentContext.Test.Name);
         }
 
@@ -291,7 +291,7 @@ namespace TCLite.TestData
 
             await ReturnOne();
 
-            Assert.IsNotNull(testName);
+            Assert.NotNull(testName);
             Assert.AreEqual(testName, TestContext.CurrentContext.Test.Name);
         }
 

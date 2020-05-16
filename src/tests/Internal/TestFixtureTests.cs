@@ -358,7 +358,7 @@ namespace TCLite.Framework.Internal
 //		public void LoadCategories() 
 //		{
 //			TestSuite fixture = LoadFixture("NUnit.Core.Tests.TestFixtureBuilderTests+HasCategories");
-//			Assert.IsNotNull(fixture);
+//			Assert.NotNull(fixture);
 //			Assert.AreEqual(2, fixture.Categories.Count);
 //		}
 

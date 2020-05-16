@@ -90,7 +90,7 @@ namespace TCLite.Framework.Tests
         [TestCase(null)]
         public void CanPassNullAsFirstArgument(object a)
         {
-        	Assert.IsNull(a);
+        	Assert.Null(a);
         }
 
         [TestCase(new object[] { 1, "two", 3.0 })]

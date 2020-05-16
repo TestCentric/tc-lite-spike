@@ -29,14 +29,14 @@ namespace TCLite.Framework.Constraints.Tests
         [Test]
         public void CanMatchWithoutToleranceMode(object value)
         {
-            Assert.IsTrue(Numerics.AreEqual(value, value, ref zeroTolerance));
+            Assert.True(Numerics.AreEqual(value, value, ref zeroTolerance));
         }
 
         // Separate test case because you can't use decimal in an attribute (24.1.3)
         [Test]
         public void CanMatchDecimalWithoutToleranceMode()
         {
-            Assert.IsTrue(Numerics.AreEqual(123m, 123m, ref zeroTolerance));
+            Assert.True(Numerics.AreEqual(123m, 123m, ref zeroTolerance));
         }
 
         [TestCase((int)9500)]
@@ -54,15 +54,15 @@ namespace TCLite.Framework.Constraints.Tests
         [Test]
         public void CanMatchIntegralsWithPercentage(object value)
         {
-            Assert.IsTrue(Numerics.AreEqual(10000, value, ref tenPercent));
+            Assert.True(Numerics.AreEqual(10000, value, ref tenPercent));
         }
 
         [Test]
         public void CanMatchDecimalWithPercentage()
         {
-            Assert.IsTrue(Numerics.AreEqual(10000m, 9500m, ref tenPercent));
-            Assert.IsTrue(Numerics.AreEqual(10000m, 10000m, ref tenPercent));
-            Assert.IsTrue(Numerics.AreEqual(10000m, 10500m, ref tenPercent));
+            Assert.True(Numerics.AreEqual(10000m, 9500m, ref tenPercent));
+            Assert.True(Numerics.AreEqual(10000m, 10000m, ref tenPercent));
+            Assert.True(Numerics.AreEqual(10000m, 10500m, ref tenPercent));
         }
 
         [TestCase((int)8500)]
@@ -77,7 +77,7 @@ namespace TCLite.Framework.Constraints.Tests
         {
             Assert.Throws<AssertionException>(() =>
             {
-                Assert.IsTrue(Numerics.AreEqual(10000, value, ref tenPercent));
+                Assert.True(Numerics.AreEqual(10000, value, ref tenPercent));
             });
         }
 
@@ -86,7 +86,7 @@ namespace TCLite.Framework.Constraints.Tests
         {
             Assert.Throws<AssertionException>(() =>
             {
-                Assert.IsTrue(Numerics.AreEqual(10000m, 8500m, ref tenPercent));
+                Assert.True(Numerics.AreEqual(10000m, 8500m, ref tenPercent));
             });
         }
 
@@ -95,7 +95,7 @@ namespace TCLite.Framework.Constraints.Tests
         {
             Assert.Throws<AssertionException>(() =>
             {
-                Assert.IsTrue(Numerics.AreEqual(10000m, 11500m, ref tenPercent));
+                Assert.True(Numerics.AreEqual(10000m, 11500m, ref tenPercent));
             });
         }
     }
