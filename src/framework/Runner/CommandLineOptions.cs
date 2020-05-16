@@ -18,22 +18,8 @@ namespace TCLite.Runner
     /// </summary>
     public class CommandLineOptions
     {
-        private string optionChars;
+        private string _optionChars;
         private static string NL = Environment.NewLine;
-
-        private bool wait = false;
-        private bool noheader = false;
-        private bool help = false;
-        private bool full = false;
-        private bool explore = false;
-        private bool labelTestsInOutput = false;
-
-        private string exploreFile;
-        private string resultFile;
-        private string resultFormat;
-        private string outFile;
-        private string includeCategory;
-        private string excludeCategory;
 
         private bool error = false;
 
@@ -48,26 +34,22 @@ namespace TCLite.Runner
         /// <summary>
         /// Gets a value indicating whether the 'wait' option was used.
         /// </summary>
-        public bool Wait
-        {
-            get { return wait; }
-        }
+        public bool Wait { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the 'nologo' option was used.
         /// </summary>
-        public bool NoHeader
-        {
-            get { return noheader; }
-        }
+        public bool NoHeader { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the 'help' option was used.
         /// </summary>
-        public bool ShowHelp
-        {
-            get { return help; }
-        }
+        public bool ShowHelp { get; private set; }
+
+        /// <summary>
+        /// Just show the header with version and exit
+        /// </summary>
+        public bool ShowVersion{ get; private set; }
 
         /// <summary>
         /// Gets a list of all tests specified on the command line
@@ -80,85 +62,49 @@ namespace TCLite.Runner
         /// <summary>
         /// Gets a value indicating whether a full report should be displayed
         /// </summary>
-        public bool Full
-        {
-            get { return full; }
-        }
+        public bool Full { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether tests should be listed
         /// rather than run.
         /// </summary>
-        public bool Explore
-        {
-            get { return explore; }
-        }
+        public bool Explore { get; private set; }
 
         /// <summary>
         /// Gets the name of the file to be used for listing tests
         /// </summary>
-        public string ExploreFile
-        {
-            get { return exploreFile; }
-        }
+        public string ExploreFile { get; private set; }
 
         /// <summary>
         /// Gets the name of the file to be used for test results
         /// </summary>
-        public string ResultFile
-        {
-            get { return resultFile; }
-        }
+        public string ResultFile { get; private set; }
 
         /// <summary>
         /// Gets the format to be used for test results
         /// </summary>
-        public string ResultFormat
-        {
-            get { return resultFormat; }
-        }
+        public string ResultFormat { get; private set; }
 
         /// <summary>
         /// Gets the full path of the file to be used for output
         /// </summary>
-        public string OutFile
-        {
-            get 
-            {
-                return outFile;
-            }
-        }
+        public string OutFile { get; private set; }
 
         /// <summary>
         /// Gets the list of categories to include
         /// </summary>
-        public string Include
-        {
-            get
-            {
-                return includeCategory;
-            }
-        }
+        public string Include { get; private set; }
 
         /// <summary>
         /// Gets the list of categories to exclude
         /// </summary>
-        public string Exclude
-        {
-            get
-            {
-                return excludeCategory;
-            }
-        }
+        public string Exclude { get; private set; }
 
         /// <summary>
         /// Gets a flag indicating whether each test should
         /// be labeled in the output.
         /// </summary>
-        public bool LabelTestsInOutput
-        {
-            get { return labelTestsInOutput; }
-        }
+        public bool LabelTestsInOutput { get; private set; }
 
         private string ExpandToFullPath(string path)
         {
@@ -200,7 +146,7 @@ namespace TCLite.Runner
         /// </summary>
         public CommandLineOptions()
         {
-            this.optionChars = System.IO.Path.DirectorySeparatorChar == '/' ? "-" : "/-";
+            _optionChars = System.IO.Path.DirectorySeparatorChar == '/' ? "-" : "/-";
         }
 
         /// <summary>
@@ -209,7 +155,7 @@ namespace TCLite.Runner
         /// <param name="optionChars"></param>
         public CommandLineOptions(string optionChars)
         {
-            this.optionChars = optionChars;
+            _optionChars = optionChars;
         }
 
         /// <summary>
@@ -220,7 +166,7 @@ namespace TCLite.Runner
         {
             foreach( string arg in args )
             {
-                if (optionChars.IndexOf(arg[0]) >= 0 )
+                if (_optionChars.IndexOf(arg[0]) >= 0 )
                     ProcessOption(arg);
                 else
                     ProcessParameter(arg);
@@ -250,29 +196,32 @@ namespace TCLite.Runner
             switch (opt.Substring(1))
             {
                 case "wait":
-                    wait = true;
+                    Wait = true;
                     break;
                 case "noheader":
                 case "noh":
-                    noheader = true;
+                    NoHeader = true;
                     break;
                 case "help":
                 case "h":
-                    help = true;
+                    ShowHelp = true;
+                    break;
+                case "version":
+                    ShowVersion = true;
                     break;
                 case "test":
                     tests.Add(val);
                     break;
                 case "full":
-                    full = true;
+                    Full = true;
                     break;
                 case "explore":
-                    explore = true;
+                    Explore = true;
                     if (val == null || val.Length == 0)
                         val = "tests.xml";
                     try
                     {
-                        exploreFile = ExpandToFullPath(val);
+                        ExploreFile = ExpandToFullPath(val);
                     }
                     catch
                     {
@@ -284,7 +233,7 @@ namespace TCLite.Runner
                         val = "TestResult.xml";
                     try
                     {
-                        resultFile = ExpandToFullPath(val);
+                        ResultFile = ExpandToFullPath(val);
                     }
                     catch
                     {
@@ -292,14 +241,14 @@ namespace TCLite.Runner
                     }
                     break;
                 case "format":
-                    resultFormat = val;
-                    if (resultFormat != "nunit3" && resultFormat != "nunit2")
+                    ResultFormat = val;
+                    if (ResultFormat != "nunit3" && ResultFormat != "nunit2")
                         InvalidOption(option);
                     break;
                 case "out":
                     try
                     {
-                        outFile = ExpandToFullPath(val);
+                        OutFile = ExpandToFullPath(val);
                     }
                     catch
                     {
@@ -307,13 +256,13 @@ namespace TCLite.Runner
                     }
                     break;
                 case "labels":
-                    labelTestsInOutput = true;
+                    LabelTestsInOutput = true;
                     break;
                 case "include":
-                    includeCategory = val;
+                    Include = val;
                     break;
                 case "exclude":
-                    excludeCategory = val;
+                    Exclude = val;
                     break;
                 case "seed":
                     try

@@ -94,19 +94,8 @@ namespace TCLite.Runner
         /// </summary>
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
-        public override void WriteLabel(string label, object option)
-        {
-            Write(label);
-            Write(option.ToString());
-        }
-
-        /// <summary>
-        /// Writes the label and the option that goes with it.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public override void WriteLabel(string label, object option, ColorStyle valueStyle)
+        public override void WriteLabel(string label, object option, ColorStyle valueStyle = ColorStyle.Value)
         {
             WriteLabel(label, option);
         }
@@ -116,19 +105,8 @@ namespace TCLite.Runner
         /// </summary>
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
-        public override void WriteLabelLine(string label, object option)
-        {
-            WriteLabel(label, option);
-            WriteLine();
-        }
-
-        /// <summary>
-        /// Writes the label and the option that goes with it followed by a new line.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public override void WriteLabelLine(string label, object option, ColorStyle valueStyle)
+        public override void WriteLabelLine(string label, object option, ColorStyle valueStyle = ColorStyle.Value)
         {
             WriteLabelLine(label, option);
         }

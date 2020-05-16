@@ -34,22 +34,8 @@ namespace TCLite.Runner
         /// </summary>
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
-        public abstract void WriteLabel(string label, object option);
-
-        /// <summary>
-        /// Writes the label and the option that goes with it.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public abstract void WriteLabel(string label, object option, ColorStyle valueStyle);
-
-        /// <summary>
-        /// Writes the label and the option that goes with it followed by a new line.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
-        public abstract void WriteLabelLine(string label, object option);
+        public abstract void WriteLabel(string label, object option, ColorStyle valueStyle = ColorStyle.Value);
 
         /// <summary>
         /// Writes the label and the option that goes with it followed by a new line.
@@ -57,7 +43,7 @@ namespace TCLite.Runner
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public abstract void WriteLabelLine(string label, object option, ColorStyle valueStyle);
+        public abstract void WriteLabelLine(string label, object option, ColorStyle valueStyle = ColorStyle.Value);
 
         #endregion
     }

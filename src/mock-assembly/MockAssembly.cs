@@ -9,6 +9,14 @@ using TCLite.Framework.Internal;
 
 namespace TCLite.Tests
 {
+	public static class Program
+	{
+		public static void Main(string[] args)
+		{
+			new TCLite.Runner.AutoRun().Execute(args);
+		}
+	}
+
 	namespace Assemblies
 	{
 		/// <summary>

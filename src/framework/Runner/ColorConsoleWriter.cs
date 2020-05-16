@@ -31,6 +31,7 @@ namespace TCLite.Runner
         }
 
         #region Extended Methods
+        
         /// <summary>
         /// Writes the value with the specified style.
         /// </summary>
@@ -64,32 +65,12 @@ namespace TCLite.Runner
         }
 
         /// <summary>
-        /// Writes the label and the option that goes with it.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
-        public override void WriteLabel(string label, object option)
-        {
-            WriteLabel(label, option, ColorStyle.Value);
-        }
-
-        /// <summary>
-        /// Writes the label and the option that goes with it followed by a new line.
-        /// </summary>
-        /// <param name="label">The label.</param>
-        /// <param name="option">The option.</param>
-        public override void WriteLabelLine(string label, object option)
-        {
-            WriteLabelLine(label, option, ColorStyle.Value);
-        }
-
-        /// <summary>
         /// Writes the label and the option that goes with it and optionally writes a new line.
         /// </summary>
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public override void WriteLabel(string label, object option, ColorStyle valueStyle)
+        public override void WriteLabel(string label, object option, ColorStyle valueStyle = ColorStyle.Value)
         {
             Write(ColorStyle.Label, label);
             Write(valueStyle, option.ToString());
@@ -101,7 +82,7 @@ namespace TCLite.Runner
         /// <param name="label">The label.</param>
         /// <param name="option">The option.</param>
         /// <param name="valueStyle">The color to display the value with</param>
-        public override void WriteLabelLine(string label, object option, ColorStyle valueStyle)
+        public override void WriteLabelLine(string label, object option, ColorStyle valueStyle = ColorStyle.Value)
         {
             WriteLabel(label, option, valueStyle);
             WriteLine();
