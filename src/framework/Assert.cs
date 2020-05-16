@@ -65,8 +65,6 @@ namespace TCLite.Framework
 
         #region Utility Asserts
 
-        #region Pass
-
         /// <summary>
         /// Throws a <see cref="SuccessException"/> with the message and arguments 
         /// that are passed in. This allows a test to be cut short, with a result
@@ -74,7 +72,7 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="message">The message to initialize the <see cref="AssertionException"/> with.</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void Pass(string message, params object[] args)
+        static public void Pass(string message=null, params object[] args)
         {
             if (message == null) message = string.Empty;
             else if (args != null && args.Length > 0)
@@ -84,26 +82,12 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Throws a <see cref="SuccessException"/> with the message and arguments 
-        /// that are passed in. This allows a test to be cut short, with a result
-        /// of success returned to TCLite.
-        /// </summary>
-        static public void Pass()
-        {
-            Assert.Pass(string.Empty, null);
-        }
-
-        #endregion
-
-        #region Fail
-
-        /// <summary>
         /// Throws an <see cref="AssertionException"/> with the message and arguments 
         /// that are passed in. This is used by the other Assert functions. 
         /// </summary>
         /// <param name="message">The message to initialize the <see cref="AssertionException"/> with.</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void Fail(string message, params object[] args)
+        static public void Fail(string message=null, params object[] args)
         {
             if (message == null) message = string.Empty;
             else if (args != null && args.Length > 0)
@@ -113,25 +97,12 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Throws an <see cref="AssertionException"/>. 
-        /// This is used by the other Assert functions. 
-        /// </summary>
-        static public void Fail()
-        {
-            Assert.Fail(string.Empty, null);
-        }
-
-        #endregion
-
-        #region Ignore
-
-        /// <summary>
         /// Throws an <see cref="IgnoreException"/> with the message and arguments 
         /// that are passed in.  This causes the test to be reported as ignored.
         /// </summary>
         /// <param name="message">The message to initialize the <see cref="AssertionException"/> with.</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void Ignore(string message, params object[] args)
+        static public void Ignore(string message=null, params object[] args)
         {
             if (message == null) message = string.Empty;
             else if (args != null && args.Length > 0)
@@ -141,25 +112,12 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Throws an <see cref="IgnoreException"/>. 
-        /// This causes the test to be reported as ignored. 
-        /// </summary>
-        static public void Ignore()
-        {
-            Assert.Ignore(string.Empty, null);
-        }
-
-        #endregion
-
-        #region InConclusive
-
-        /// <summary>
         /// Throws an <see cref="InconclusiveException"/> with the message and arguments 
         /// that are passed in.  This causes the test to be reported as inconclusive.
         /// </summary>
         /// <param name="message">The message to initialize the <see cref="InconclusiveException"/> with.</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void Inconclusive(string message, params object[] args)
+        static public void Inconclusive(string message=null, params object[] args)
         {
             if (message == null) message = string.Empty;
             else if (args != null && args.Length > 0)
@@ -168,33 +126,9 @@ namespace TCLite.Framework
             throw new InconclusiveException(message);
         }
 
-        /// <summary>
-        /// Throws an <see cref="InconclusiveException"/>. 
-        /// This causes the test to be reported as Inconclusive. 
-        /// </summary>
-        static public void Inconclusive()
-        {
-            Assert.Inconclusive(string.Empty, null);
-        }
-
-        #endregion
-
         #endregion
 
         #region Assert.That
-
-        #region Object
-
-        /// <summary>
-        /// Apply a constraint to an actual value, succeeding if the constraint
-        /// is satisfied and throwing an assertion exception on failure.
-        /// </summary>
-        /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A Constraint to be applied</param>
-        static public void That(object actual, IResolveConstraint expression)
-        {
-            Assert.That(actual, expression, null, null);
-        }
 
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
@@ -204,7 +138,7 @@ namespace TCLite.Framework
         /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void That(object actual, IResolveConstraint expression, string message, params object[] args)
+        static public void That(object actual, IResolveConstraint expression, string message=null, params object[] args)
         {
             Constraint constraint = expression.Resolve();
 
@@ -217,10 +151,6 @@ namespace TCLite.Framework
             }
         }
 
-        #endregion
-
-        #region Boolean
-
         /// <summary>
         /// Asserts that a condition is true. If the condition is false the method throws
         /// an <see cref="AssertionException"/>.
@@ -228,117 +158,20 @@ namespace TCLite.Framework
         /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display if the condition is false</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void That(bool condition, string message, params object[] args)
+        static public void That(bool condition, string message=null, params object[] args)
         {
             Assert.That(condition, Is.True, message, args);
         }
 
         /// <summary>
-        /// Asserts that a condition is true. If the condition is false the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary>
-        /// <param name="condition">The evaluated condition</param>
-        static public void That(bool condition)
-        {
-            Assert.That(condition, Is.True, null, null);
-        }
-
-        #endregion
-
-        #region ref Boolean
-
-            /// <summary>
-            /// Apply a constraint to a referenced boolean, succeeding if the constraint
-            /// is satisfied and throwing an assertion exception on failure.
-            /// </summary>
-            /// <param name="actual">The actual value to test</param>
-            /// <param name="constraint">A Constraint to be applied</param>
-            static public void That(ref bool actual, IResolveConstraint constraint)
-            {
-                Assert.That(ref actual, constraint.Resolve(), null, null);
-            }
-
-            /// <summary>
-            /// Apply a constraint to a referenced value, succeeding if the constraint
-            /// is satisfied and throwing an assertion exception on failure.
-            /// </summary>
-            /// <param name="actual">The actual value to test</param>
-            /// <param name="expression">A Constraint expression to be applied</param>
-            /// <param name="message">The message that will be displayed on failure</param>
-            /// <param name="args">Arguments to be used in formatting the message</param>
-            static public void That(ref bool actual, IResolveConstraint expression, string message, params object[] args)
-            {
-                Constraint constraint = expression.Resolve();
-
-                IncrementAssertCount();
-                if (!constraint.Matches(ref actual))
-                {
-                    MessageWriter writer = new TextMessageWriter(message, args);
-                    constraint.WriteMessageTo(writer);
-                    throw new AssertionException(writer.ToString());
-                }
-            }
-
-        #endregion
-
-        #region ActualValueDelegate
-
-        /// <summary>
-        /// Apply a constraint to an actual value, succeeding if the constraint
-        /// is satisfied and throwing an assertion exception on failure.
-        /// </summary>
-        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
-        /// <param name="expr">A Constraint expression to be applied</param>
-        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr)
-        {
-            Assert.That(del, expr.Resolve(), null, null);
-        }
-
-        /// <summary>
-        /// Apply a constraint to an actual value, succeeding if the constraint
-        /// is satisfied and throwing an assertion exception on failure.
-        /// </summary>
-        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
-        /// <param name="expr">A Constraint expression to be applied</param>
-        /// <param name="message">The message that will be displayed on failure</param>
-        /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr, string message, params object[] args)
-        {
-            Constraint constraint = expr.Resolve();
-
-            IncrementAssertCount();
-            if (!constraint.Matches(del))
-            {
-                MessageWriter writer = new TextMessageWriter(message, args);
-                constraint.WriteMessageTo(writer);
-                throw new AssertionException(writer.ToString());
-            }
-        }
-
-        #endregion
-
-        #region ref Object
-
-        /// <summary>
         /// Apply a constraint to a referenced value, succeeding if the constraint
         /// is satisfied and throwing an assertion exception on failure.
         /// </summary>
         /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A Constraint to be applied</param>
-        static public void That<T>(ref T actual, IResolveConstraint expression)
-        {
-            Assert.That(ref actual, expression, null, null);
-        }
-
-        /// <summary>
-        /// Apply a constraint to a referenced value, succeeding if the constraint
-        /// is satisfied and throwing an assertion exception on failure.
-        /// </summary>
-        /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void That<T>(ref T actual, IResolveConstraint expression, string message, params object[] args)
+        static public void That(ref bool actual, IResolveConstraint expression, string message=null, params object[] args)
         {
             Constraint constraint = expression.Resolve();
 
@@ -351,9 +184,47 @@ namespace TCLite.Framework
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        static public void That<T>(ActualValueDelegate<T> del, IResolveConstraint expr, string message=null, params object[] args)
+        {
+            Constraint constraint = expr.Resolve();
 
-        #region TestDelegate
+            IncrementAssertCount();
+            if (!constraint.Matches(del))
+            {
+                MessageWriter writer = new TextMessageWriter(message, args);
+                constraint.WriteMessageTo(writer);
+                throw new AssertionException(writer.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Apply a constraint to a referenced value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        static public void That<T>(ref T actual, IResolveConstraint expression, string message=null, params object[] args)
+        {
+            Constraint constraint = expression.Resolve();
+
+            IncrementAssertCount();
+            if (!constraint.Matches(ref actual))
+            {
+                MessageWriter writer = new TextMessageWriter(message, args);
+                constraint.WriteMessageTo(writer);
+                throw new AssertionException(writer.ToString());
+            }
+        }
 
         /// <summary>
         /// Asserts that the code represented by a delegate throws an exception
@@ -361,29 +232,14 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="code">A TestDelegate to be executed</param>
         /// <param name="constraint">A ThrowsConstraint used in the test</param>
-        static public void That(TestDelegate code, IResolveConstraint constraint)
+        static public void That(TestDelegate code, IResolveConstraint constraint, string message=null, params object[] args)
         {
-            Assert.That((object)code, constraint);
+            Assert.That((object)code, constraint, message, args);
         }
-
-        #endregion
 
         #endregion
 
         #region Assert.ByVal
-
-        /// <summary>
-        /// Apply a constraint to an actual value, succeeding if the constraint
-        /// is satisfied and throwing an assertion exception on failure.
-        /// Used as a synonym for That in rare cases where a private setter 
-        /// causes a Visual Basic compilation error.
-        /// </summary>
-        /// <param name="actual">The actual value to test</param>
-        /// <param name="expression">A Constraint to be applied</param>
-        static public void ByVal(object actual, IResolveConstraint expression)
-        {
-            Assert.That(actual, expression, null, null);
-        }
 
         /// <summary>
         /// Apply a constraint to an actual value, succeeding if the constraint
@@ -399,7 +255,7 @@ namespace TCLite.Framework
         /// <param name="expression">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        static public void ByVal(object actual, IResolveConstraint expression, string message, params object[] args)
+        static public void ByVal(object actual, IResolveConstraint expression, string message=null, params object[] args)
         {
             Assert.That(actual, expression, message, args);
         }
@@ -408,7 +264,6 @@ namespace TCLite.Framework
 
         #region Throws, Catch and DoesNotThrow
 
-        #region Throws
         /// <summary>
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
@@ -416,7 +271,7 @@ namespace TCLite.Framework
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static Exception Throws(IResolveConstraint expression, TestDelegate code, string message, params object[] args)
+        public static Exception Throws(IResolveConstraint expression, TestDelegate code, string message=null, params object[] args)
         {
             Exception caughtException = null;
 
@@ -456,21 +311,11 @@ namespace TCLite.Framework
         /// <summary>
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
-        /// <param name="expression">A constraint to be satisfied by the exception</param>
-        /// <param name="code">A TestDelegate</param>
-        public static Exception Throws(IResolveConstraint expression, TestDelegate code)
-        {
-            return Throws(expression, code, string.Empty, null);
-        }
-
-        /// <summary>
-        /// Verifies that a delegate throws a particular exception when called.
-        /// </summary>
         /// <param name="expectedExceptionType">The exception Type expected</param>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static Exception Throws(Type expectedExceptionType, TestDelegate code, string message, params object[] args)
+        public static Exception Throws(Type expectedExceptionType, TestDelegate code, string message=null, params object[] args)
         {
             return Throws(new ExceptionTypeConstraint(expectedExceptionType), code, message, args);
         }
@@ -478,62 +323,25 @@ namespace TCLite.Framework
         /// <summary>
         /// Verifies that a delegate throws a particular exception when called.
         /// </summary>
-        /// <param name="expectedExceptionType">The exception Type expected</param>
-        /// <param name="code">A TestDelegate</param>
-        public static Exception Throws(Type expectedExceptionType, TestDelegate code)
-        {
-            return Throws(new ExceptionTypeConstraint(expectedExceptionType), code, string.Empty, null);
-        }
-
-        #endregion
-
-        #region Throws<T>
-
-        /// <summary>
-        /// Verifies that a delegate throws a particular exception when called.
-        /// </summary>
         /// <typeparam name="T">Type of the expected exception</typeparam>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static T Throws<T>(TestDelegate code, string message, params object[] args) where T : Exception
+        public static T Throws<T>(TestDelegate code, string message=null, params object[] args) where T : Exception
         {
             return (T)Throws(typeof(T), code, message, args);
         }
 
         /// <summary>
-        /// Verifies that a delegate throws a particular exception when called.
-        /// </summary>
-        /// <typeparam name="T">Type of the expected exception</typeparam>
-        /// <param name="code">A TestDelegate</param>
-        public static T Throws<T>(TestDelegate code) where T : Exception
-        {
-            return Throws<T>(code, string.Empty, null);
-        }
-
-        #endregion
-
-        #region Catch
-        /// <summary>
         /// Verifies that a delegate throws an exception when called
         /// and returns it.
         /// </summary>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static Exception Catch(TestDelegate code, string message, params object[] args)
+        public static Exception Catch(TestDelegate code, string message=null, params object[] args)
         {
             return Throws(new InstanceOfTypeConstraint(typeof(Exception)), code, message, args);
-        }
-
-        /// <summary>
-        /// Verifies that a delegate throws an exception when called
-        /// and returns it.
-        /// </summary>
-        /// <param name="code">A TestDelegate</param>
-        public static Exception Catch(TestDelegate code)
-        {
-            return Throws(new InstanceOfTypeConstraint(typeof(Exception)), code);
         }
 
         /// <summary>
@@ -544,7 +352,7 @@ namespace TCLite.Framework
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static Exception Catch(Type expectedExceptionType, TestDelegate code, string message, params object[] args)
+        public static Exception Catch(Type expectedExceptionType, TestDelegate code, string message=null, params object[] args)
         {
             return Throws(new InstanceOfTypeConstraint(expectedExceptionType), code, message, args);
         }
@@ -553,44 +361,14 @@ namespace TCLite.Framework
         /// Verifies that a delegate throws an exception of a certain Type
         /// or one derived from it when called and returns it.
         /// </summary>
-        /// <param name="expectedExceptionType">The expected Exception Type</param>
-        /// <param name="code">A TestDelegate</param>
-        public static Exception Catch(Type expectedExceptionType, TestDelegate code)
-        {
-            return Throws(new InstanceOfTypeConstraint(expectedExceptionType), code);
-        }
-
-        #endregion
-
-        #region Catch<T>
-
-        /// <summary>
-        /// Verifies that a delegate throws an exception of a certain Type
-        /// or one derived from it when called and returns it.
-        /// </summary>
         /// <typeparam name="T">The expected Exception Type</typeparam>
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static T Catch<T>(TestDelegate code, string message, params object[] args) where T : System.Exception
+        public static T Catch<T>(TestDelegate code, string message=null, params object[] args) where T : System.Exception
         {
             return (T)Throws(new InstanceOfTypeConstraint(typeof(T)), code, message, args);
         }
-
-        /// <summary>
-        /// Verifies that a delegate throws an exception of a certain Type
-        /// or one derived from it when called and returns it.
-        /// </summary>
-        /// <typeparam name="T">The expected Exception Type</typeparam>
-        /// <param name="code">A TestDelegate</param>
-        public static T Catch<T>(TestDelegate code) where T : System.Exception
-        {
-            return (T)Throws(new InstanceOfTypeConstraint(typeof(T)), code);
-        }
-
-        #endregion
-
-        #region DoesNotThrow
 
         /// <summary>
         /// Verifies that a delegate does not throw an exception
@@ -598,21 +376,10 @@ namespace TCLite.Framework
         /// <param name="code">A TestDelegate</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static void DoesNotThrow(TestDelegate code, string message, params object[] args)
+        public static void DoesNotThrow(TestDelegate code, string message=null, params object[] args)
         {
             Assert.That(code, new ThrowsNothingConstraint(), message, args);
         }
-
-        /// <summary>
-        /// Verifies that a delegate does not throw an exception.
-        /// </summary>
-        /// <param name="code">A TestDelegate</param>
-        public static void DoesNotThrow(TestDelegate code)
-        {
-            DoesNotThrow(code, string.Empty, null);
-        }
-
-        #endregion
 
         #endregion
 
@@ -625,19 +392,9 @@ namespace TCLite.Framework
         /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void True(bool condition, string message, params object[] args)
+        public static void True(bool condition, string message=null, params object[] args)
         {
             Assert.That(condition, Is.True ,message, args);
-        }
-
-        /// <summary>
-        /// Asserts that a condition is true. If the condition is false the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary>
-        /// <param name="condition">The evaluated condition</param>
-        public static void True(bool condition)
-        {
-            Assert.That(condition, Is.True ,null, null);
         }
 
         /// <summary>
@@ -647,19 +404,9 @@ namespace TCLite.Framework
         /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsTrue(bool condition, string message, params object[] args)
+        public static void IsTrue(bool condition, string message=null, params object[] args)
         {
             Assert.That(condition, Is.True ,message, args);
-        }
-
-        /// <summary>
-        /// Asserts that a condition is true. If the condition is false the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary>
-        /// <param name="condition">The evaluated condition</param>
-        public static void IsTrue(bool condition)
-        {
-            Assert.That(condition, Is.True ,null, null);
         }
 
         #endregion
@@ -668,12 +415,12 @@ namespace TCLite.Framework
 
         /// <summary>
         /// Asserts that a condition is false. If the condition is true the method throws
-        /// an <see cref="AssertionException"/>.
+        /// an <see cref="AssertionException"/>
         /// </summary> 
         /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void False(bool condition, string message, params object[] args)
+        public static void False(bool condition, string message=null, params object[] args)
         {
             Assert.That(condition, Is.False ,message, args);
         }
@@ -683,31 +430,11 @@ namespace TCLite.Framework
         /// an <see cref="AssertionException"/>.
         /// </summary> 
         /// <param name="condition">The evaluated condition</param>
-        public static void False(bool condition)
-        {
-            Assert.That(condition, Is.False ,null, null);
-        }
-
-        /// <summary>
-        /// Asserts that a condition is false. If the condition is true the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary> 
-        /// <param name="condition">The evaluated condition</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsFalse(bool condition, string message, params object[] args)
+        public static void IsFalse(bool condition, string message=null, params object[] args)
         {
             Assert.That(condition, Is.False ,message, args);
-        }
-
-        /// <summary>
-        /// Asserts that a condition is false. If the condition is true the method throws
-        /// an <see cref="AssertionException"/>.
-        /// </summary> 
-        /// <param name="condition">The evaluated condition</param>
-        public static void IsFalse(bool condition)
-        {
-            Assert.That(condition, Is.False ,null, null);
         }
 
         #endregion
@@ -722,20 +449,9 @@ namespace TCLite.Framework
         /// <param name="anObject">The object that is to be tested</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void NotNull(object anObject, string message, params object[] args)
+        public static void NotNull(object anObject, string message=null, params object[] args)
         {
             Assert.That(anObject, Is.Not.Null ,message, args);
-        }
-
-        /// <summary>
-        /// Verifies that the object that is passed in is not equal to <code>null</code>
-        /// If the object is <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        public static void NotNull(object anObject)
-        {
-            Assert.That(anObject, Is.Not.Null ,null, null);
         }
 
         /// <summary>
@@ -746,20 +462,9 @@ namespace TCLite.Framework
         /// <param name="anObject">The object that is to be tested</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNotNull(object anObject, string message, params object[] args)
+        public static void IsNotNull(object anObject, string message=null, params object[] args)
         {
             Assert.That(anObject, Is.Not.Null ,message, args);
-        }
-
-        /// <summary>
-        /// Verifies that the object that is passed in is not equal to <code>null</code>
-        /// If the object is <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        public static void IsNotNull(object anObject)
-        {
-            Assert.That(anObject, Is.Not.Null ,null, null);
         }
 
         #endregion
@@ -774,20 +479,9 @@ namespace TCLite.Framework
         /// <param name="anObject">The object that is to be tested</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void Null(object anObject, string message, params object[] args)
+        public static void Null(object anObject, string message=null, params object[] args)
         {
             Assert.That(anObject, Is.Null ,message, args);
-        }
-
-        /// <summary>
-        /// Verifies that the object that is passed in is equal to <code>null</code>
-        /// If the object is not <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        public static void Null(object anObject)
-        {
-            Assert.That(anObject, Is.Null ,null, null);
         }
 
         /// <summary>
@@ -798,28 +492,15 @@ namespace TCLite.Framework
         /// <param name="anObject">The object that is to be tested</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void IsNull(object anObject, string message, params object[] args)
+        public static void IsNull(object anObject, string message=null, params object[] args)
         {
             Assert.That(anObject, Is.Null ,message, args);
-        }
-
-        /// <summary>
-        /// Verifies that the object that is passed in is equal to <code>null</code>
-        /// If the object is not <code>null</code> then an <see cref="AssertionException"/>
-        /// is thrown.
-        /// </summary>
-        /// <param name="anObject">The object that is to be tested</param>
-        public static void IsNull(object anObject)
-        {
-            Assert.That(anObject, Is.Null ,null, null);
         }
 
         #endregion
 
         #region AreEqual
 
-        #region Ints
-
         /// <summary>
         /// Verifies that two ints are equal. If they are not, then an 
         /// <see cref="AssertionException"/> is thrown.
@@ -828,35 +509,7 @@ namespace TCLite.Framework
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(int expected, int actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two ints are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreEqual(int expected, int actual)
-        {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that two longs are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(long expected, long actual, string message, params object[] args)
+        public static void AreEqual(int expected, int actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.EqualTo(expected), message, args);
         }
@@ -867,14 +520,12 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
-        public static void AreEqual(long expected, long actual)
+        /// <param name="message">The message to display in case of failure</param>
+        /// <param name="args">Array of objects to be used in formatting the message</param>
+        public static void AreEqual(long expected, long actual, string message=null, params object[] args)
         {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
+            Assert.That(actual, Is.EqualTo(expected), message, args);
         }
-
-        #endregion
-
-        #region Unsigned Ints
 
         /// <summary>
         /// Verifies that two unsigned ints are equal. If they are not, then an 
@@ -886,23 +537,8 @@ namespace TCLite.Framework
         /// <param name="args">Array of objects to be used in formatting the message</param>
         public static void AreEqual(uint expected, uint actual, string message, params object[] args)
         {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
+            Assert.That(actual, Is.EqualTo(expected), message=null, args);
         }
-
-        /// <summary>
-        /// Verifies that two unsigned ints are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreEqual(uint expected, uint actual)
-        {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
 
         /// <summary>
         /// Verifies that two unsigned longs are equal. If they are not, then an 
@@ -912,35 +548,7 @@ namespace TCLite.Framework
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(ulong expected, ulong actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two unsigned longs are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreEqual(ulong expected, ulong actual)
-        {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Decimals
-
-        /// <summary>
-        /// Verifies that two decimals are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(decimal expected, decimal actual, string message, params object[] args)
+        public static void AreEqual(ulong expected, ulong actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.EqualTo(expected), message, args);
         }
@@ -951,14 +559,12 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
-        public static void AreEqual(decimal expected, decimal actual)
+        /// <param name="message">The message to display in case of failure</param>
+        /// <param name="args">Array of objects to be used in formatting the message</param>
+        public static void AreEqual(decimal expected, decimal actual, string message=null, params object[] args)
         {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
+            Assert.That(actual, Is.EqualTo(expected), message, args);
         }
-
-        #endregion
-
-        #region Doubles
 
         /// <summary>
         /// Verifies that two doubles are equal considering a delta. If the
@@ -974,22 +580,7 @@ namespace TCLite.Framework
         /// <param name="args">Array of objects to be used in formatting the message</param>
         public static void AreEqual(double expected, double actual, double delta, string message, params object[] args)
         {
-            AssertDoublesAreEqual(expected, actual, delta, message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two doubles are equal considering a delta. If the
-        /// expected value is infinity then the delta value is ignored. If 
-        /// they are not equal then an <see cref="AssertionException"/> is
-        /// thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="delta">The maximum acceptable difference between the
-        /// the expected and the actual</param>
-        public static void AreEqual(double expected, double actual, double delta)
-        {
-            AssertDoublesAreEqual(expected, actual, delta, null, null);
+            AssertDoublesAreEqual(expected, actual, delta, message=null, args);
         }
 
         /// <summary>
@@ -1004,31 +595,12 @@ namespace TCLite.Framework
         /// the expected and the actual</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(double expected, double? actual, double delta, string message, params object[] args)
+        public static void AreEqual(double expected, double? actual, double delta, string message=null, params object[] args)
         {
             AssertDoublesAreEqual(expected, (double)actual, delta, message, args);
         }
 
         /// <summary>
-        /// Verifies that two doubles are equal considering a delta. If the
-        /// expected value is infinity then the delta value is ignored. If 
-        /// they are not equal then an <see cref="AssertionException"/> is
-        /// thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="delta">The maximum acceptable difference between the
-        /// the expected and the actual</param>
-        public static void AreEqual(double expected, double? actual, double delta)
-        {
-            AssertDoublesAreEqual(expected, (double)actual, delta, null, null);
-        }
-
-        #endregion
-
-        #region Objects
-
-        /// <summary>
         /// Verifies that two objects are equal.  Two objects are considered
         /// equal if both are null, or if both have the same value. NUnit
         /// has special semantics for some object types.
@@ -1038,32 +610,15 @@ namespace TCLite.Framework
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(object expected, object actual, string message, params object[] args)
+        public static void AreEqual(object expected, object actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.EqualTo(expected), message, args);
         }
-
-        /// <summary>
-        /// Verifies that two objects are equal.  Two objects are considered
-        /// equal if both are null, or if both have the same value. NUnit
-        /// has special semantics for some object types.
-        /// If they are not equal an <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The value that is expected</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreEqual(object expected, object actual)
-        {
-            Assert.That(actual, Is.EqualTo(expected), null, null);
-        }
-
-        #endregion
 
         #endregion
 
         #region AreNotEqual
 
-        #region Ints
-
         /// <summary>
         /// Verifies that two ints are not equal. If they are equal, then an 
         /// <see cref="AssertionException"/> is thrown.
@@ -1072,35 +627,7 @@ namespace TCLite.Framework
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(int expected, int actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two ints are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(int expected, int actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Longs
-
-        /// <summary>
-        /// Verifies that two longs are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(long expected, long actual, string message, params object[] args)
+        public static void AreNotEqual(int expected, int actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
@@ -1111,24 +638,9 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(long expected, long actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Ints
-
-        /// <summary>
-        /// Verifies that two unsigned ints are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(uint expected, uint actual, string message, params object[] args)
+        public static void AreNotEqual(long expected, long actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
@@ -1139,24 +651,9 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(uint expected, uint actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Unsigned Longs
-
-        /// <summary>
-        /// Verifies that two unsigned longs are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(ulong expected, ulong actual, string message, params object[] args)
+        public static void AreNotEqual(uint expected, uint actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
@@ -1167,14 +664,12 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(ulong expected, ulong actual)
+        /// <param name="message">The message to display in case of failure</param>
+        /// <param name="args">Array of objects to be used in formatting the message</param>
+        public static void AreNotEqual(ulong expected, ulong actual, string message=null, params object[] args)
         {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
+            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
-
-        #endregion
-
-        #region Decimals
 
         /// <summary>
         /// Verifies that two decimals are not equal. If they are equal, then an 
@@ -1186,23 +681,8 @@ namespace TCLite.Framework
         /// <param name="args">Array of objects to be used in formatting the message</param>
         public static void AreNotEqual(decimal expected, decimal actual, string message, params object[] args)
         {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
+            Assert.That(actual, Is.Not.EqualTo(expected), message=null, args);
         }
-
-        /// <summary>
-        /// Verifies that two decimals are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(decimal expected, decimal actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Floats
 
         /// <summary>
         /// Verifies that two floats are not equal. If they are equal, then an 
@@ -1214,23 +694,8 @@ namespace TCLite.Framework
         /// <param name="args">Array of objects to be used in formatting the message</param>
         public static void AreNotEqual(float expected, float actual, string message, params object[] args)
         {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
+            Assert.That(actual, Is.Not.EqualTo(expected), message=null, args);
         }
-
-        /// <summary>
-        /// Verifies that two floats are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(float expected, float actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Doubles
 
         /// <summary>
         /// Verifies that two doubles are not equal. If they are equal, then an 
@@ -1240,37 +705,7 @@ namespace TCLite.Framework
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(double expected, double actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two doubles are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(double expected, double actual)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
-        }
-
-        #endregion
-
-        #region Objects
-
-        /// <summary>
-        /// Verifies that two objects are not equal.  Two objects are considered
-        /// equal if both are null, or if both have the same value. NUnit
-        /// has special semantics for some object types.
-        /// If they are equal an <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The value that is expected</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(object expected, object actual, string message, params object[] args)
+        public static void AreNotEqual(double expected, double actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
@@ -1283,16 +718,16 @@ namespace TCLite.Framework
         /// </summary>
         /// <param name="expected">The value that is expected</param>
         /// <param name="actual">The actual value</param>
-        public static void AreNotEqual(object expected, object actual)
+        /// <param name="message">The message to display in case of failure</param>
+        /// <param name="args">Array of objects to be used in formatting the message</param>
+        public static void AreNotEqual(object expected, object actual, string message=null, params object[] args)
         {
-            Assert.That(actual, Is.Not.EqualTo(expected), null, null);
+            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
 
         #endregion
 
-        #endregion
-
-        #region AreSame
+        #region Same / NotSame
 
         /// <summary>
         /// Asserts that two objects refer to the same object. If they
@@ -1302,27 +737,12 @@ namespace TCLite.Framework
         /// <param name="actual">The actual object</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreSame(object expected, object actual, string message, params object[] args)
+        public static void AreSame(object expected, object actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.SameAs(expected), message, args);
         }
 
         /// <summary>
-        /// Asserts that two objects refer to the same object. If they
-        /// are not the same an <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        /// <param name="actual">The actual object</param>
-        public static void AreSame(object expected, object actual)
-        {
-            Assert.That(actual, Is.SameAs(expected), null, null);
-        }
-
-        #endregion
-
-        #region AreNotSame
-
-        /// <summary>
         /// Asserts that two objects do not refer to the same object. If they
         /// are the same an <see cref="AssertionException"/> is thrown.
         /// </summary>
@@ -1330,20 +750,9 @@ namespace TCLite.Framework
         /// <param name="actual">The actual object</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotSame(object expected, object actual, string message, params object[] args)
+        public static void AreNotSame(object expected, object actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.SameAs(expected), message, args);
-        }
-
-        /// <summary>
-        /// Asserts that two objects do not refer to the same object. If they
-        /// are the same an <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected object</param>
-        /// <param name="actual">The actual object</param>
-        public static void AreNotSame(object expected, object actual)
-        {
-            Assert.That(actual, Is.Not.SameAs(expected), null, null);
         }
 
         #endregion
