@@ -13,9 +13,6 @@ namespace TCLite.Framework.Api
     /// </summary>
 	public class TestOutput
 	{
-		string text;
-		TestOutputType type;
-
         /// <summary>
         /// Construct with text and an output destination type
         /// </summary>
@@ -23,8 +20,8 @@ namespace TCLite.Framework.Api
         /// <param name="type">Destination of output</param>
 		public TestOutput(string text, TestOutputType type)
 		{
-			this.text = text;
-			this.type = type;
+			Text = text;
+			Type = type;
 		}
 
         /// <summary>
@@ -33,30 +30,18 @@ namespace TCLite.Framework.Api
         /// <returns></returns>
 		public override string ToString()
 		{
-			return type + ": " + text;
+			return $"{Type}: {Text}";
 		}
 
         /// <summary>
         /// Get the text 
         /// </summary>
-		public string Text
-		{
-			get
-			{
-				return this.text;
-			}
-		}
+		public string Text { get; }
 
         /// <summary>
         /// Get the output type
         /// </summary>
-		public TestOutputType Type
-		{
-			get
-			{
-				return this.type;
-			}
-		}
+		public TestOutputType Type { get; }
 	}
 
     /// <summary>

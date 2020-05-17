@@ -14,8 +14,6 @@ namespace TCLite.Framework.Api
 	/// </summary>
 	public class ResultState
 	{
-        private readonly TestStatus status;
-        private readonly string label;
 
         #region Constructors
 
@@ -32,10 +30,10 @@ namespace TCLite.Framework.Api
         /// </summary>
         /// <param name="status">The TestStatus.</param>
         /// <param name="label">The label.</param>
-        public ResultState(TestStatus status, string label)
+        public ResultState(TestStatus status, string label=null)
         {
-            this.status = status;
-            this.label = label == null ? string.Empty : label;
+            Status = status;
+            Label = label ?? string.Empty;
         }
 
         #endregion
@@ -90,19 +88,13 @@ namespace TCLite.Framework.Api
         /// Gets the TestStatus for the test.
         /// </summary>
         /// <value>The status.</value>
-        public TestStatus Status
-        {
-            get { return status; }
-        }
+        public TestStatus Status { get; }
 
         /// <summary>
         /// Gets the label under which this test resullt is
         /// categorized, if any.
         /// </summary>
-        public string Label
-        {
-            get { return label; }
-        }
+        public string Label { get; }
 
         #endregion
 
@@ -114,8 +106,9 @@ namespace TCLite.Framework.Api
         /// </returns>
         public override string ToString()
         {
-            string s = status.ToString();
-            return label == null || label.Length == 0 ? s : string.Format("{0}:{1}", s, label);
+            return string.IsNullOrEmpty(Label)
+                ? Status.ToString()
+                : $"{Status}:{Label}";
         }
     }
 }
