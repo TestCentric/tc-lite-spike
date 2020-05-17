@@ -50,6 +50,9 @@ Task("BuildAndTest")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
+Task("AppVeyor")
+    .IsDependentOn("BuildAndTest");
+
 Task("Travis")
     .IsDependentOn("BuildAndTest");
 
