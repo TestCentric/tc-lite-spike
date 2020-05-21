@@ -8,69 +8,18 @@ namespace TCLite.Framework
     public abstract partial class Assert
     {
         /// <summary>
-        /// Verifies that two ints are equal. If they are not, then an 
+        /// Verifies that two instances of a type are equal. If they are not, then an 
         /// <see cref="AssertionException"/> is thrown.
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(int expected, int actual, string message=null, params object[] args)
+        public static void AreEqual<T>(T expected, T actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.EqualTo(expected), message, args);
         }
 
-        /// <summary>
-        /// Verifies that two longs are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(long expected, long actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two unsigned ints are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(uint expected, uint actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message=null, args);
-        }
-
-        /// <summary>
-        /// Verifies that two unsigned longs are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(ulong expected, ulong actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two decimals are equal. If they are not, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(decimal expected, decimal actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.EqualTo(expected), message, args);
-        }
 
         /// <summary>
         /// Verifies that two doubles are equal considering a delta. If the
@@ -84,12 +33,12 @@ namespace TCLite.Framework
         /// the expected and the actual</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreEqual(double expected, double actual, double delta, string message, params object[] args)
+        public static void AreEqual(double expected, double actual, double delta, string message=null, params object[] args)
         {
-            AssertDoublesAreEqual(expected, actual, delta, message=null, args);
+            AssertDoublesAreEqual(expected, actual, delta, message, args);
         }
 
-        /// <summary>
+         /// <summary>
         /// Verifies that two doubles are equal considering a delta. If the
         /// expected value is infinity then the delta value is ignored. If 
         /// they are not equal then an <see cref="AssertionException"/> is
@@ -106,7 +55,7 @@ namespace TCLite.Framework
             AssertDoublesAreEqual(expected, (double)actual, delta, message, args);
         }
 
-        /// <summary>
+       /// <summary>
         /// Verifies that two objects are equal.  Two objects are considered
         /// equal if both are null, or if both have the same value. NUnit
         /// has special semantics for some object types.
@@ -122,92 +71,14 @@ namespace TCLite.Framework
         }
 
         /// <summary>
-        /// Verifies that two ints are not equal. If they are equal, then an 
+        /// Verifies that two instances of a type are not equal. If they are equal, then an 
         /// <see cref="AssertionException"/> is thrown.
         /// </summary>
         /// <param name="expected">The expected value</param>
         /// <param name="actual">The actual value</param>
         /// <param name="message">The message to display in case of failure</param>
         /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(int expected, int actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two longs are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(long expected, long actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two unsigned ints are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(uint expected, uint actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two unsigned longs are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(ulong expected, ulong actual, string message=null, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message, args);
-        }
-
-        /// <summary>
-        /// Verifies that two decimals are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(decimal expected, decimal actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message=null, args);
-        }
-
-        /// <summary>
-        /// Verifies that two floats are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(float expected, float actual, string message, params object[] args)
-        {
-            Assert.That(actual, Is.Not.EqualTo(expected), message=null, args);
-        }
-
-        /// <summary>
-        /// Verifies that two doubles are not equal. If they are equal, then an 
-        /// <see cref="AssertionException"/> is thrown.
-        /// </summary>
-        /// <param name="expected">The expected value</param>
-        /// <param name="actual">The actual value</param>
-        /// <param name="message">The message to display in case of failure</param>
-        /// <param name="args">Array of objects to be used in formatting the message</param>
-        public static void AreNotEqual(double expected, double actual, string message=null, params object[] args)
+        public static void AreNotEqual<T>(T expected, T actual, string message=null, params object[] args)
         {
             Assert.That(actual, Is.Not.EqualTo(expected), message, args);
         }
