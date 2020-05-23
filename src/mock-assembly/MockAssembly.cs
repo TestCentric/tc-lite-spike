@@ -13,7 +13,7 @@ namespace TCLite.Tests
 	{
 		public static void Main(string[] args)
 		{
-			new TCLite.Runner.AutoRun().Execute(args);
+			new TCLite.Runner.TestRunner().Execute(args);
 		}
 	}
 

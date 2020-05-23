@@ -26,9 +26,9 @@ namespace TCLite.Runner
 
         private bool ShowHelp;
 
-        public TestRunner(Assembly testAssembly)
+        public TestRunner()
         {
-            _testAssembly = testAssembly;
+            _testAssembly = Assembly.GetCallingAssembly();
             _runner = new NUnitLiteTestAssemblyRunner(new NUnitLiteTestAssemblyBuilder());
         }
 
