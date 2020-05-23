@@ -29,8 +29,6 @@ namespace TCLite.Runner
     /// </summary>
     public class TextUI
     {
-        private CommandLineOptions _options;
-
         private ExtendedTextWriter _writer;
 
         /// <summary>
@@ -83,9 +81,10 @@ namespace TCLite.Runner
             WriteSubHeader(copyright);
         }
 
-        public void DisplayHelp()
+        public void DisplayHelp(Mono.Options.OptionSet optionSet)
         {
-            _writer.WriteLine(_options.HelpText);
+            using (new ColorConsole(ColorStyle.Help))
+                optionSet.WriteOptionDescriptions(_writer);  
         }
 
         /// <summary>

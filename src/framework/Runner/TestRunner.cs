@@ -7,7 +7,9 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Xml;
+using Mono.Options;
 using TCLite.Framework.Api;
 using TCLite.Framework.Internal;
 using TCLite.Framework.Internal.Filters;
@@ -21,6 +23,8 @@ namespace TCLite.Runner
         private ExtendedTextWriter _writer;
         private TextUI _textUI;
         private ITestAssemblyRunner _runner;
+
+        private bool ShowHelp;
 
         public TestRunner(Assembly testAssembly)
         {
@@ -43,14 +47,15 @@ namespace TCLite.Runner
 
             if (_options.ShowHelp)
             {
-                _textUI.DisplayHelp();
+                _textUI.DisplayHelp(_options._monoOptions);
                 return;
             }
 
             if (_options.Error)
             {
-                _writer.WriteLine(_options.ErrorMessage);
-                _textUI.DisplayHelp();
+                foreach (string msg in _options.ErrorMessages)
+                    _writer.WriteLine(msg);
+                _textUI.DisplayHelp(_options._monoOptions);
                 return;
             }
 
@@ -58,7 +63,7 @@ namespace TCLite.Runner
 
             _textUI.DisplayTestFile(AssemblyHelper.GetAssemblyPath(_testAssembly));
 
-            if (_options.Wait && _options.OutFile != null)
+            if (_options.WaitBeforeExit && _options.OutFile != null)
                 _writer.WriteLine("Ignoring /wait option - only valid for Console");
 
 #if SILVERLIGHT
@@ -73,13 +78,11 @@ namespace TCLite.Runner
             //if (commandLineOptions.TestCount > 0)
             //    runOptions["RUN"] = commandLineOptions.Tests;
 
-            ITestFilter filter = _options.TestCount > 0
-                ? new SimpleNameFilter(_options.Tests)
-                : TestFilter.Empty;
+            ITestFilter filter = TestFilter.Empty;
 
             try
             {
-                Randomizer.InitialSeed = _options.InitialSeed;
+                Randomizer.InitialSeed = _options.RandomSeed;
 
                 if (!_runner.Load(_testAssembly, loadOptions))
                 {
@@ -91,31 +94,7 @@ namespace TCLite.Runner
                 if (_options.Explore)
                     ExploreTests();
                 else
-                {
-                    if (_options.Include != null && _options.Include != string.Empty)
-                    {
-                        TestFilter includeFilter = new SimpleCategoryExpression(_options.Include).Filter;
-
-                        if (filter.IsEmpty)
-                            filter = includeFilter;
-                        else
-                            filter = new AndFilter(filter, includeFilter);
-                    }
-
-                    if (_options.Exclude != null && _options.Exclude != string.Empty)
-                    {
-                        TestFilter excludeFilter = new NotFilter(new SimpleCategoryExpression(_options.Exclude).Filter);
-
-                        if (filter.IsEmpty)
-                            filter = excludeFilter;
-                        else if (filter is AndFilter)
-                            ((AndFilter)filter).Add(excludeFilter);
-                        else
-                            filter = new AndFilter(filter, excludeFilter);
-                    }
-
                     RunTests(filter);
-                }
             }
             catch (FileNotFoundException ex)
             {
@@ -129,7 +108,7 @@ namespace TCLite.Runner
             {
                 if (_options.OutFile == null)
                 {
-                    if (_options.Wait)
+                    if (_options.WaitBeforeExit)
                     {
                         Console.WriteLine("Press Enter key to continue . . .");
                         Console.ReadLine();
@@ -161,32 +140,34 @@ namespace TCLite.Runner
 
             _textUI.DisplaySummaryReport(summary);
 
-            string resultFile = _options.ResultFile;
-            string resultFormat = _options.ResultFormat;
+            // string resultFile = _options.ResultFile;
+            // string resultFormat = _options.ResultFormat;
                     
-            if (resultFile != null || _options.ResultFormat != null)
-            {
-                if (resultFile == null)
-                    resultFile = "TestResult.xml";
+            // if (resultFile != null || _options.ResultFormat != null)
+            // {
+            //     if (resultFile == null)
+            //         resultFile = "TestResult.xml";
 
-                if (resultFormat == "nunit2")
-                    new NUnit2XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
-                else
-                    new NUnit3XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
+            //     if (resultFormat == "nunit2")
+            //         new NUnit2XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
+            //     else
+            //         new NUnit3XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
 
-                Console.WriteLine();
-                Console.WriteLine("Results saved as {0}.", resultFile);
-            }
+            //     Console.WriteLine();
+            //     Console.WriteLine("Results saved as {0}.", resultFile);
+            // }
         }
 
         private void ExploreTests()
         {
             XmlNode testNode = _runner.LoadedTest.ToXml(true);
 
-            string listFile = _options.ExploreFile;
-            TextWriter textWriter = listFile != null && listFile.Length > 0
-                ? new StreamWriter(listFile)
-                : Console.Out;
+            // string listFile = _options.ExploreFile;
+            // TextWriter textWriter = listFile != null && listFile.Length > 0
+            //     ? new StreamWriter(listFile)
+            //     : Console.Out;
+
+            TextWriter textWriter = Console.Out;
 
             System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.Indent = true;
@@ -197,7 +178,7 @@ namespace TCLite.Runner
             testWriter.Close();
 
             Console.WriteLine();
-            Console.WriteLine("Test info saved as {0}.", listFile);
+            // Console.WriteLine("Test info saved as {0}.", listFile);
         }
 
         #region ITestListener Members
@@ -212,8 +193,8 @@ namespace TCLite.Runner
         {
             _currentTestName = test.Name;
 
-            if (_options.LabelTestsInOutput)
-                _writer.WriteLine("***** {0}", _currentTestName);
+            // if (_options.LabelTestsInOutput)
+            //     _writer.WriteLine("***** {0}", _currentTestName);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Options;
 using TCLite.Framework;
 
 namespace TCLite.Runner
@@ -18,93 +19,212 @@ namespace TCLite.Runner
     /// </summary>
     public class CommandLineOptions
     {
-        private string _optionChars;
-        private static string NL = Environment.NewLine;
+        internal OptionSet _monoOptions;
 
-        private bool error = false;
+#region Constructor
 
-        private List<string> tests = new List<string>();
-        private List<string> invalidOptions = new List<string>();
-        private List<string> parameters = new List<string>();
+        public CommandLineOptions()
+        {
+            _monoOptions = new OptionSet()
+            {
+                "",
+                "Usage: TEST_ASSEMBLY [options]",
+                "",
+                "Runs tests contained in a user TEST_ASSEMBLY, written as a console application",
+                "and referencing the tc-lite framework. The following options are supported...",
+                "",
+                "Select Tests:",
+                "",
+                { "where=", "(NYI) {TSL} expression indicating which tests will be run. See Test Selection Language note below. If omitted, all tests are run.",
+                    v => WhereClause = RequiredValue(v, "--where") },
+                "",
+                "Determine HOW Tests are Run:",
+                "",
+                { "params|p=", "(NYI) Define test parameters.",
+                    v => { } },
+//                     {
+//                         string parameters = RequiredValue(v, "--params");
 
-        private int randomSeed = -1;
+//                         // This can be changed without breaking backwards compatibility with frameworks.
+//                         foreach (string param in parameters.Split(new[] { ';' }))
+//                         {
+//                             int eq = param.IndexOf("=");
+//                             if (eq == -1 || eq == param.Length - 1)
+//                             {
+//                                 ErrorMessages.Add("Invalid format for test parameter. Use NAME=VALUE.");
+//                             }
+//                             else
+//                             {
+//                                 string name = param.Substring(0, eq);
+//                                 string val = param.Substring(eq + 1);
+
+//                                 TestParameters[name] = val;
+//                             }
+//                         }
+//                     }
+//                 }
+
+                { "timeout=", "(NYI) Set default test case timeout in {MILLISECONDS}.",
+                    v => DefaultTimeout = RequiredInt(v, "--timeout") },
+
+                { "seed=", "(NYI) Set the random {SEED} used to generate test data. Used for debugging earlier runs.",
+                    v => RandomSeed = RequiredInt(v, "--seed") },
+
+                 { "workers=", "(NYI) Specify the {NUMBER} of worker threads to be used in running tests. If not specified, defaults to 2 or the number of processors, whichever is greater.",
+                     v => NumberOfTestWorkers = RequiredInt(v, "--workers") },
+
+                { "stoponerror", "(NYI) Stop run immediately upon any test failure or error.",
+                    v => StopOnError = v != null },
+
+                { "wait", "Wait for input before closing console window.",
+                    v => WaitBeforeExit = v != null },
+                "",
+                "Test Output:",
+                "",
+                { "work=", "(NYI) {PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
+                    v => WorkDirectory = RequiredValue(v, "--work") },
+
+                { "output|out=", "(NYI) File {PATH} to contain text output from the tests.",
+                    v => OutFile = RequiredValue(v, "--output") },
+
+                { "err=", "(NYI) File {PATH} to contain error output from the tests.",
+                    v => ErrFile = RequiredValue(v, "--err") },
+
+                // { "result=", "An output {SPEC} for saving the test results. This option may be repeated.",
+                //     v => ResolveOutputSpecification(RequiredValue(v, "--resultxml"), resultOutputSpecifications) },
+
+                { "explore:", "(NYI) Explore tests rather than running them. The optional file PATH is used for the XML report describing the tests.", //Optionally provide an output {SPEC} for saving the test info. This option may be repeated.",
+                    v =>
+                    {
+                        Explore = true;
+                        //ResolveOutputSpecification(v, ExploreOutputSpecifications);
+                    } },
+                
+                { "result=", "(NYI) Save test result XML in file at {PATH}. If not specified, default is TestResult.xml.",
+                    v => ResultFile=RequiredValue(v, "--result")},
+
+                { "noresult", "(NYI) Don't save any test results.",
+                    v => NoResult = v != null },
+
+                { "labels=", "(NYI) Specify whether to write test case names to the output.", //Values: Off, On, All",
+                    v => DisplayTestLabels = RequiredValue(v, "--labels", "Off", "On", "Before", "After", "All") },
+
+                // { "test-name-format=", "Non-standard naming pattern to use in generating test names.",
+                //     v => DefaultTestNamePattern = RequiredValue(v, "--test-name-format") },
+
+                { "teamcity", "(NYI) Turns on use of TeamCity service messages.",
+                    v => TeamCity = v != null },
+
+                { "trace=", "(NYI) Set internal trace {LEVEL}.\nValues: Off, Error, Warning, Info, Verbose (Debug)",
+                     v => InternalTraceLevel = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug") },
+
+                { "noheader|noh", "Don't display program header at start of run.",
+                    v => NoHeader = v != null },
+
+                { "nocolor|noc", "(NYI) Displays console output without color.",
+                    v => NoColor = v != null },
+
+                { "help|h", "Display this message and exit.",
+                    v => ShowHelp = v != null },
+
+                { "version|V", "Display the header and exit.",
+                    v => ShowVersion = v != null },
+
+                ""
+            };
+        }
+
+#endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets a value indicating whether the 'wait' option was used.
-        /// </summary>
-        public bool Wait { get; private set; }
+        // Action to Perform
 
-        /// <summary>
-        /// Gets a value indicating whether the 'nologo' option was used.
-        /// </summary>
-        public bool NoHeader { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the 'help' option was used.
-        /// </summary>
-        public bool ShowHelp { get; private set; }
-
-        /// <summary>
-        /// Just show the header with version and exit
-        /// </summary>
-        public bool ShowVersion{ get; private set; }
-
-        /// <summary>
-        /// Gets a list of all tests specified on the command line
-        /// </summary>
-        public string[] Tests
-        {
-            get { return (string[])tests.ToArray(); }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether a full report should be displayed
-        /// </summary>
-        public bool Full { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether tests should be listed
-        /// rather than run.
-        /// </summary>
         public bool Explore { get; private set; }
 
-        /// <summary>
-        /// Gets the name of the file to be used for listing tests
-        /// </summary>
+        public bool ShowHelp { get; private set; }
+
+        public bool ShowVersion { get; private set; }
+
+        // Select tests
+
+        public IDictionary<string, string> TestParameters { get; } = new Dictionary<string, string>();
+
+        public string WhereClause { get; private set; }
+        public bool WhereClauseSpecified { get { return WhereClause != null; } }
+
+        public int DefaultTimeout { get; private set; } = -1;
+        public bool DefaultTimeoutSpecified { get { return DefaultTimeout >= 0; } }
+
+        public int RandomSeed { get; private set; } = -1;
+        public bool RandomSeedSpecified { get { return RandomSeed >= 0; } }
+
+        public string DefaultTestNamePattern { get; private set; }
+
+        public int NumberOfTestWorkers { get; private set; } = -1;
+        public bool NumberOfTestWorkersSpecified { get { return NumberOfTestWorkers >= 0; } }
+
+        public bool StopOnError { get; private set; }
+
+        public bool WaitBeforeExit { get; private set; }
+
+        // Output Control
+        public bool NoHeader { get; private set; }
+
+        public bool NoColor { get; private set; }
+
+        public bool TeamCity { get; private set; }
+
+        public string OutFile { get; private set; }
+        public bool OutFileSpecified { get { return OutFile != null; } }
+
+        public string ErrFile { get; private set; }
+        public bool ErrFileSpecified { get { return ErrFile != null; } }
+
+        public string DisplayTestLabels { get; private set; }
+
+        // private string workDirectory = null;
+        public string WorkDirectory { get; private set; }
+        // {
+        //     get { return workDirectory ?? DEFAULT_WORK_DIRECTORY; }
+        // }
+        // public bool WorkDirectorySpecified { get { return workDirectory != null; } }
+
+        public string InternalTraceLevel { get; private set; }
+        public bool InternalTraceLevelSpecified { get { return InternalTraceLevel != null; } }
+
+        // private readonly List<OutputSpecification> resultOutputSpecifications = new List<OutputSpecification>();
+        // public IList<OutputSpecification> ResultOutputSpecifications
+        // {
+        //     get
+        //     {
+        //         if (noresult)
+        //             return new OutputSpecification[0];
+
+        //         if (resultOutputSpecifications.Count == 0)
+        //             resultOutputSpecifications.Add(new OutputSpecification("TestResult.xml"));
+
+        //         return resultOutputSpecifications;
+        //     }
+        // }
+
+        public string ResultFile { get; private set; }
+        public string ResultFormat { get; private set; }
+        public bool NoResult { get; private set; }
+
+        // public IList<OutputSpecification> ExploreOutputSpecifications { get; } = new List<OutputSpecification>();
+
         public string ExploreFile { get; private set; }
 
-        /// <summary>
-        /// Gets the name of the file to be used for test results
-        /// </summary>
-        public string ResultFile { get; private set; }
+        public bool Full { get; private set; }
 
-        /// <summary>
-        /// Gets the format to be used for test results
-        /// </summary>
-        public string ResultFormat { get; private set; }
+        // Error Processing
 
-        /// <summary>
-        /// Gets the full path of the file to be used for output
-        /// </summary>
-        public string OutFile { get; private set; }
+        public IList<string> ErrorMessages { get; } = new List<string>();
 
-        /// <summary>
-        /// Gets the list of categories to include
-        /// </summary>
-        public string Include { get; private set; }
+        public bool Error => ErrorMessages.Count > 0;
 
-        /// <summary>
-        /// Gets the list of categories to exclude
-        /// </summary>
-        public string Exclude { get; private set; }
-
-        /// <summary>
-        /// Gets a flag indicating whether each test should
-        /// be labeled in the output.
-        /// </summary>
-        public bool LabelTestsInOutput { get; private set; }
+        #endregion
 
         private string ExpandToFullPath(string path)
         {
@@ -118,259 +238,68 @@ namespace TCLite.Runner
         }
 
         /// <summary>
-        /// Gets the test count
-        /// </summary>
-        public int TestCount
-        {
-            get { return tests.Count; }
-        }
-
-        /// <summary>
-        /// Gets the seed to be used for generating random values
-        /// </summary>
-        public int InitialSeed
-        {
-            get 
-            {
-                if (randomSeed < 0)
-                    randomSeed = new Random().Next();
-
-                return randomSeed; 
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Construct a CommandLineOptions object using default option chars
-        /// </summary>
-        public CommandLineOptions()
-        {
-            _optionChars = System.IO.Path.DirectorySeparatorChar == '/' ? "-" : "/-";
-        }
-
-        /// <summary>
-        /// Construct a CommandLineOptions object using specified option chars
-        /// </summary>
-        /// <param name="optionChars"></param>
-        public CommandLineOptions(string optionChars)
-        {
-            _optionChars = optionChars;
-        }
-
-        /// <summary>
         /// Parse command arguments and initialize option settings accordingly
         /// </summary>
         /// <param name="args">The argument list</param>
         public void Parse(params string[] args)
         {
-            foreach( string arg in args )
-            {
-                if (_optionChars.IndexOf(arg[0]) >= 0 )
-                    ProcessOption(arg);
-                else
-                    ProcessParameter(arg);
-            }
-        }
+            var invalidOptions = new List<string>();
 
+            try
+            {
+                invalidOptions = _monoOptions.Parse(args);
+            }
+            catch(OptionException ex)
+            {
+                ErrorMessages.Add(ex.Message);
+            }
+
+            foreach (string msg in invalidOptions)
+                ErrorMessages.Add($"Invalid option: {msg}");
+
+        }
+    
         /// <summary>
-        ///  Gets the parameters provided on the commandline
+        /// Case is ignored when val is compared to validValues. When a match is found, the
+        /// returned value will be in the canonical case from validValues.
         /// </summary>
-        public string[] Parameters
+        protected string RequiredValue(string val, string option, params string[] validValues)
         {
-            get { return (string[])parameters.ToArray(); }
-        }
+            if (string.IsNullOrEmpty(val))
+                ErrorMessages.Add("Missing required value for option '" + option + "'.");
 
-        private void ProcessOption(string option)
-        {
-            string opt = option;
-            int pos = opt.IndexOfAny( new char[] { ':', '=' } );
-            string val = string.Empty;
+            bool isValid = true;
 
-            if (pos >= 0)
+            if (validValues != null && validValues.Length > 0)
             {
-                val = opt.Substring(pos + 1);
-                opt = opt.Substring(0, pos);
+                isValid = false;
+
+                foreach (string valid in validValues)
+                    if (string.Compare(valid, val, StringComparison.OrdinalIgnoreCase) == 0)
+                        return valid;
+
             }
 
-            switch (opt.Substring(1))
-            {
-                case "wait":
-                    Wait = true;
-                    break;
-                case "noheader":
-                case "noh":
-                    NoHeader = true;
-                    break;
-                case "help":
-                case "h":
-                    ShowHelp = true;
-                    break;
-                case "version":
-                    ShowVersion = true;
-                    break;
-                case "test":
-                    tests.Add(val);
-                    break;
-                case "full":
-                    Full = true;
-                    break;
-                case "explore":
-                    Explore = true;
-                    if (val == null || val.Length == 0)
-                        val = "tests.xml";
-                    try
-                    {
-                        ExploreFile = ExpandToFullPath(val);
-                    }
-                    catch
-                    {
-                        InvalidOption(option);
-                    }
-                    break;
-                case "result":
-                    if (val == null || val.Length == 0)
-                        val = "TestResult.xml";
-                    try
-                    {
-                        ResultFile = ExpandToFullPath(val);
-                    }
-                    catch
-                    {
-                        InvalidOption(option);
-                    }
-                    break;
-                case "format":
-                    ResultFormat = val;
-                    if (ResultFormat != "nunit3" && ResultFormat != "nunit2")
-                        InvalidOption(option);
-                    break;
-                case "out":
-                    try
-                    {
-                        OutFile = ExpandToFullPath(val);
-                    }
-                    catch
-                    {
-                        InvalidOption(option);
-                    }
-                    break;
-                case "labels":
-                    LabelTestsInOutput = true;
-                    break;
-                case "include":
-                    Include = val;
-                    break;
-                case "exclude":
-                    Exclude = val;
-                    break;
-                case "seed":
-                    try
-                    {
-                        randomSeed = int.Parse(val);
-                    }
-                    catch
-                    {
-                        InvalidOption(option);
-                    }
-                    break;
-                default:
-                    InvalidOption(option);
-                    break;
-            }
+            if (!isValid)
+                ErrorMessages.Add(string.Format("The value '{0}' is not valid for option '{1}'.", val, option));
+
+            return val;
         }
 
-        private void InvalidOption(string option)
+        protected int RequiredInt(string val, string option)
         {
-            error = true;
-            invalidOptions.Add(option);
+            int result;
+            if (int.TryParse(val, out result)) return result;
+
+            ErrorMessages.Add(string.IsNullOrEmpty(val)
+                ? "Missing required value for option '" + option + "'."
+                : "An int value was expected for option '{0}' but a value of '{1}' was used");
+
+            // We have to return something even though the value will
+            // be ignored if an error is reported. The -1 value seems
+            // like a safe bet in case it isn't ignored due to a bug.
+            return -1;
         }
 
-        private void ProcessParameter(string param)
-        {
-            parameters.Add(param);
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether there was an error in parsing the options.
-        /// </summary>
-        /// <value><c>true</c> if error; otherwise, <c>false</c>.</value>
-        public bool Error
-        {
-            get { return error; }
-        }
-
-        /// <summary>
-        /// Gets the error message.
-        /// </summary>
-        /// <value>The error message.</value>
-        public string ErrorMessage
-        {
-            get 
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (string opt in invalidOptions)
-                    sb.Append( "Invalid option: " + opt + NL );
-                return sb.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the help text.
-        /// </summary>
-        /// <value>The help text.</value>
-        public string HelpText
-        {
-            get
-            {
-                StringBuilder sb = new StringBuilder();
-
-#if PocketPC || WindowsCE || NETCF || SILVERLIGHT
-                string name = "NUnitLite";
-#else
-                string name = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
-#endif
-
-                sb.Append("Usage: " + name + " [assemblies] [options]" + NL + NL);
-                sb.Append("Runs a set of NUnitLite tests from the console." + NL + NL);
-                sb.Append("You may specify one or more test assemblies by name, without a path or" + NL);
-                sb.Append("extension. They must be in the same in the same directory as the exe" + NL);
-                sb.Append("or on the probing path. If no assemblies are provided, tests in the" + NL);
-                sb.Append("executing assembly itself are run." + NL + NL);
-                sb.Append("Options:" + NL);
-                sb.Append("  -test:testname  Provides the name of a test to run. This option may be" + NL);
-                sb.Append("                  repeated. If no test names are given, all tests are run." + NL + NL);
-                sb.Append("  -out:FILE       File to which output is redirected. If this option is not" + NL);
-                sb.Append("                  used, output is to the Console, which means it is lost" + NL);
-                sb.Append("                  on devices without a Console." + NL + NL);
-                sb.Append("  -full           Prints full report of all test results." + NL + NL);
-                sb.Append("  -result:FILE    File to which the xml test result is written." + NL + NL);
-                sb.Append("  -format:FORMAT  Format in which the result is to be written. FORMAT must be" + NL);
-                sb.Append("                  either nunit3 or nunit2. The default is nunit3." + NL + NL);
-                sb.Append("  -explore:FILE  If provided, this option indicates that the tests" + NL);
-                sb.Append("                  should be listed rather than executed. They are listed" + NL);
-                sb.Append("                  to the specified file in XML format." + NL);
-                sb.Append("  -help,-h        Displays this help" + NL + NL);
-                sb.Append("  -noheader,-noh  Suppresses display of the initial message" + NL + NL);
-                sb.Append("  -labels         Displays the name of each test when it starts" + NL + NL);
-                sb.Append("  -seed:SEED      If provided, this option allows you to set the seed for the" + NL + NL);
-                sb.Append("                  random generator in the test context." + NL + NL);
-                sb.Append("  -include:CAT    List of categories to include" + NL + NL);
-                sb.Append("  -exclude:CAT    List of categories to exclude" + NL + NL);
-                sb.Append("  -wait           Waits for a key press before exiting" + NL + NL);
-
-                sb.Append("Notes:" + NL);
-                sb.Append(" * File names may be listed by themselves, with a relative path or " + NL);
-                sb.Append("   using an absolute path. Any relative path is based on the current " + NL);
-                sb.Append("   directory or on the Documents folder if running on a under the " +NL);
-                sb.Append("   compact framework." + NL + NL);
-                if (System.IO.Path.DirectorySeparatorChar != '/')
-                    sb.Append(" * On Windows, options may be prefixed by a '/' character if desired" + NL + NL);
-                sb.Append(" * Options that take values may use an equal sign or a colon" + NL);
-                sb.Append("   to separate the option from its value." + NL + NL);
-
-                return sb.ToString();
-            }
-        }
     }
 }
