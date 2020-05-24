@@ -5,11 +5,8 @@
 
 using System;
 using System.IO;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 using Mono.Options;
-using TCLite.Framework;
 
 namespace TCLite.Runner
 {
@@ -84,7 +81,7 @@ namespace TCLite.Runner
                 { "work=", "(NYI) {PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                     v => WorkDirectory = RequiredValue(v, "--work") },
 
-                { "output|out=", "(NYI) File {PATH} to contain text output from the tests.",
+                { "out=", "(NYI) File {PATH} to contain text output from the tests.",
                     v => OutFile = RequiredValue(v, "--output") },
 
                 { "err=", "(NYI) File {PATH} to contain error output from the tests.",
@@ -102,6 +99,9 @@ namespace TCLite.Runner
                 
                 { "result=", "(NYI) Save test result XML in file at {PATH}. If not specified, default is TestResult.xml.",
                     v => ResultFile=RequiredValue(v, "--result")},
+
+                { "format=", "(NYI) Specify the {FORMAT} to be used in saving the test result. May be `nunit3` or `nunit2'.",
+                    v => ResultFormat=RequiredValue(v, "--format", "nunit3", "nunit2")},
 
                 { "noresult", "(NYI) Don't save any test results.",
                     v => NoResult = v != null },
@@ -281,7 +281,7 @@ namespace TCLite.Runner
             }
 
             if (!isValid)
-                ErrorMessages.Add(string.Format("The value '{0}' is not valid for option '{1}'.", val, option));
+                ErrorMessages.Add($"The value {val} is not valid for option {option}.");
 
             return val;
         }
@@ -292,8 +292,8 @@ namespace TCLite.Runner
             if (int.TryParse(val, out result)) return result;
 
             ErrorMessages.Add(string.IsNullOrEmpty(val)
-                ? "Missing required value for option '" + option + "'."
-                : "An int value was expected for option '{0}' but a value of '{1}' was used");
+                ? $"Missing required value for option {option}."
+                : $"The value {val} is not valid for option {option}.");
 
             // We have to return something even though the value will
             // be ignored if an error is reported. The -1 value seems

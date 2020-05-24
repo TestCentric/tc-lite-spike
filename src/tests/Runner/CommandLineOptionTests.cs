@@ -1,11 +1,10 @@
-// *****************************************************
-// Copyright 2007, Charlie Poole
-//
-// Licensed under the Open Software License version 3.0
-// *****************************************************
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
 
-using System;
 using System.IO;
+using System.Reflection;
 using TCLite.Framework;
 
 namespace TCLite.Runner.Tests
@@ -13,191 +12,176 @@ namespace TCLite.Runner.Tests
     [TestFixture]
     class CommandLineOptionTests
     {
-        private static readonly string NL = Environment.NewLine;
-
-        private CommandLineOptions options;
+        private CommandLineOptions _options;
 
         [SetUp]
         public void CreateOptions()
         {
-            options = new CommandLineOptions();
+            _options = new CommandLineOptions();
         }
 
-        [Test]
-        public void TestWaitOption()
+        [TestCase("ShowHelp", "--help")]
+        [TestCase("ShowHelp", "-h")]
+        [TestCase("ShowVersion", "--version")]
+        [TestCase("ShowVersion", "-V")]
+        [TestCase("StopOnError", "--stoponerror")]
+        [TestCase("WaitBeforeExit", "--wait")]
+        [TestCase("NoHeader", "--noheader")]
+        [TestCase("NoHeader", "--noh")]
+        // NYI: [TestCase("Full", "--full")]
+        // NYI: [TestCase("TeamCity", "teamcity")]
+        public void BooleanOptions(string propertyName, string option)
         {
-            options.Parse( "--wait" );
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.WaitBeforeExit, Is.True);
+            PropertyInfo property = GetPropertyInfo(propertyName);
+            Assert.AreEqual(typeof(bool), property.PropertyType, "Property '{0}' is wrong type", propertyName);
+
+            _options.Parse(option);
+            Assert.AreEqual(true, (bool)property.GetValue(_options, null), "Didn't recognize -" + option);
         }
 
-        [Test]
-        public void TestNoheaderOption()
+        [TestCase("WhereClause", "--where", "cat==Fast")]
+        [TestCase("DisplayTestLabels", "--labels", "Off")]
+        [TestCase("DisplayTestLabels", "--labels", "On")]
+        [TestCase("DisplayTestLabels", "--labels", "Before")]
+        [TestCase("DisplayTestLabels", "--labels", "After")]
+        [TestCase("DisplayTestLabels", "--labels", "All")]
+        [TestCase("OutFile", "--out", "output.txt")]
+        [TestCase("ErrFile", "--err", "error.txt")]
+        [TestCase("WorkDirectory", "--work", "results")]
+        [TestCase("InternalTraceLevel", "--trace", "Off")]
+        [TestCase("InternalTraceLevel", "--trace", "Error")]
+        [TestCase("InternalTraceLevel", "--trace", "Warning")]
+        [TestCase("InternalTraceLevel", "--trace", "Info")]
+        [TestCase("InternalTraceLevel", "--trace", "Debug")]
+        [TestCase("InternalTraceLevel", "--trace", "Verbose")]
+        [TestCase("ResultFile", "--result", "MyOwnResult.xml")]
+        [TestCase("ResultFormat", "--format", "nunit2")]
+        [TestCase("ResultFormat", "--format", "nunit3")]
+        [TestCase("RandomSeed", "--seed", 123456789)]
+        [TestCase("DefaultTimeout", "--timeout", 2000)]
+        [TestCase("NumberOfTestWorkers", "--workers", 32)]
+        public void ValidOptionValues<T>(string propertyName, string option, T value)
         {
-            options.Parse("--noheader");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.NoHeader, Is.True);
+            PropertyInfo property = GetPropertyInfo(propertyName);
+            Assert.AreEqual(typeof(T), property.PropertyType);
+
+            string optionPlusValue = $"{option}={value}";
+            _options.Parse(optionPlusValue);
+            if (_options.Error)
+                Assert.Fail("Unexpected Error: " + _options.ErrorMessages[0]);
+            Assert.AreEqual(value, (T)property.GetValue(_options, null), "Didn't recognize " + optionPlusValue);
+       }
+
+        //[TestCase("--where")]
+        [TestCase("--labels", "JUNK")]
+        //[TestCase("--out")]
+        //[TestCase("--err")]
+        //[TestCase("--work")]
+        [TestCase("--trace", "JUNK")]
+        //[TestCase("--result")]
+        [TestCase("--format", "xyz")]
+        [TestCase("--seed", "xxx")]
+        [TestCase("--timeout", "ABC")]
+        [TestCase("--workers", "Yes")]
+        public void InvalidOptionValues(string option, string value)
+        {
+            string optionPlusValue = $"{option}={value}";
+            _options.Parse(optionPlusValue);
+            Assert.True(_options.Error, "Should not be valid: " + optionPlusValue);
+            Assert.That(_options.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo($"The value {value} is not valid for option {option}."));
         }
 
-        [Test]
-        public void TestHelpOption()
+        [TestCase("--where")]
+        [TestCase("--labels")]
+        [TestCase("--out")]
+        [TestCase("--err")]
+        [TestCase("--work")]
+        [TestCase("--trace")]
+        [TestCase("--result")]
+        [TestCase("--format")]
+        [TestCase("--seed")]
+        [TestCase("--timeout")]
+        [TestCase("--workers")]
+        public void MissingOptionValues(string option)
         {
-            options.Parse("--help");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.ShowHelp, Is.True);
-        }
-
-        [Test, Ignore("NYI")]
-        public void TestFullOption()
-        {
-            options.Parse("--full");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.Full, Is.True);
+            _options.Parse(option);
+            Assert.True(_options.Error, "Should not be valid: " + option);
+            Assert.That(_options.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo($"Missing required value for option '{option}'."));
         }
 
 #if !SILVERLIGHT && !NETCF
         [Test, Ignore("NYI")]
         public void TestExploreOptionWithNoFileName()
         {
-            options.Parse("-explore");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.Explore, Is.True);
-            Assert.That(options.ExploreFile, Is.EqualTo(Path.GetFullPath("tests.xml")));
+            _options.Parse("-explore");
+            Assert.That(_options.Error, Is.False);
+            Assert.That(_options.Explore, Is.True);
+            Assert.That(_options.ExploreFile, Is.EqualTo(Path.GetFullPath("tests.xml")));
         }
 
         [Test, Ignore("NYI")]
         public void TestExploreOptionWithGoodFileName()
         {
-            options.Parse("-explore=MyFile.xml");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.Explore, Is.True);
-            Assert.That(options.ExploreFile, Is.EqualTo(Path.GetFullPath("MyFile.xml")));
+            _options.Parse("-explore=MyFile.xml");
+            Assert.That(_options.Error, Is.False);
+            Assert.That(_options.Explore, Is.True);
+            Assert.That(_options.ExploreFile, Is.EqualTo(Path.GetFullPath("MyFile.xml")));
         }
 
         [Test, Ignore("NYI")]
         public void TestExploreOptionWithBadFileName()
         {
-            options.Parse("--explore=MyFile*.xml");
-            Assert.That(options.Error, Is.True);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: -explore=MyFile*.xml" + NL));
-        }
-
-        [Test]
-        public void TestResultOptionWithNoFileName()
-        {
-            options.Parse("--result");
-            Assert.That(options.Error, Is.True);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Missing required value for option '--result'."));
-        }
-
-        [Test, Ignore("NYI")]
-        public void TestResultOptionWithGoodFileName()
-        {
-            options.Parse("-result=MyResult.xml");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.ResultFile, Is.EqualTo(Path.GetFullPath("MyResult.xml")));
+            _options.Parse("--explore=MyFile*.xml");
+            Assert.That(_options.Error, Is.True);
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -explore=MyFile*.xml"));
         }
 
         [Test, Ignore("NYI")]
         public void TestResultOptionWithBadFileName()
         {
-            options.Parse("-result=MyResult*.xml");
-            Assert.That(options.Error, Is.True);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: -result=MyResult*.xml"));
+            _options.Parse("-result=MyResult*.xml");
+            Assert.That(_options.Error, Is.True);
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -result=MyResult*.xml"));
         }
 #endif
-
-        [Test, Ignore("NYI")]
-        public void TestNUnit2FormatOption()
-        {
-            options.Parse("--format=nunit2");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.ResultFormat, Is.EqualTo("nunit2"));
-        }
-
-        [Test, Ignore("NYI")]
-        public void TestNUnit3FormatOption()
-        {
-            options.Parse("-format=nunit3");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.ResultFormat, Is.EqualTo("nunit3"));
-        }
-
-        [Test]
-        public void TestBadFormatOption()
-        {
-            options.Parse("--format=xyz");
-            Assert.That(options.Error, Is.True);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: --format=xyz"));
-        }
-
-        [Test]
-        public void TestMissingFormatOption()
-        {
-            options.Parse("--format");
-            Assert.That(options.Error, Is.True);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: --format"));
-        }
 
 #if !SILVERLIGHT && !NETCF
         [Test, Ignore("NYI")]
-        public void TestOutOptionWithGoodFileName()
-        {
-            options.Parse("--out=myfile.txt");
-            Assert.False(options.Error);
-            Assert.That(options.OutFile, Is.EqualTo(Path.GetFullPath("myfile.txt")));
-        }
-
-        [Test]
-        public void TestOutOptionWithNoFileName()
-        {
-            options.Parse("--out=");
-            Assert.True(options.Error);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Missing required value for option '--output'."));
-        }
-
-        [Test, Ignore("NYI")]
         public void TestOutOptionWithBadFileName()
         {
-            options.Parse("-out=my*file.txt");
-            Assert.True(options.Error);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: -out=my*file.txt" + NL));
+            _options.Parse("-out=my*file.txt");
+            Assert.True(_options.Error);
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -out=my*file.txt"));
         }
 #endif
-
-        [Test, Ignore("NYI")]
-        public void TestLabelsOption()
-        {
-            options.Parse("--labels");
-            Assert.That(options.Error, Is.False);
-            Assert.That(options.DisplayTestLabels, Is.True);
-        }
-
-        [Test]
-        public void TestSeedOption()
-        {
-            options.Parse("--seed=123456789");
-            Assert.False(options.Error);
-            Assert.That(options.RandomSeed, Is.EqualTo(123456789));
-        }
 
         [Test]
         public void InvalidOptionProducesError()
         {
-            options.Parse( "--junk" );
-            Assert.That(options.Error);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: --junk"));
+            _options.Parse( "--junk" );
+            Assert.That(_options.Error);
+            Assert.That(_options.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: --junk"));
         }
 
         [Test]
         public void MultipleInvalidOptionsAreListedInErrorMessage()
         {
-            options.Parse( "--junk", "--trash", "something", "--garbage" );
-            Assert.That(options.Error);
-            Assert.That(options.ErrorMessages[0], Is.EqualTo("Invalid option: --junk"));
+            _options.Parse( "--junk", "--trash", "something", "--garbage" );
+            Assert.That(_options.Error);
+            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: --junk"));
                 // "Invalid option: -junk" + NL +
                 // "Invalid option: -trash" + NL +
                 // "Invalid option: -garbage" + NL));
+        }
+    
+        private static PropertyInfo GetPropertyInfo(string propertyName)
+        {
+            PropertyInfo property = typeof(CommandLineOptions).GetProperty(propertyName);
+            Assert.NotNull(property, "The property '{0}' is not defined", propertyName);
+            return property;
         }
     }
 }
