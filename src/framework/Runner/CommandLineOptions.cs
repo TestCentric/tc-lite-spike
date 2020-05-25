@@ -121,7 +121,7 @@ namespace TCLite.Runner
                 { "noheader|noh", "Don't display program header at start of run.",
                     v => NoHeader = v != null },
 
-                { "nocolor|noc", "(NYI) Displays console output without color.",
+                { "nocolor|noc", "Displays console output without color.",
                     v => NoColor = v != null },
 
                 { "help|h", "Display this message and exit.",

@@ -72,13 +72,13 @@ namespace TCLite.Runner.Tests
             Assert.AreEqual(value, (T)property.GetValue(_options, null), "Didn't recognize " + optionPlusValue);
        }
 
-        //[TestCase("--where")]
+        // NYI: [TestCase("--where")]
         [TestCase("--labels", "JUNK")]
-        //[TestCase("--out")]
-        //[TestCase("--err")]
-        //[TestCase("--work")]
+        // NYI: [TestCase("--out")]
+        // NYI: [TestCase("--err")]
+        // NYI: [TestCase("--work")]
         [TestCase("--trace", "JUNK")]
-        //[TestCase("--result")]
+        // NYI: [TestCase("--result")]
         [TestCase("--format", "xyz")]
         [TestCase("--seed", "xxx")]
         [TestCase("--timeout", "ABC")]

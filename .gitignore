@@ -114,6 +114,7 @@ UpgradeLog*.XML
 
 # NUnit Files
 TestResult.xml
+MockAssemblyResult.xml
 *.VisualState.xml
 
 # Packaging Directory

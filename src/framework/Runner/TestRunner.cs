@@ -18,6 +18,15 @@ namespace TCLite.Runner
 {
     public class TestRunner : ITestListener
     {
+        // Runner Return Codes
+        public const int OK = 0;
+        public const int INVALID_ARG = -1;
+        public const int FILE_NOT_FOUND = -2;
+        //public const int FIXTURE_NOT_FOUND = -3;
+        public const int INVALID_TEST_FIXTURE = -4;
+        public const int NO_TESTS_FOUND = -5;
+        public const int UNEXPECTED_ERROR = -100;
+
         private Assembly _testAssembly;
         private CommandLineOptions _options;
         private ExtendedTextWriter _writer;
@@ -32,14 +41,14 @@ namespace TCLite.Runner
             _runner = new NUnitLiteTestAssemblyRunner(new NUnitLiteTestAssemblyBuilder());
         }
 
-        public void Execute(string[] args)
+        public int Execute(string[] args)
         {
             _options = new CommandLineOptions();
             _options.Parse(args);
 
             _writer = _options.OutFile != null
                 ? new ExtendedTextWrapper(new StreamWriter(_options.OutFile))
-                : new ColorConsoleWriter();
+                : new ColorConsoleWriter(!_options.NoColor);
             _textUI = new TextUI(_writer);
 
             if (!_options.NoHeader)
@@ -48,15 +57,18 @@ namespace TCLite.Runner
             if (_options.ShowHelp)
             {
                 _textUI.DisplayHelp(_options._monoOptions);
-                return;
+                return OK;
             }
+
+            if (_options.ShowVersion)
+                return OK;
 
             if (_options.Error)
             {
                 foreach (string msg in _options.ErrorMessages)
                     _writer.WriteLine(msg);
                 _textUI.DisplayHelp(_options._monoOptions);
-                return;
+                return INVALID_ARG;
             }
 
             _textUI.DisplayRuntimeEnvironment();
@@ -88,21 +100,22 @@ namespace TCLite.Runner
                 {
                     AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(_testAssembly);
                     Console.WriteLine("No tests found in assembly {0}", assemblyName.Name);
-                    return;
+                    return NO_TESTS_FOUND;
                 }
 
-                if (_options.Explore)
-                    ExploreTests();
-                else
-                    RunTests(filter);
+                return _options.Explore
+                    ? ExploreTests()
+                    : RunTests(filter);
             }
             catch (FileNotFoundException ex)
             {
                 _writer.WriteLine(ex.Message);
+                return FILE_NOT_FOUND;
             }
             catch (Exception ex)
             {
                 _writer.WriteLine(ex.ToString());
+                return UNEXPECTED_ERROR;
             }
             finally
             {
@@ -121,7 +134,7 @@ namespace TCLite.Runner
             }
         }
 
-        private void RunTests(ITestFilter filter)
+        private int RunTests(ITestFilter filter)
         {
             DateTime startTime = DateTime.Now;
 
@@ -156,9 +169,11 @@ namespace TCLite.Runner
             //     Console.WriteLine();
             //     Console.WriteLine("Results saved as {0}.", resultFile);
             // }
+
+            return Math.Min(100, summary.FailedCount);
         }
 
-        private void ExploreTests()
+        private int ExploreTests()
         {
             XmlNode testNode = _runner.LoadedTest.ToXml(true);
 
@@ -179,6 +194,8 @@ namespace TCLite.Runner
 
             Console.WriteLine();
             // Console.WriteLine("Test info saved as {0}.", listFile);
+
+            return OK;
         }
 
         #region ITestListener Members
