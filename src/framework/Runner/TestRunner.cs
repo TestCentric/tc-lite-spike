@@ -32,6 +32,7 @@ namespace TCLite.Runner
         private ExtendedTextWriter _writer;
         private TextUI _textUI;
         private ITestAssemblyRunner _runner;
+        private string _workDirectory;
 
         private bool ShowHelp;
 
@@ -45,6 +46,8 @@ namespace TCLite.Runner
         {
             _options = new CommandLineOptions();
             _options.Parse(args);
+
+            _workDirectory = _options.WorkDirectory ?? Environment.CurrentDirectory;
 
             _writer = _options.OutFile != null
                 ? new ExtendedTextWrapper(new StreamWriter(_options.OutFile))
@@ -147,7 +150,7 @@ namespace TCLite.Runner
             var summary = new ResultSummary(result);
 
             if (summary.FailureCount > 0 || summary.ErrorCount > 0)
-                _textUI.DisplayErrorReport(result);
+                _textUI.DisplayErrorsAndFailuresReport(result);
 
             if (summary.NotRunCount > 0)
                 _textUI.DisplayNotRunReport(result);
@@ -157,22 +160,22 @@ namespace TCLite.Runner
 
             _textUI.DisplaySummaryReport(summary);
 
-            // string resultFile = _options.ResultFile;
-            // string resultFormat = _options.ResultFormat;
+            if (!_options.NoResult)
+            {
+                string resultFile = _options.ResultFile ?? "TestResult.xml";
+                if (!Path.IsPathRooted(resultFile))
+                    resultFile = Path.Combine(_workDirectory, resultFile);
+                string resultFormat = _options.ResultFormat ?? "nunit3";
+                
+                if(resultFormat == "nunit3")
+                    new NUnit3XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
+                else if (resultFormat == "nunit2")
+                    new NUnit2XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
+                else
+                    throw new InvalidOperationException($"Invalid result format: {resultFormat}");
                     
-            // if (resultFile != null || _options.ResultFormat != null)
-            // {
-            //     if (resultFile == null)
-            //         resultFile = "TestResult.xml";
-
-            //     if (resultFormat == "nunit2")
-            //         new NUnit2XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
-            //     else
-            //         new NUnit3XmlOutputWriter(startTime).WriteResultFile(result, resultFile);
-
-            //     Console.WriteLine();
-            //     Console.WriteLine("Results saved as {0}.", resultFile);
-            // }
+                _textUI.DisplaySavedResultMessage(resultFile, resultFormat);
+            }
 
             return Math.Min(100, summary.FailedCount);
         }

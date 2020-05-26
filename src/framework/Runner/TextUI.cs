@@ -167,16 +167,17 @@ namespace TCLite.Runner
             //writer.WriteLabelLine("  Start time: ", summary.StartTime.ToString("u"));
             //writer.WriteLabelLine("    End time: ", summary.EndTime.ToString("u"));
             WriteLabelLine("    Duration: ", string.Format(NumberFormatInfo.InvariantInfo, "{0:0.000} seconds", summary.Duration));
+            _writer.WriteLine();
         }
 
         /// <summary>
         /// Prints the Error Report
         /// </summary>
-        public void DisplayErrorReport(ITestResult result)
+        public void DisplayErrorsAndFailuresReport(ITestResult result)
         {
             int reportCount = 0;
             WriteSectionHeader("Errors and Failures");
-            ListErrorResults(result, ref reportCount);
+            ListErrorsAndFailures(result, ref reportCount);
         }
 
         /// <summary>
@@ -204,6 +205,12 @@ namespace TCLite.Runner
                 _writer.Write(GetColorForResultStatus(status), $"{status} ");
 
             _writer.WriteLine(ColorStyle.SectionHeader, $"=> {testName}");
+        }
+
+        public void DisplaySavedResultMessage(string path, string format)
+        {
+            _writer.WriteLine(ColorStyle.Output, $"Result saved in {format} format as {path}");
+            _writer.WriteLine();
         }
 
        #region Helper Methods
@@ -245,7 +252,7 @@ namespace TCLite.Runner
             _writer.WriteLabelLine(label, option, color);
         }
 
-        private void ListErrorResults(ITestResult result, ref int reportCount)
+        private void ListErrorsAndFailures(ITestResult result, ref int reportCount)
         {
             if (result.ResultState.Status == TestStatus.Failed)
                 if (!result.HasChildren)
@@ -253,7 +260,7 @@ namespace TCLite.Runner
 
             if (result.HasChildren)
                 foreach (ITestResult childResult in result.Children)
-                    ListErrorResults(childResult, ref reportCount);
+                    ListErrorsAndFailures(childResult, ref reportCount);
         }
 
         private void ListNotRunResults(ITestResult result, ref int reportCount)

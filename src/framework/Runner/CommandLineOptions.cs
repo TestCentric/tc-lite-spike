@@ -78,7 +78,7 @@ namespace TCLite.Runner
                 "",
                 "Test Output:",
                 "",
-                { "work=", "(NYI) {PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
+                { "work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                     v => WorkDirectory = RequiredValue(v, "--work") },
 
                 { "out=", "(NYI) File {PATH} to contain text output from the tests.",
@@ -97,13 +97,13 @@ namespace TCLite.Runner
                         //ResolveOutputSpecification(v, ExploreOutputSpecifications);
                     } },
                 
-                { "result=", "(NYI) Save test result XML in file at {PATH}. If not specified, default is TestResult.xml.",
+                { "result=", "Save test result XML in file at {PATH}. If not specified, default is TestResult.xml.",
                     v => ResultFile=RequiredValue(v, "--result")},
 
-                { "format=", "(NYI) Specify the {FORMAT} to be used in saving the test result. May be `nunit3` or `nunit2'.",
+                { "format=", "Specify the {FORMAT} to be used in saving the test result. May be `nunit3` or `nunit2'.",
                     v => ResultFormat=RequiredValue(v, "--format", "nunit3", "nunit2")},
 
-                { "noresult", "(NYI) Don't save any test results.",
+                { "noresult", "Don't save any test results.",
                     v => NoResult = v != null },
 
                 { "labels=", "Specify whether to write test case labels to the output. Values: Off, On, Before, After.",
