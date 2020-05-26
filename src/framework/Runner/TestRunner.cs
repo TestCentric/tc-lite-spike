@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -65,8 +65,7 @@ namespace TCLite.Runner
 
             if (_options.Error)
             {
-                foreach (string msg in _options.ErrorMessages)
-                    _writer.WriteLine(msg);
+                _textUI.DisplayErrorMessages(_options.ErrorMessages);
                 _textUI.DisplayHelp(_options._monoOptions);
                 return INVALID_ARG;
             }
@@ -78,17 +77,7 @@ namespace TCLite.Runner
             if (_options.WaitBeforeExit && _options.OutFile != null)
                 _writer.WriteLine("Ignoring /wait option - only valid for Console");
 
-#if SILVERLIGHT
-            IDictionary loadOptions = new System.Collections.Generic.Dictionary<string, string>();
-#else
-            IDictionary loadOptions = new Hashtable();
-#endif
-            //if (options.Load.Count > 0)
-            //    loadOptions["LOAD"] = options.Load;
-
-            //IDictionary runOptions = new Hashtable();
-            //if (commandLineOptions.TestCount > 0)
-            //    runOptions["RUN"] = commandLineOptions.Tests;
+            var runSettings = MakeRunSettings(_options);
 
             ITestFilter filter = TestFilter.Empty;
 
@@ -96,7 +85,7 @@ namespace TCLite.Runner
             {
                 Randomizer.InitialSeed = _options.RandomSeed;
 
-                if (!_runner.Load(_testAssembly, loadOptions))
+                if (!_runner.Load(_testAssembly, runSettings))
                 {
                     AssemblyName assemblyName = AssemblyHelper.GetAssemblyName(_testAssembly);
                     Console.WriteLine("No tests found in assembly {0}", assemblyName.Name);
@@ -136,6 +125,21 @@ namespace TCLite.Runner
 
         private int RunTests(ITestFilter filter)
         {
+            var labelsOption = _options.DisplayTestLabels?.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+
+            if (!string.IsNullOrEmpty(labelsOption))
+            {
+                _displayBeforeTest = labelsOption == "BEFORE";
+                _displayAfterTest = labelsOption == "AFTER";
+                _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || labelsOption == "ON";
+
+                if (_displayBeforeOutput)
+                {
+                    Console.SetOut(new TextCapture(this, TestOutputType.Out));
+                    Console.SetError(new TextCapture(this, TestOutputType.Error));
+                }
+            }
+
             DateTime startTime = DateTime.Now;
 
             ITestResult result = _runner.Run(this, filter);
@@ -198,9 +202,47 @@ namespace TCLite.Runner
             return OK;
         }
 
+        /// <summary>
+        /// Make the settings for this run - this is public for testing
+        /// </summary>
+        public static Dictionary<string, object> MakeRunSettings(CommandLineOptions options)
+        {
+            // Transfer command line options to run settings
+            var runSettings = new Dictionary<string, object>();
+
+            if (options.NumberOfTestWorkers >= 0)
+                runSettings[FrameworkPackageSettings.NumberOfTestWorkers] = options.NumberOfTestWorkers;
+
+            if (options.InternalTraceLevel != null)
+                runSettings[FrameworkPackageSettings.InternalTraceLevel] = options.InternalTraceLevel;
+
+            if (options.RandomSeed >= 0)
+                runSettings[FrameworkPackageSettings.RandomSeed] = options.RandomSeed;
+
+            if (options.WorkDirectory != null)
+                runSettings[FrameworkPackageSettings.WorkDirectory] = Path.GetFullPath(options.WorkDirectory);
+
+            if (options.DefaultTimeout >= 0)
+                runSettings[FrameworkPackageSettings.DefaultTimeout] = options.DefaultTimeout;
+
+            if (options.StopOnError)
+                runSettings[FrameworkPackageSettings.StopOnError] = true;
+
+            // if (options.DefaultTestNamePattern != null)
+            //     runSettings[FrameworkPackageSettings.DefaultTestNamePattern] = options.DefaultTestNamePattern;
+
+            if (options.TestParameters.Count != 0)
+                runSettings[FrameworkPackageSettings.TestParametersDictionary] = options.TestParameters;
+
+            return runSettings;
+        }
+
         #region ITestListener Members
 
         private string _currentTestName;
+        private bool _displayBeforeTest;
+        private bool _displayAfterTest;
+        private bool _displayBeforeOutput;
 
         /// <summary>
         /// A test has just started
@@ -210,8 +252,8 @@ namespace TCLite.Runner
         {
             _currentTestName = test.Name;
 
-            // if (_options.LabelTestsInOutput)
-            //     _writer.WriteLine("***** {0}", _currentTestName);
+            if (_displayBeforeTest)
+                _textUI.DisplayTestLabel(_currentTestName);
         }
 
         /// <summary>
@@ -220,6 +262,14 @@ namespace TCLite.Runner
         /// <param name="result">The result of the test</param>
         public void TestFinished(ITestResult result)
         {
+            if (_displayAfterTest)
+            {
+                string status = result.ResultState.Label;
+                if (string.IsNullOrEmpty(status))
+                    status = result.ResultState.Status.ToString();
+
+                _textUI.DisplayTestLabel(result.Test.Name, status);
+            }
         }
 
         /// <summary>
@@ -228,7 +278,13 @@ namespace TCLite.Runner
         /// <param name="testOutput">A TestOutput object holding the text that was written</param>
         public void TestOutput(TestOutput testOutput)
         {
-            _writer.WriteLine("***** {0}", _currentTestName);
+            if (_displayBeforeOutput)
+                _textUI.DisplayTestLabel(_currentTestName);
+
+            var style = testOutput.Type == TestOutputType.Error
+                ? ColorStyle.Error
+                : ColorStyle.Output;
+            _writer.Write(style, testOutput.Text);
         }
 
         #endregion

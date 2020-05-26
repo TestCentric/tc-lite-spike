@@ -44,7 +44,6 @@ namespace TCLite.Runner.Tests
         [TestCase("DisplayTestLabels", "--labels", "On")]
         [TestCase("DisplayTestLabels", "--labels", "Before")]
         [TestCase("DisplayTestLabels", "--labels", "After")]
-        [TestCase("DisplayTestLabels", "--labels", "All")]
         [TestCase("OutFile", "--out", "output.txt")]
         [TestCase("ErrFile", "--err", "error.txt")]
         [TestCase("WorkDirectory", "--work", "results")]

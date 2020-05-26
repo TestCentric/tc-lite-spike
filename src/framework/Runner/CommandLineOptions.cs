@@ -106,8 +106,8 @@ namespace TCLite.Runner
                 { "noresult", "(NYI) Don't save any test results.",
                     v => NoResult = v != null },
 
-                { "labels=", "(NYI) Specify whether to write test case names to the output.", //Values: Off, On, All",
-                    v => DisplayTestLabels = RequiredValue(v, "--labels", "Off", "On", "Before", "After", "All") },
+                { "labels=", "Specify whether to write test case labels to the output. Values: Off, On, Before, After.",
+                    v => DisplayTestLabels = RequiredValue(v, "--labels", "Off", "On", "Before", "After") },
 
                 // { "test-name-format=", "Non-standard naming pattern to use in generating test names.",
                 //     v => DefaultTestNamePattern = RequiredValue(v, "--test-name-format") },

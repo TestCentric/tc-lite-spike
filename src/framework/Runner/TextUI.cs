@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using TCLite.Framework.Api;
@@ -85,6 +86,13 @@ namespace TCLite.Runner
         {
             using (new ColorConsole(ColorStyle.Help))
                 optionSet.WriteOptionDescriptions(_writer);  
+        }
+
+        public void DisplayErrorMessages(IEnumerable<string> messages)
+        {
+            _writer.WriteLine();
+            foreach (string msg in messages)
+                _writer.WriteLine(ColorStyle.Error, msg);
         }
 
         /// <summary>
@@ -188,6 +196,14 @@ namespace TCLite.Runner
         {
             WriteSectionHeader("All Test Results");
             ListAllResults(result, " ");
+        }
+
+        public void DisplayTestLabel(string testName, string status=null)
+        {
+            if (status != null)
+                _writer.Write(GetColorForResultStatus(status), $"{status} ");
+
+            _writer.WriteLine(ColorStyle.SectionHeader, $"=> {testName}");
         }
 
        #region Helper Methods
@@ -300,6 +316,26 @@ namespace TCLite.Runner
 
                 if (!stackTrace.EndsWith(Environment.NewLine))
                     _writer.WriteLine();
+            }
+        }
+
+        private static ColorStyle GetColorForResultStatus(string status)
+        {
+            switch (status)
+            {
+                case "Passed":
+                    return ColorStyle.Pass;
+                case "Failed":
+                    return ColorStyle.Failure;
+                case "Error":
+                case "Invalid":
+                case "Cancelled":
+                    return ColorStyle.Error;
+                case "Warning":
+                case "Ignored":
+                    return ColorStyle.Warning;
+                default:
+                    return ColorStyle.Output;
             }
         }
 
