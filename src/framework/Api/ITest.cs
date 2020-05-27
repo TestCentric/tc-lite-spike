@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Reflection;
 
 namespace TCLite.Framework.Api
 {
@@ -57,6 +58,10 @@ namespace TCLite.Framework.Api
         /// </summary>
         /// <value>The parent test or null if none exists.</value>
         ITest Parent { get; }
+
+        MethodInfo[] SetUpMethods { get; }
+
+        MethodInfo[] TearDownMethods { get; }
 
         /// <summary>
         /// Returns true if this is a test suite

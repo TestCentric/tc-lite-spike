@@ -26,22 +26,6 @@ namespace TCLite.Framework.Attributes
             throw new NotImplementedException();
         }
 
-        public override bool HasChildren
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override System.Collections.Generic.IList<ITest> Tests
-        {
-            get
-            {
-                return new ITest[0];
-            }
-        }
-
         public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
         {
             throw new NotImplementedException();

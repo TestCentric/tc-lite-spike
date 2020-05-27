@@ -188,7 +188,7 @@ namespace TCLite.Framework.Internal
 
 
             // TODO: Make this an option? Add Option to sort assemblies as well?
-            testAssembly.Sort();
+            //testAssembly.Sort();
 
             return testAssembly;
         }

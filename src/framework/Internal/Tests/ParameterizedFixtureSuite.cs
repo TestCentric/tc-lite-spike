@@ -13,25 +13,20 @@ namespace TCLite.Framework.Internal
     /// </summary>
     public class ParameterizedFixtureSuite : TestSuite
     {
-        private Type type;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterizedFixtureSuite"/> class.
         /// </summary>
         /// <param name="type">The type.</param>
         public ParameterizedFixtureSuite(Type type) : base(type.Namespace, TypeHelper.GetDisplayName(type)) 
         {
-            this.type = type;
+            ParameterizedType = type;
         }
 
         /// <summary>
         /// Gets the Type represented by this suite.
         /// </summary>
         /// <value>A Sysetm.Type.</value>
-        public Type ParameterizedType
-        {
-            get { return type; }
-        }
+        public Type ParameterizedType { get; }
 
         /// <summary>
         /// Gets a string representing the type of test
@@ -41,7 +36,7 @@ namespace TCLite.Framework.Internal
         {
             get
             {
-                if (this.ParameterizedType.ContainsGenericParameters)
+                if (ParameterizedType.ContainsGenericParameters)
                     return "GenericFixture";
                 
                 return "ParameterizedFixture";

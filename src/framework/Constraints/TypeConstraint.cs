@@ -11,7 +11,7 @@ namespace TCLite.Framework.Constraints
     /// TypeConstraint is the abstract base for constraints
     /// that take a Type as their expected value.
     /// </summary>
-    public abstract class TypeConstraint : Constraint
+    public abstract class TypeConstraint : Constraint<Type>
     {
         /// <summary>
         /// The expected Type used by the constraint

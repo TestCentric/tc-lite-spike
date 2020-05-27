@@ -9,12 +9,6 @@ using System.Collections;
 namespace TCLite.Framework.Constraints
 {
     /// <summary>
-    /// Delegate used to delay evaluation of the actual value
-    /// to be used in evaluating a constraint
-    /// </summary>
-    public delegate T ActualValueDelegate<T>();
-
-    /// <summary>
     /// The Constraint class is the base of all built-in constraints
     /// within TCLite. It provides the operator overloads used to combine 
     /// constraints.
@@ -370,5 +364,12 @@ namespace TCLite.Framework.Constraints
             return builder == null ? this : builder.Resolve();
         }
         #endregion
+    }
+
+    public abstract class Constraint<T> : Constraint
+    {
+        public Constraint(T arg) : base(arg) { }
+
+        public Constraint(T arg1, T arg2) : base(arg1, arg2) { }
     }
 }

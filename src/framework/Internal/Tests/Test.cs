@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using TCLite.Framework.Api;
@@ -17,27 +18,11 @@ namespace TCLite.Framework.Internal
 	/// </summary>
 	public abstract class Test : ITest, IComparable
     {
-        #region Fields
-
         /// <summary>
         /// Static value to seed ids. It's started at 1000 so any
         /// uninitialized ids will stand out.
         /// </summary>
         private static int _nextID = 1000;
-
-        /// <summary>
-        /// The SetUp methods.
-        /// </summary>
-        protected MethodInfo[] setUpMethods;
-
-        /// <summary>
-        /// The teardown methods
-        /// </summary>
-        protected MethodInfo[] tearDownMethods;
-
-        #endregion
-
-        #region Construction
 
         /// <summary>
 		/// Constructs a test given its name
@@ -72,8 +57,6 @@ namespace TCLite.Framework.Internal
         {
             FixtureType = fixtureType;
         }
-
-		#endregion
 
 		#region ITest Members
 
@@ -148,7 +131,7 @@ namespace TCLite.Framework.Internal
         /// Gets a bool indicating whether the current test
         /// has any descendant tests.
         /// </summary>
-        public abstract bool HasChildren { get; }
+        public bool HasChildren => Tests.Count > 0;
 
         /// <summary>
         /// Gets the parent as a Test object.
@@ -167,7 +150,29 @@ namespace TCLite.Framework.Internal
         /// </summary>
         /// <value>A list of child tests</value>
         
-        public abstract System.Collections.Generic.IList<ITest> Tests { get; }
+        public IList<ITest> Tests { get; } = new List<ITest>();
+
+        /// <summary>
+        /// Gets the set up methods.
+        /// </summary>
+        /// <returns></returns>
+        public MethodInfo[] SetUpMethods
+        { 
+            get { return _setUpMethods ?? (_setUpMethods = Parent?.SetUpMethods); }
+            protected set { _setUpMethods = value; }
+        }
+        private MethodInfo[] _setUpMethods;
+
+        /// <summary>
+        /// Gets the tear down methods.
+        /// </summary>
+        /// <returns></returns>
+        public MethodInfo[] TearDownMethods
+        {
+            get { return _tearDownMethods ?? (_tearDownMethods = Parent?.TearDownMethods); }
+            protected set { _tearDownMethods = value; }
+        }
+        private MethodInfo[] _tearDownMethods;
 
         #endregion
 
@@ -212,7 +217,7 @@ namespace TCLite.Framework.Internal
             if (other == null)
                 return -1;
 
-            return this.FullName.CompareTo(other.FullName);
+            return FullName.CompareTo(other.FullName);
         }
 
         #endregion
@@ -257,9 +262,9 @@ namespace TCLite.Framework.Internal
         /// <param name="recursive"></param>
         protected void PopulateTestNode(XmlNode thisNode, bool recursive)
         {
-            thisNode.AddAttribute("id", this.Id.ToString());
-            thisNode.AddAttribute("name", this.Name);
-            thisNode.AddAttribute("fullname", this.FullName);
+            thisNode.AddAttribute("id", Id.ToString());
+            thisNode.AddAttribute("name", Name);
+            thisNode.AddAttribute("fullname", FullName);
 
             if (Properties.Count > 0)
                 Properties.AddToXml(thisNode, recursive);
@@ -275,44 +280,6 @@ namespace TCLite.Framework.Internal
         /// provided for use by LegacySuiteBuilder.
         /// </summary>
         public object Fixture { get; set; }
-
-        /// <summary>
-        /// Gets the set up methods.
-        /// </summary>
-        /// <returns></returns>
-        internal virtual MethodInfo[] SetUpMethods
-        {
-            get
-            {
-                if (setUpMethods == null && this.Parent != null)
-                {
-                    TestSuite suite = this.Parent as TestSuite;
-                    if (suite != null)
-                        setUpMethods = suite.SetUpMethods;
-                }
-
-                return setUpMethods;
-            }
-        }
-
-        /// <summary>
-        /// Gets the tear down methods.
-        /// </summary>
-        /// <returns></returns>
-        internal virtual MethodInfo[] TearDownMethods
-        {
-            get
-            {
-                if (tearDownMethods == null && this.Parent != null)
-                {
-                    TestSuite suite = this.Parent as TestSuite;
-                    if (suite != null)
-                        tearDownMethods = suite.TearDownMethods;
-                }
-
-                return tearDownMethods;
-            }
-        }
 
         #endregion
     }

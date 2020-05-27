@@ -4,8 +4,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Xml;
 using TCLite.Framework.Api;
 using TCLite.Framework.Internal.Commands;
@@ -18,26 +16,10 @@ namespace TCLite.Framework.Internal
     /// </summary>
 	public class TestSuite : Test
 	{
-		#region Fields
-
-		/// <summary>
-		/// Our collection of child tests
-		/// </summary>
-        private List<ITest> tests = new List<ITest>();
-
-        /// <summary>
-        /// Set to true to suppress sorting this suite's contents
-        /// </summary>
-        protected bool maintainTestOrder;
-
         /// <summary>
         /// Argument list for use in creating the fixture.
         /// </summary>
         internal object[] arguments;
-
-        #endregion
-
-		#region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestSuite"/> class.
@@ -79,59 +61,14 @@ namespace TCLite.Framework.Internal
             this.arguments = arguments;
         }
 
-        #endregion
-
-		#region Public Methods
-
-        /// <summary>
-        /// Sorts tests under this suite.
-        /// </summary>
-		public void Sort()
-		{
-            if (!maintainTestOrder)
-            {
-                this.tests.Sort();
-
-                foreach (Test test in Tests)
-                {
-                    TestSuite suite = test as TestSuite;
-                    if (suite != null)
-                        suite.Sort();
-                }
-            }
-		}
-
-#if false
-        /// <summary>
-        /// Sorts tests under this suite using the specified comparer.
-        /// </summary>
-        /// <param name="comparer">The comparer.</param>
-        public void Sort(IComparer comparer)
-        {
-			this.tests.Sort(comparer);
-
-			foreach( Test test in Tests )
-			{
-				TestSuite suite = test as TestSuite;
-				if ( suite != null )
-					suite.Sort(comparer);
-			}
-		}
-#endif
-
         /// <summary>
         /// Adds a test to the suite.
         /// </summary>
         /// <param name="test">The test.</param>
 		public void Add( Test test ) 
 		{
-//			if( test.RunState == RunState.Runnable )
-//			{
-//				test.RunState = this.RunState;
-//				test.IgnoreReason = this.IgnoreReason;
-//			}
 			test.Parent = this;
-			tests.Add(test);
+			Tests.Add(test);
 		}
 
         /// <summary>
@@ -168,19 +105,6 @@ namespace TCLite.Framework.Internal
             return command;
         }
 
-		#endregion
-
-		#region Properties
-
-        /// <summary>
-        /// Gets this test's child tests
-        /// </summary>
-        /// <value>The list of child tests</value>
-        public override IList<ITest> Tests 
-		{
-			get { return tests; }
-		}
-
         /// <summary>
         /// Gets a count of test cases represented by
         /// or contained under this test.
@@ -199,10 +123,6 @@ namespace TCLite.Framework.Internal
 				return count;
 			}
 		}
-
-        #endregion
-
-		#region Test Overrides
 
         /// <summary>
         /// Overridden to return a TestSuiteResult.
@@ -224,18 +144,6 @@ namespace TCLite.Framework.Internal
             //    ? (WorkItem)new CompositeWorkItem(this, childFilter)
             //    : (WorkItem)new SimpleWorkItem(this);
             return new CompositeWorkItem(this, childFilter);
-        }
-
-        /// <summary>
-        /// Gets a bool indicating whether the current test
-        /// has any descendant tests.
-        /// </summary>
-        public override bool HasChildren
-        {
-            get
-            {
-                return tests.Count > 0;
-            }
         }
 
         /// <summary>
@@ -269,7 +177,5 @@ namespace TCLite.Framework.Internal
 
             return thisNode;
         }
-
-        #endregion
     }
 }

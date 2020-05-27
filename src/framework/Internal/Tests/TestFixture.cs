@@ -32,8 +32,8 @@ namespace TCLite.Framework.Internal
         public TestFixture(Type fixtureType, object[] arguments)
             : base(fixtureType, arguments) 
         {
-            this.setUpMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(SetUpAttribute), true);
-            this.tearDownMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(TearDownAttribute), true);
+            SetUpMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(SetUpAttribute), true);
+            TearDownMethods = Reflect.GetMethodsWithAttribute(FixtureType, typeof(TearDownAttribute), true);
         }
 
         #endregion

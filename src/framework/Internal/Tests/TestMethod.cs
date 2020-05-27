@@ -132,15 +132,6 @@ namespace TCLite.Framework.Internal
         }
 
         /// <summary>
-        /// Gets a bool indicating whether the current test
-        /// has any descendant tests.
-        /// </summary>
-        public override bool HasChildren
-        {
-            get { return false; }
-        }
-
-        /// <summary>
         /// Returns an XmlNode representing the current result after
         /// adding it as a child of the supplied parent node.
         /// </summary>
@@ -156,15 +147,6 @@ namespace TCLite.Framework.Internal
             thisNode.AddAttribute("seed", this.Seed.ToString());
 
             return thisNode;
-        }
-
-        /// <summary>
-        /// Gets this test's child tests
-        /// </summary>
-        /// <value>A list of child tests</value>
-        public override IList<ITest> Tests
-        {
-            get { return new ITest[0]; }
         }
 
         /// <summary>
