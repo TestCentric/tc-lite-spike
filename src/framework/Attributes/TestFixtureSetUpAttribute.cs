@@ -12,7 +12,7 @@ namespace TCLite.Framework
 	/// called before any tests in a fixture are run.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
-	public class TestFixtureSetUpAttribute : NUnitAttribute
+	public class TestFixtureSetUpAttribute : TCLiteAttribute
 	{
 	}
 }

@@ -101,7 +101,7 @@ namespace TCLite.Framework.Internal.Commands
             }
             catch (Exception ex)
             {
-                if (ex is NUnitException)
+                if (ex is TCLiteException)
                     ex = ex.InnerException;
 
                 // TODO: What about ignore exceptions in teardown?

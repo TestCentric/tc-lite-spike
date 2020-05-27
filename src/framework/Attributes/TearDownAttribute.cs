@@ -13,6 +13,6 @@ namespace TCLite.Framework
 	/// guaranteed to be called, even if an exception is thrown.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
-	public class TearDownAttribute : NUnitAttribute
+	public class TearDownAttribute : TCLiteAttribute
 	{}
 }

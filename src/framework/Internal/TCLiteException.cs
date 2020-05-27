@@ -15,30 +15,30 @@ namespace TCLite.Framework.Internal
 	/// exception and hence its stack trace.
 	/// </summary>
 	[Serializable]
-	public class NUnitException : Exception 
+	public class TCLiteException : Exception 
 	{
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnitException"/> class.
+        /// Initializes a new instance of the <see cref="TCLiteException"/> class.
         /// </summary>
-		public NUnitException () : base() 
+		public TCLiteException () : base() 
 		{} 
 
 		/// <summary>
-        /// Initializes a new instance of the <see cref="NUnitException"/> class.
+        /// Initializes a new instance of the <see cref="TCLiteException"/> class.
         /// </summary>
 		/// <param name="message">The error message that explains 
 		/// the reason for the exception</param>
-		public NUnitException(string message) : base (message)
+		public TCLiteException(string message) : base (message)
 		{}
 
 		/// <summary>
-        /// Initializes a new instance of the <see cref="NUnitException"/> class.
+        /// Initializes a new instance of the <see cref="TCLiteException"/> class.
         /// </summary>
 		/// <param name="message">The error message that explains 
 		/// the reason for the exception</param>
 		/// <param name="inner">The exception that caused the 
 		/// current exception</param>
-		public NUnitException(string message, Exception inner) :
+		public TCLiteException(string message, Exception inner) :
 			base(message, inner) 
 		{}
 
@@ -46,7 +46,7 @@ namespace TCLite.Framework.Internal
 		/// <summary>
 		/// Serialization Constructor
 		/// </summary>
-		protected NUnitException(SerializationInfo info, 
+		protected TCLiteException(SerializationInfo info, 
 			StreamingContext context) : base(info,context){}
 #endif
 	}

@@ -13,7 +13,7 @@ namespace TCLite.Framework.Internal
     /// DefaultTestAssemblyBuilder loads a single assembly and builds a TestSuite
     /// containing test fixtures present in the assembly.
     /// </summary>
-    public class NUnitLiteTestAssemblyBuilder : ITestAssemblyBuilder
+    public class TCLiteTestAssemblyBuilder : ITestAssemblyBuilder
     {
         #region Instance Fields
 
@@ -27,9 +27,9 @@ namespace TCLite.Framework.Internal
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnitLiteTestAssemblyBuilder"/> class.
+        /// Initializes a new instance of the <see cref="TCLiteTestAssemblyBuilder"/> class.
         /// </summary>
-        public NUnitLiteTestAssemblyBuilder()
+        public TCLiteTestAssemblyBuilder()
         {
         }
 

@@ -15,7 +15,7 @@ namespace TCLite.Framework
     /// Synonymous with DatapointsAttribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class DatapointSourceAttribute : NUnitAttribute
+    public class DatapointSourceAttribute : TCLiteAttribute
     {
     }
 }

@@ -31,7 +31,7 @@ namespace TCLite.Framework
 	/// </example>
 	/// 
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
-    public class TestAttribute : NUnitAttribute, IApplyToTest
+    public class TestAttribute : TCLiteAttribute, IApplyToTest
 	{
 		private string description;
 

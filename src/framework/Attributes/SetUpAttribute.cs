@@ -13,7 +13,7 @@ namespace TCLite.Framework
     /// namespace or an assembly.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited=true)]
-    public class SetUpAttribute : NUnitAttribute
+    public class SetUpAttribute : TCLiteAttribute
     { }
 
     /// <summary>
@@ -22,7 +22,7 @@ namespace TCLite.Framework
     /// namespace or an assembly.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited=true)]
-    public class PreTestAttribute : NUnitAttribute
+    public class PreTestAttribute : TCLiteAttribute
     { }
 
     /// <summary>
@@ -31,6 +31,6 @@ namespace TCLite.Framework
     /// namespace or an assembly.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited=true)]
-    public class PostTestAttribute : NUnitAttribute
+    public class PostTestAttribute : TCLiteAttribute
     { }
 }

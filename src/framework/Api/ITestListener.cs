@@ -5,7 +5,7 @@ namespace TCLite.Framework.Api
 	/// The ITestListener interface is used internally to receive 
 	/// notifications of significant events while a test is being 
     /// run. The events are propagated to clients by means of an
-    /// AsyncCallback. NUnit extensions may also monitor these events.
+    /// AsyncCallback.
 	/// </summary>
 	public interface ITestListener
 	{

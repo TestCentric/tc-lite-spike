@@ -15,7 +15,7 @@ namespace TCLite.Framework
 	/// tests are run.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method|AttributeTargets.Class|AttributeTargets.Assembly, AllowMultiple=false, Inherited=false)]
-    public class IgnoreAttribute : NUnitAttribute, IApplyToTest
+    public class IgnoreAttribute : TCLiteAttribute, IApplyToTest
 	{
 		private string reason;
 

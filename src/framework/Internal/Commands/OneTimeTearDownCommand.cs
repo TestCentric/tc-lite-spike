@@ -64,7 +64,7 @@ namespace TCLite.Framework.Internal.Commands
                     // Error in TestFixtureTearDown or Dispose causes the
                     // suite to be marked as a error, even if
                     // all the contained tests passed.
-                    NUnitException nex = ex as NUnitException;
+                    TCLiteException nex = ex as TCLiteException;
                     if (nex != null)
                         ex = nex.InnerException;
 

@@ -16,7 +16,7 @@ namespace TCLite.Framework
 	/// {}
 	/// </example>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
-    public class TestFixtureAttribute : NUnitAttribute, IApplyToTest
+    public class TestFixtureAttribute : TCLiteAttribute, IApplyToTest
 	{
 		private string description;
 

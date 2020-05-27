@@ -12,7 +12,7 @@ namespace TCLite.Framework
     /// defined by TCLite. Used to select all data sources for a 
     /// method, class or parameter.
     /// </summary>
-    public abstract class DataAttribute : NUnitAttribute
+    public abstract class DataAttribute : TCLiteAttribute
     {
         /// <summary>
         /// Default constructor

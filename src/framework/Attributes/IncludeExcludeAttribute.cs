@@ -11,7 +11,7 @@ namespace TCLite.Framework
 	/// Abstract base for Attributes that are used to include tests
 	/// in the test run based on environmental settings.
 	/// </summary>
-	public abstract class IncludeExcludeAttribute : NUnitAttribute
+	public abstract class IncludeExcludeAttribute : TCLiteAttribute
 	{
 		private string include;
 		private string exclude;

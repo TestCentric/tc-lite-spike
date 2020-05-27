@@ -13,7 +13,7 @@ namespace TCLite.Framework
 	/// PropertyAttribute is used to attach information to a test as a name/value pair..
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Assembly, AllowMultiple=true, Inherited=true)]
-	public class PropertyAttribute : NUnitAttribute, IApplyToTest
+	public class PropertyAttribute : TCLiteAttribute, IApplyToTest
 	{
         private PropertyBag properties = new PropertyBag();
 

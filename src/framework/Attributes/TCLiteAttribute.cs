@@ -11,11 +11,11 @@ namespace TCLite.Framework
     /// <summary>
     /// The abstract base class for all custom attributes defined by TCLite.
     /// </summary>
-    public abstract class NUnitAttribute : Attribute
+    public abstract class TCLiteAttribute : Attribute
     {
         /// <summary>
         /// Default constructor
         /// </summary>
-        public NUnitAttribute() { }
+        public TCLiteAttribute() { }
     }
 }

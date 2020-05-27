@@ -39,7 +39,7 @@ namespace TCLite.Runner
         public TestRunner()
         {
             _testAssembly = Assembly.GetCallingAssembly();
-            _runner = new NUnitLiteTestAssemblyRunner(new NUnitLiteTestAssemblyBuilder());
+            _runner = new TCLiteTestAssemblyRunner(new TCLiteTestAssemblyBuilder());
         }
 
         public int Execute(string[] args)

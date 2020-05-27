@@ -164,18 +164,6 @@ namespace TCLite.Framework
 
         #endregion
 
-        #region Public Properties - NUnit 2.6 Compatibility
-
-        /// <summary>
-        /// Gets the expected result.
-        /// </summary>
-        public object Result
-        {
-            get { return expectedResult; }
-        }
-
-        #endregion
-
         #region Fluent Instance Modifiers
 
         /// <summary>

@@ -299,7 +299,7 @@ namespace TCLite.Framework.Internal
         /// <param name="ex">The exception that was thrown</param>
         public void RecordException(Exception ex)
         {
-            if (ex is NUnitException)
+            if (ex is TCLiteException)
                 ex = ex.InnerException;
 
             if (ex is System.Threading.ThreadAbortException)

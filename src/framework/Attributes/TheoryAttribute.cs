@@ -29,7 +29,7 @@ namespace TCLite.Framework
     /// </example>
     /// 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited=true)]
-    public class TheoryAttribute : NUnitAttribute
+    public class TheoryAttribute : TCLiteAttribute
     {
         //private string description;
 

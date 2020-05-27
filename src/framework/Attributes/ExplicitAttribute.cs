@@ -16,7 +16,7 @@ namespace TCLite.Framework
 	/// run simply because an enclosing suite is run.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Assembly, AllowMultiple=false, Inherited=false)]
-    public class ExplicitAttribute : NUnitAttribute, IApplyToTest
+    public class ExplicitAttribute : TCLiteAttribute, IApplyToTest
 	{
         private string reason;
 

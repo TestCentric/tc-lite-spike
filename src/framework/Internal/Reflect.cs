@@ -194,9 +194,9 @@ namespace TCLite.Framework.Internal
 				catch(Exception e)
 				{
                     if (e is TargetInvocationException)
-                        throw new NUnitException("Rethrown", e.InnerException);
+                        throw new TCLiteException("Rethrown", e.InnerException);
                     else
-                        throw new NUnitException("Rethrown", e);
+                        throw new TCLiteException("Rethrown", e);
                 }
 			}
 

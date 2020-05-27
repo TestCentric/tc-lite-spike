@@ -14,7 +14,7 @@ namespace TCLite.Framework.Internal
     /// <summary>
     /// Default implementation of ITestAssemblyRunner
     /// </summary>
-    public class NUnitLiteTestAssemblyRunner : ITestAssemblyRunner
+    public class TCLiteTestAssemblyRunner : ITestAssemblyRunner
     {
         private IDictionary settings;
         private ITestAssemblyBuilder builder;
@@ -24,10 +24,10 @@ namespace TCLite.Framework.Internal
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnitLiteTestAssemblyRunner"/> class.
+        /// Initializes a new instance of the <see cref="TCLiteTestAssemblyRunner"/> class.
         /// </summary>
         /// <param name="builder">The builder.</param>
-        public NUnitLiteTestAssemblyRunner(ITestAssemblyBuilder builder)
+        public TCLiteTestAssemblyRunner(ITestAssemblyBuilder builder)
         {
             this.builder = builder;
         }

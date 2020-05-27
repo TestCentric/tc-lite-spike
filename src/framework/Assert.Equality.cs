@@ -57,7 +57,7 @@ namespace TCLite.Framework
 
        /// <summary>
         /// Verifies that two objects are equal.  Two objects are considered
-        /// equal if both are null, or if both have the same value. NUnit
+        /// equal if both are null, or if both have the same value. TCLite
         /// has special semantics for some object types.
         /// If they are not equal an <see cref="AssertionException"/> is thrown.
         /// </summary>
@@ -85,7 +85,7 @@ namespace TCLite.Framework
 
         /// <summary>
         /// Verifies that two objects are not equal.  Two objects are considered
-        /// equal if both are null, or if both have the same value. NUnit
+        /// equal if both are null, or if both have the same value. TCLite
         /// has special semantics for some object types.
         /// If they are equal an <see cref="AssertionException"/> is thrown.
         /// </summary>

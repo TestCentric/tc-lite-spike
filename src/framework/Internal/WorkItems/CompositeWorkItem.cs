@@ -114,7 +114,7 @@ namespace TCLite.Framework.Internal.WorkItems
             }
             catch (Exception ex)
             {
-                if (ex is NUnitException || ex is System.Reflection.TargetInvocationException)
+                if (ex is TCLiteException || ex is System.Reflection.TargetInvocationException)
                     ex = ex.InnerException;
 
                 Result.RecordException(ex);
