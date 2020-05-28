@@ -15,10 +15,6 @@ namespace TCLite.Framework.Internal
     /// </summary>
     public abstract class TestResult : ITestResult
     {
-        private List<ITestResult> children;
-
-        #region Constructor
-
         /// <summary>
         /// Construct a test result given a Test
         /// </summary>
@@ -28,8 +24,6 @@ namespace TCLite.Framework.Internal
             Test = test;
             ResultState = ResultState.Inconclusive;
         }
-
-        #endregion
 
         #region ITestResult Members
 
@@ -106,24 +100,12 @@ namespace TCLite.Framework.Internal
         /// Test HasChildren before accessing Children to avoid
         /// the creation of an empty collection.
         /// </summary>
-        public bool HasChildren
-        {
-            get { return Children != null && Children.Count > 0; }
-        }
+        public bool HasChildren => Children.Count > 0;
 
         /// <summary>
         /// Gets the collection of child results.
         /// </summary>
-        public System.Collections.Generic.IList<ITestResult> Children
-        {
-            get
-            {
-                if (children == null)
-                    children = new System.Collections.Generic.List<ITestResult>();
-
-                return children;
-            }
-        }
+        public IList<ITestResult> Children { get; } = new List<ITestResult>();
 
         #endregion
 
@@ -159,7 +141,7 @@ namespace TCLite.Framework.Internal
             if (ResultState.Label != string.Empty) // && ResultState.Label != ResultState.Status.ToString())
                 thisNode.AddAttribute("label", ResultState.Label);
 
-            thisNode.AddAttribute("time", this.Duration.ToString());
+            thisNode.AddAttribute("time", Duration.ToString());
 
             if (Test is TestSuite)
             {
@@ -170,7 +152,7 @@ namespace TCLite.Framework.Internal
                 thisNode.AddAttribute("skipped", SkipCount.ToString());                
             }            
 
-            thisNode.AddAttribute("asserts", this.AssertCount.ToString());
+            thisNode.AddAttribute("asserts", AssertCount.ToString());
 
             switch (ResultState.Status)
             {
@@ -182,7 +164,7 @@ namespace TCLite.Framework.Internal
                     break;
                 case TestStatus.Passed:
                 case TestStatus.Inconclusive:
-                    if (this.Message != null)
+                    if (Message != null)
                         AddReasonElement(thisNode);
                     break;
             }
@@ -230,14 +212,14 @@ namespace TCLite.Framework.Internal
                     {
                         case "Invalid":
 
-                            if (this.ResultState != ResultState.NotRunnable && this.ResultState.Status != TestStatus.Failed)
+                            if (ResultState != ResultState.NotRunnable && ResultState.Status != TestStatus.Failed)
                                 SetResult(ResultState.Failure, "One or more child tests had errors");
 
                             break;
 
                         case "Ignored":
 
-                            if (this.ResultState.Status == TestStatus.Inconclusive || this.ResultState.Status == TestStatus.Passed)
+                            if (ResultState.Status == TestStatus.Inconclusive || ResultState.Status == TestStatus.Passed)
                                 SetResult(ResultState.Ignored, "One or more child tests were ignored");
 
                             break;
@@ -330,7 +312,7 @@ namespace TCLite.Framework.Internal
         private XmlNode AddReasonElement(XmlNode targetNode)
         {
             XmlNode reasonNode = targetNode.AddElement("reason");
-            reasonNode.AddElement("message").InnerText = this.Message;
+            reasonNode.AddElement("message").InnerText = Message;
             return reasonNode;
         }
 
@@ -343,14 +325,14 @@ namespace TCLite.Framework.Internal
         {
             XmlNode failureNode = targetNode.AddElement("failure");
 
-            if (this.Message != null)
+            if (Message != null)
             {
-                failureNode.AddElement("message").InnerText = this.Message;
+                failureNode.AddElement("message").InnerText = Message;
             }
 
-            if (this.StackTrace != null)
+            if (StackTrace != null)
             {
-                failureNode.AddElement("stack-trace").InnerText = this.StackTrace;
+                failureNode.AddElement("stack-trace").InnerText = StackTrace;
             }
 
             return failureNode;

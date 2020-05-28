@@ -8,10 +8,10 @@ namespace TCLite.Framework.Internal
     /// </summary>
     public class TestSuiteResult : TestResult
     {
-        private int passCount = 0;
-        private int failCount = 0;
-        private int skipCount = 0;
-        private int inconclusiveCount = 0;
+        private int _passCount = 0;
+        private int _failCount = 0;
+        private int _skipCount = 0;
+        private int _inconclusiveCount = 0;
 
         /// <summary>
         /// Construct a TestSuiteResult base on a TestSuite
@@ -23,37 +23,25 @@ namespace TCLite.Framework.Internal
         /// Gets the number of test cases that failed
         /// when running the test and all its children.
         /// </summary>
-        public override int FailCount
-        {
-            get { return this.failCount; }
-        }
+        public override int FailCount => _failCount;
 
         /// <summary>
         /// Gets the number of test cases that passed
         /// when running the test and all its children.
         /// </summary>
-        public override int PassCount
-        {
-            get { return this.passCount; }
-        }
+        public override int PassCount => _passCount;
 
         /// <summary>
         /// Gets the number of test cases that were skipped
         /// when running the test and all its children.
         /// </summary>
-        public override int SkipCount
-        {
-            get { return this.skipCount; }
-        }
+        public override int SkipCount => _skipCount;
 
         /// <summary>
         /// Gets the number of test cases that were inconclusive
         /// when running the test and all its children.
         /// </summary>
-        public override int InconclusiveCount
-        {
-            get { return this.inconclusiveCount; }
-        }
+        public override int InconclusiveCount => _inconclusiveCount;
 
         /// <summary>
         /// Add a child result
@@ -63,10 +51,10 @@ namespace TCLite.Framework.Internal
         {
             base.AddResult(result);
 
-            this.passCount += result.PassCount;
-            this.failCount += result.FailCount;
-            this.skipCount += result.SkipCount;
-            this.inconclusiveCount += result.InconclusiveCount;
+            _passCount += result.PassCount;
+            _failCount += result.FailCount;
+            _skipCount += result.SkipCount;
+            _inconclusiveCount += result.InconclusiveCount;
         }
     }
 }

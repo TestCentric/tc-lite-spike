@@ -52,8 +52,8 @@ namespace TCLite.Framework.Internal
 
         //public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
         //{
-        //    XmlNode thisNode = this.test.AddToXml(parentNode, recursive);
-        //    //thisNode.AddAttribute("seed", this.test.Seed.ToString());
+        //    XmlNode thisNode = Test.AddToXml(parentNode, recursive);
+        //    //thisNode.AddAttribute("seed", Test.Seed.ToString());
         //    return thisNode;
         //}
     }
