@@ -48,7 +48,7 @@ namespace TCLite.Framework.Internal
             Assert.That(ec.CurrentTest.Name, Is.EqualTo("TestExecutionContextTests"));
             Assert.That(ec.CurrentTest.FullName,
                 Is.EqualTo("TCLite.Framework.Internal.TestExecutionContextTests"));
-            Assert.That(fixtureContext.CurrentTest.Id, Is.GreaterThan(0));
+            Assert.That(fixtureContext.CurrentTest.Id, Has.Length.GreaterThan(0));
             Assert.That(fixtureContext.CurrentTest.Properties.Get("Question"), Is.EqualTo("Why?"));
         }
 
@@ -106,7 +106,7 @@ namespace TCLite.Framework.Internal
         [Test]
         public void FixtureSetUpCanAccessFixtureId()
         {
-            Assert.That(fixtureContext.CurrentTest.Id, Is.GreaterThan(0));
+            Assert.That(fixtureContext.CurrentTest.Id, Has.Length.GreaterThan(0));
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace TCLite.Framework.Internal
         [Test]
         public void SetUpCanAccessTestId()
         {
-            Assert.That(setupContext.CurrentTest.Id, Is.GreaterThan(0));
+            Assert.That(setupContext.CurrentTest.Id, Has.Length.GreaterThan(0));
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace TCLite.Framework.Internal
         [Test]
         public void TestCanAccessItsOwnId()
         {
-            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Id, Is.GreaterThan(0));
+            Assert.That(TestExecutionContext.CurrentContext.CurrentTest.Id, Has.Length.GreaterThan(0));
         }
 
         [Test]

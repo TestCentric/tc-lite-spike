@@ -138,7 +138,7 @@ namespace TCLite.Framework
             /// <summary>
             /// Gets the unique Id of a test
             /// </summary>
-            public int ID
+            public string ID
             {
                 get { return test.Id; }
             }

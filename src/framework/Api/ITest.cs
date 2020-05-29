@@ -19,7 +19,7 @@ namespace TCLite.Framework.Api
         /// <summary>
         /// Gets or sets the id of the test
         /// </summary>
-        int Id { get; set; }
+        string Id { get; set; }
 
         /// <summary>
         /// Gets the name of the test

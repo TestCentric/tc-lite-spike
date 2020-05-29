@@ -32,7 +32,7 @@ namespace TCLite.Framework.Internal
 		{
 			FullName = name;
 			Name = name;
-            Id = unchecked(_nextID++);
+            Id = GetNextId();
 		}
 
 		/// <summary>
@@ -46,8 +46,13 @@ namespace TCLite.Framework.Internal
 			FullName = pathName == null || pathName == string.Empty 
 				? name : pathName + "." + name;
 			Name = name;
-            Id = unchecked(_nextID++);
+            Id = GetNextId();
 		}
+
+        private string GetNextId()
+        {
+            return unchecked(_nextID++).ToString();
+        }
 
         /// <summary>
         ///  TODO: Documentation needed for constructor
@@ -64,7 +69,7 @@ namespace TCLite.Framework.Internal
         /// Gets or sets the id of the test
         /// </summary>
         /// <value></value>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the test
