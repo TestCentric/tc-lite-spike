@@ -12,7 +12,7 @@ namespace TCLite.Framework.Api
 	/// The filter applies when running the test, after it has been
 	/// loaded, since this is the only time an ITest exists.
 	/// </summary>
-	public interface ITestFilter //: IXmlNodeBuilder
+	public interface ITestFilter : IXmlNodeBuilder
 	{
 		/// <summary>
 		/// Determine if a particular test passes the filter criteria. Pass

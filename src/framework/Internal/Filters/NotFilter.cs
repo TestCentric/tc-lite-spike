@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
+using System.Xml;
 using TCLite.Framework.Api;
 
 namespace TCLite.Framework.Internal.Filters
@@ -11,38 +11,35 @@ namespace TCLite.Framework.Internal.Filters
 	/// <summary>
 	/// NotFilter negates the operation of another filter
 	/// </summary>
-	[Serializable]
-	public class NotFilter : TestFilter
+	internal class NotFilter : TestFilter
 	{
-		ITestFilter baseFilter;
-        bool topLevel = false;
-
 		/// <summary>
 		/// Construct a not filter on another filter
 		/// </summary>
 		/// <param name="baseFilter">The filter to be negated</param>
-		public NotFilter( ITestFilter baseFilter)
+		public NotFilter(TestFilter baseFilter)
 		{
-			this.baseFilter = baseFilter;
+			BaseFilter = baseFilter;
 		}
-
-        /// <summary>
-        /// Indicates whether this is a top-level NotFilter,
-        /// requiring special handling of Explicit
-        /// </summary>
-        public bool TopLevel
-        {
-            get { return topLevel; }
-            set { topLevel = value; }
-        }
 
 		/// <summary>
 		/// Gets the base filter
 		/// </summary>
-		public ITestFilter BaseFilter
-		{
-			get { return baseFilter; }
-		}
+		public TestFilter BaseFilter { get; }
+
+        /// <summary>
+        /// Determine if a particular test passes the filter criteria. The default 
+        /// implementation checks the test itself, its parents and any descendants.
+        /// 
+        /// Derived classes may override this method or any of the Match methods
+        /// to change the behavior of the filter.
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the test passes the filter, otherwise false</returns>
+        public override bool Pass(ITest test)
+        {
+            return !BaseFilter.Match (test) && !BaseFilter.MatchParent (test);
+        }
 
 		/// <summary>
 		/// Check whether the filter matches a test
@@ -51,29 +48,32 @@ namespace TCLite.Framework.Internal.Filters
 		/// <returns>True if it matches, otherwise false</returns>
 		public override bool Match( ITest test )
 		{
-            if (topLevel && test.RunState == RunState.Explicit)
-                return false;
-
-			return !baseFilter.Pass( test );
+			return !BaseFilter.Match(test);
 		}
 
-		/// <summary>
-		/// Determine whether any descendant of the test matches the filter criteria.
-		/// </summary>
-		/// <param name="test">The test to be matched</param>
-		/// <returns>True if at least one descendant matches the filter criteria</returns>
-		protected override bool MatchDescendant(ITest test)
-		{
-			if (!test.HasChildren || test.Tests == null || topLevel && test.RunState == RunState.Explicit)
-				return false;
+        /// <summary>
+        /// Determine if a test matches the filter explicitly. That is, it must
+        /// be a direct match of the test itself or one of its children.
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the test matches the filter explicitly, otherwise false</returns>
+        public override bool IsExplicitMatch(ITest test)
+        {
+            return false;
+        }
 
-			foreach (ITest child in test.Tests)
-			{
-				if (Match(child) || MatchDescendant(child))
-					return true;
-			}
-
-			return false;
-		}	
+        /// <summary>
+        /// Adds an XML node
+        /// </summary>
+        /// <param name="parentNode">Parent node</param>
+        /// <param name="recursive">True if recursive</param>
+        /// <returns>The added XML node</returns>
+        public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
+        {
+            XmlNode result = parentNode.AddElement("not");
+            if (recursive)
+                BaseFilter.AddToXml(result, true);
+            return result;
+        }
 	}
 }

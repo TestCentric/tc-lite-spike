@@ -15,7 +15,6 @@ namespace TCLite.Framework.Internal
 	/// The filter applies when running the test, after it has been
 	/// loaded, since this is the only time an ITest exists.
 	/// </summary>
-	[Serializable]
 	public abstract class TestFilter : ITestFilter
 	{
 		/// <summary>
@@ -31,6 +30,12 @@ namespace TCLite.Framework.Internal
             get { return this is TestFilter.EmptyFilter; }
         }
 
+		        /// <summary>
+        /// Indicates whether this is a top-level filter,
+        /// not contained in any other filter.
+        /// </summary>
+        public bool TopLevel { get; set; }
+
 		/// <summary>
 		/// Determine if a particular test passes the filter criteria. The default 
 		/// implementation checks the test itself, its parents and any descendants.
@@ -45,24 +50,35 @@ namespace TCLite.Framework.Internal
 			return Match(test) || MatchParent(test) || MatchDescendant(test);
 		}
 
-		/// <summary>
-		/// Determine whether the test itself matches the filter criteria, without
-		/// examining either parents or descendants.
-		/// </summary>
-		/// <param name="test">The test to which the filter is applied</param>
-		/// <returns>True if the filter matches the any parent of the test</returns>
-		public abstract bool Match(ITest test);
+		        /// <summary>
+        /// Determine if a test matches the filter explicitly. That is, it must
+        /// be a direct match of the test itself or one of its children.
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the test matches the filter explicitly, otherwise false</returns>
+        public virtual bool IsExplicitMatch(ITest test)
+        {
+            return Match(test) || MatchDescendant(test);
+        }
 
-		/// <summary>
-		/// Determine whether any ancestor of the test matches the filter criteria
-		/// </summary>
-		/// <param name="test">The test to which the filter is applied</param>
-		/// <returns>True if the filter matches the an ancestor of the test</returns>
-		protected virtual bool MatchParent(ITest test)
-		{
-            return (test.RunState != RunState.Explicit && test.Parent != null &&
-                (Match(test.Parent) || MatchParent(test.Parent)));
-		}
+        /// <summary>
+        /// Determine whether the test itself matches the filter criteria, without
+        /// examining either parents or descendants. This is overridden by each
+        /// different type of filter to perform the necessary tests.
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the filter matches the any parent of the test</returns>
+        public abstract bool Match(ITest test);
+
+        /// <summary>
+        /// Determine whether any ancestor of the test matches the filter criteria
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the filter matches the an ancestor of the test</returns>
+        public bool MatchParent(ITest test)
+        {
+            return test.Parent != null && (Match(test.Parent) || MatchParent(test.Parent));
+        }
 
 		/// <summary>
 		/// Determine whether any descendant of the test matches the filter criteria.
@@ -83,22 +99,135 @@ namespace TCLite.Framework.Internal
             return false;
 		}
 
-		/// <summary>
-		/// Nested class provides an empty filter - one that always
-		/// returns true when called, unless the test is marked explicit.
-		/// </summary>
-		[Serializable]
-		private class EmptyFilter : TestFilter
-		{
-			public override bool Match( ITest test )
-			{
-				return test.RunState != RunState.Explicit;
-			}
+        /// <summary>
+        /// Create a TestFilter instance from an XML representation.
+        /// </summary>
+        public static TestFilter FromXml(string xmlText)
+        {
+            if (string.IsNullOrEmpty(xmlText))
+                xmlText = "<filter />";
 
-			public override bool Pass( ITest test )
-			{
-				return test.RunState != RunState.Explicit;
-			}
-		}
+            XmlNode topNode = XmlHelper.CreateXmlNode(xmlText);
+
+            if (topNode.Name != "filter")
+                throw new Exception("Expected filter element at top level");
+
+            int count = topNode.ChildNodes.Count;
+
+            TestFilter filter = count == 0
+                ? TestFilter.Empty
+                : count == 1
+                    ? FromXml(topNode.FirstChild)
+                    : FromXml(topNode);
+
+            filter.TopLevel = true;
+
+            return filter;
+        }
+
+        /// <summary>
+        /// Create a TestFilter from its TNode representation
+        /// </summary>
+        public static TestFilter FromXml(XmlNode node)
+        {
+            bool isRegex = node.GetAttribute("re") == "1";
+
+            switch (node.Name)
+            {
+                case "filter":
+                case "and":
+                    var andFilter = new AndFilter();
+                    foreach (XmlNode childNode in node.ChildNodes)
+                        andFilter.Add(FromXml(childNode));
+                    return andFilter;
+
+                case "or":
+                    var orFilter = new OrFilter();
+                    foreach (XmlNode childNode in node.ChildNodes)
+                        orFilter.Add(FromXml(childNode));
+                    return orFilter;
+
+                case "not":
+                    return new NotFilter(FromXml(node.FirstChild));
+
+                // case "id":
+                //     return new IdFilter(node.Value);
+
+                case "test":
+                    return new SimpleNameFilter(node.Value); // { IsRegex = isRegex };
+
+                // case "name":
+                //     return new TestNameFilter(node.Value) { IsRegex = isRegex };
+
+                // case "method":
+                //     return new MethodNameFilter(node.Value) { IsRegex = isRegex };
+
+                // case "class":
+                //     return new ClassNameFilter(node.Value) { IsRegex = isRegex };
+
+                // case "namespace":
+                //     return new NamespaceFilter(node.Value) { IsRegex = isRegex };
+
+                case "cat":
+                    return new CategoryFilter(node.Value); // { IsRegex = isRegex };
+
+                // case "prop":
+                //     string name = node.GetAttribute("name");
+                //     if (name != null)
+                //         return new PropertyFilter(name, node.Value) { IsRegex = isRe };
+                //     break;
+            }
+
+            throw new ArgumentException("Invalid filter element: " + node.Name, "xmlNode");
+        }
+
+		#region IXmlNodeBuilder Implementation
+
+        /// <summary>
+        /// Adds an XML node
+        /// </summary>
+        /// <param name="recursive">True if recursive</param>
+        /// <returns>The added XML node</returns>
+        public XmlNode ToXml(bool recursive)
+        {
+            return AddToXml(XmlHelper.CreateTopLevelElement("dummy"), recursive);
+        }
+
+        /// <summary>
+        /// Adds an XML node
+        /// </summary>
+        /// <param name="parentNode">Parent node</param>
+        /// <param name="recursive">True if recursive</param>
+        /// <returns>The added XML node</returns>
+        public abstract XmlNode AddToXml(XmlNode parentNode, bool recursive);
+
+		#endregion
+
+        /// <summary>
+        /// Nested class provides an empty filter - one that always
+        /// returns true when called. It never matches explicitly.
+        /// </summary>
+        private class EmptyFilter : TestFilter
+        {
+            public override bool Match( ITest test )
+            {
+                return true;
+            }
+
+            public override bool Pass( ITest test )
+            {
+                return true;
+            }
+
+            public override bool IsExplicitMatch( ITest test )
+            {
+                return false;
+            }
+
+            public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
+            {
+                return parentNode.AddElement("filter");
+            }
+        }
 	}
 }

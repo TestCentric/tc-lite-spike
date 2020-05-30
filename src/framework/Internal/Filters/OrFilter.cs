@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using TCLite.Framework.Api;
 
@@ -13,8 +12,7 @@ namespace TCLite.Framework.Internal.Filters
 	/// Combines multiple filters so that a test must pass one 
 	/// of them in order to pass this filter.
 	/// </summary>
-	[Serializable]
-	public class OrFilter : TestFilter
+	internal class OrFilter : CompositeFilter
 	{
 		private List<ITestFilter> filters = new List<ITestFilter>();
 
@@ -27,30 +25,7 @@ namespace TCLite.Framework.Internal.Filters
 		/// Constructs an AndFilter from an array of filters
 		/// </summary>
 		/// <param name="filters"></param>
-		public OrFilter( params ITestFilter[] filters )
-		{
-			this.filters.AddRange( filters );
-		}
-
-		/// <summary>
-		/// Adds a filter to the list of filters
-		/// </summary>
-		/// <param name="filter">The filter to be added</param>
-		public void Add( ITestFilter filter )
-		{
-			this.filters.Add( filter );
-		}
-
-		/// <summary>
-		/// Return an array of the composing filters
-		/// </summary>
-		public ITestFilter[] Filters
-		{
-			get
-			{
-                return filters.ToArray();
-			}
-		}
+		public OrFilter( params ITestFilter[] filters ) : base(filters) { }
 
 		/// <summary>
 		/// Checks whether the OrFilter is matched by a test
@@ -79,5 +54,28 @@ namespace TCLite.Framework.Internal.Filters
 
 			return false;
 		}
+
+        /// <summary>
+        /// Checks whether the OrFilter is explicit matched by a test
+        /// </summary>
+        /// <param name="test">The test to be matched</param>
+        /// <returns>True if any of the component filters explicit match, otherwise false</returns>
+        public override bool IsExplicitMatch( ITest test )
+        {
+            foreach( TestFilter filter in Filters )
+                if ( filter.IsExplicitMatch( test ) )
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the element name
+        /// </summary>
+        /// <value>Element name</value>
+        protected override string ElementName
+        {
+            get { return "or"; }
+        }
 	}
 }
