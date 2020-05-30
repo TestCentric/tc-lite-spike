@@ -9,22 +9,27 @@ using TCLite.Framework.Api;
 namespace TCLite.Framework.Internal.Filters
 {
     /// <summary>
-    /// TestName filter selects tests based on their Name
+    /// ClassName filter selects tests based on the class FullName
     /// </summary>
-    internal class TestNameFilter : ValueMatchFilter
+    internal class ClassNameFilter : ValueMatchFilter
     {
         /// <summary>
-        /// Construct a TestNameFilter for a single name
+        /// Construct a FullNameFilter for a single name
         /// </summary>
         /// <param name="expectedValue">The name the filter will recognize.</param>
-        public TestNameFilter(string expectedValue) : base(expectedValue) { }
+        public ClassNameFilter(string expectedValue) : base(expectedValue) { }
 
         /// <summary>
         /// Match a test against a single value.
         /// </summary>
         public override bool Match(ITest test)
         {
-            return Match(test.Name);
+            // tests below the fixture level may have non-null className
+            // but we don't want to match them explicitly.
+            if (!test.IsSuite || test is ParameterizedMethodSuite || test.ClassName == null)
+                return false;
+
+            return Match(test.ClassName);
         }
 
         /// <summary>
@@ -33,7 +38,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <value>Element name</value>
         protected override string ElementName
         {
-            get { return "name"; }
+            get { return "class"; }
         }
     }
 }

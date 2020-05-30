@@ -3,28 +3,29 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
 using TCLite.Framework.Api;
 
 namespace TCLite.Framework.Internal.Filters
 {
     /// <summary>
-    /// TestName filter selects tests based on their Name
+    /// ClassName filter selects tests based on the class FullName
     /// </summary>
-    internal class TestNameFilter : ValueMatchFilter
+    internal class NamespaceFilter : ValueMatchFilter
     {
         /// <summary>
-        /// Construct a TestNameFilter for a single name
+        /// Construct a NamespaceFilter for a single namespace
         /// </summary>
-        /// <param name="expectedValue">The name the filter will recognize.</param>
-        public TestNameFilter(string expectedValue) : base(expectedValue) { }
+        /// <param name="expectedValue">The namespace the filter will recognize.</param>
+        public NamespaceFilter(string expectedValue) : base(expectedValue) { }
 
         /// <summary>
         /// Match a test against a single value.
-        /// </summary>
+        /// </summary> 
         public override bool Match(ITest test)
         {
-            return Match(test.Name);
+            string containingNamespace = ((Test)test).FixtureType.Namespace;
+
+            return Match(containingNamespace);
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <value>Element name</value>
         protected override string ElementName
         {
-            get { return "name"; }
+            get { return "namespace"; }
         }
     }
 }

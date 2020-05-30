@@ -126,7 +126,7 @@ namespace TCLite.Framework.Internal
         }
 
         /// <summary>
-        /// Create a TestFilter from its TNode representation
+        /// Create a TestFilter from its Xml representation
         /// </summary>
         public static TestFilter FromXml(XmlNode node)
         {
@@ -150,32 +150,29 @@ namespace TCLite.Framework.Internal
                 case "not":
                     return new NotFilter(FromXml(node.FirstChild));
 
-                // case "id":
-                //     return new IdFilter(node.Value);
+                case "id":
+                    return new IdFilter(node.Value);
 
                 case "test":
-                    return new TestNameFilter(node.Value); // { IsRegex = isRegex };
+                    return new FullNameFilter(node.Value) { IsRegex = isRegex };
 
-                // case "name":
-                //     return new TestNameFilter(node.Value) { IsRegex = isRegex };
+                case "method":
+                    return new MethodNameFilter(node.Value) { IsRegex = isRegex };
 
-                // case "method":
-                //     return new MethodNameFilter(node.Value) { IsRegex = isRegex };
+                case "class":
+                    return new ClassNameFilter(node.Value) { IsRegex = isRegex };
 
-                // case "class":
-                //     return new ClassNameFilter(node.Value) { IsRegex = isRegex };
-
-                // case "namespace":
-                //     return new NamespaceFilter(node.Value) { IsRegex = isRegex };
+                case "namespace":
+                    return new NamespaceFilter(node.Value) { IsRegex = isRegex };
 
                 case "cat":
-                    return new CategoryFilter(node.Value); // { IsRegex = isRegex };
+                    return new CategoryFilter(node.Value) { IsRegex = isRegex };
 
-                // case "prop":
-                //     string name = node.GetAttribute("name");
-                //     if (name != null)
-                //         return new PropertyFilter(name, node.Value) { IsRegex = isRegex };
-                //     break;
+                case "prop":
+                    string name = node.GetAttribute("name");
+                    if (name != null)
+                        return new PropertyFilter(name, node.Value) { IsRegex = isRegex };
+                    break;
             }
 
             throw new ArgumentException("Invalid filter element: " + node.Name, "xmlNode");

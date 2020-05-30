@@ -3,28 +3,29 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
 using TCLite.Framework.Api;
 
 namespace TCLite.Framework.Internal.Filters
 {
     /// <summary>
-    /// TestName filter selects tests based on their Name
+    /// IdFilter selects tests based on their id
     /// </summary>
-    internal class TestNameFilter : ValueMatchFilter
+    internal class IdFilter : ValueMatchFilter
     {
         /// <summary>
-        /// Construct a TestNameFilter for a single name
+        /// Construct an IdFilter for a single value
         /// </summary>
-        /// <param name="expectedValue">The name the filter will recognize.</param>
-        public TestNameFilter(string expectedValue) : base(expectedValue) { }
+        /// <param name="id">The id the filter will recognize.</param>
+        public IdFilter(string id) : base (id) { }
 
         /// <summary>
         /// Match a test against a single value.
         /// </summary>
         public override bool Match(ITest test)
         {
-            return Match(test.Name);
+            // We make a direct test here rather than calling ValueMatchFilter.Match
+            // because regular expressions are not supported for ID.
+            return test.Id == ExpectedValue;
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <value>Element name</value>
         protected override string ElementName
         {
-            get { return "name"; }
+            get { return "id"; }
         }
     }
 }

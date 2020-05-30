@@ -9,22 +9,22 @@ using TCLite.Framework.Api;
 namespace TCLite.Framework.Internal.Filters
 {
     /// <summary>
-    /// TestName filter selects tests based on their Name
+    /// FullName filter selects tests based on their FullName
     /// </summary>
-    internal class TestNameFilter : ValueMatchFilter
+    internal class MethodNameFilter : ValueMatchFilter
     {
         /// <summary>
-        /// Construct a TestNameFilter for a single name
+        /// Construct a MethodNameFilter for a single name
         /// </summary>
         /// <param name="expectedValue">The name the filter will recognize.</param>
-        public TestNameFilter(string expectedValue) : base(expectedValue) { }
+        public MethodNameFilter(string expectedValue) : base(expectedValue) { }
 
         /// <summary>
         /// Match a test against a single value.
         /// </summary>
         public override bool Match(ITest test)
         {
-            return Match(test.Name);
+            return Match(test.MethodName);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <value>Element name</value>
         protected override string ElementName
         {
-            get { return "name"; }
+            get { return "method"; }
         }
     }
 }
