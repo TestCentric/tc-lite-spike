@@ -12,16 +12,13 @@ namespace TCLite.Framework.Internal.Filters
 	/// <summary>
 	/// SimpleName filter selects tests based on their name
 	/// </summary>
-    [Serializable]
-    internal class SimpleNameFilter : ValueMatchFilter
+    internal class TestNameFilter : ValueMatchFilter
     {
-        private List<string> names = new List<string>();
-
         /// <summary>
-        /// Construct a SimpleNameFilter for a single name
+        /// Construct a FullNameFilter for a single name
         /// </summary>
-        /// <param name="nameToAdd">The name the filter will recognize.</param>
-        public SimpleNameFilter(string nameToAdd) : base(nameToAdd) { }
+        /// <param name="expectedValue">The name the filter will recognize.</param>
+        public TestNameFilter(string expectedValue) : base(expectedValue) { }
 
 		/// <summary>
 		/// Check whether the filter matches a test
@@ -39,7 +36,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <value>Element name</value>
         protected override string ElementName
         {
-            get { return "cat"; }
+            get { return "test"; }
         }
 	}
 }

@@ -52,12 +52,6 @@ namespace TCLite.Framework.Internal
         #region Properties
 
         /// <summary>
-        /// Gets a MethodInfo for the method implementing this test.
-        /// Returns null if the test is not implemented as a method.
-        /// </summary>
-        public MethodInfo Method { get; set; } // public setter needed by NUnitTestCaseBuilder
-
-        /// <summary>
         /// The ParameterSet used to create this test method
         /// </summary>
         internal ParameterSet TestCaseParameters { get; set; }

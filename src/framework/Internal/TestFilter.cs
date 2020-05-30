@@ -154,7 +154,7 @@ namespace TCLite.Framework.Internal
                 //     return new IdFilter(node.Value);
 
                 case "test":
-                    return new SimpleNameFilter(node.Value); // { IsRegex = isRegex };
+                    return new TestNameFilter(node.Value); // { IsRegex = isRegex };
 
                 // case "name":
                 //     return new TestNameFilter(node.Value) { IsRegex = isRegex };
