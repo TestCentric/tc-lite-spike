@@ -95,6 +95,16 @@ namespace TCLite.Framework.Api
         /// </summary>
         /// <value>A list of child tests</value>
         System.Collections.Generic.IList<ITest> Tests { get; }
+
+        /// <summary>
+        /// Gets a fixture object for running this test.
+        /// </summary>
+        object Fixture { get; }
+
+        /// <summary>
+        /// The arguments to use in creating the test or empty array if none are required.
+        /// </summary>
+        object[] Arguments { get; }
     }
 }
 

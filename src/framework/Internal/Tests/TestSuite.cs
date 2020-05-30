@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Reflection;
 using System.Xml;
 using TCLite.Framework.Api;
 using TCLite.Framework.Internal.Commands;
@@ -115,7 +116,7 @@ namespace TCLite.Framework.Internal
         /// <summary>
         /// The arguments to use in creating the fixture, or empty array if none are provided.
         /// </summary>
-        public object[] Arguments { get; }
+        public override object[] Arguments { get; }
 
         /// <summary>
         /// Overridden to return a TestSuiteResult.

@@ -41,6 +41,11 @@ namespace TCLite.Framework.Attributes
             get { throw new NotImplementedException(); }
         }
 
+        public override object[] Arguments
+        {
+            get { return new object[0]; }
+        }
+
         #endregion
     }
 }

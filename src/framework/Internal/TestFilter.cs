@@ -174,7 +174,7 @@ namespace TCLite.Framework.Internal
                 // case "prop":
                 //     string name = node.GetAttribute("name");
                 //     if (name != null)
-                //         return new PropertyFilter(name, node.Value) { IsRegex = isRe };
+                //         return new PropertyFilter(name, node.Value) { IsRegex = isRegex };
                 //     break;
             }
 

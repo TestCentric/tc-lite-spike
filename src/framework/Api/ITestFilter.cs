@@ -23,12 +23,12 @@ namespace TCLite.Framework.Api
 		/// <returns>True if the test passes the fFilter, otherwise false</returns>
 		bool Pass( ITest test );
 
-        // /// <summary>
-        // /// Determine if a test matches the filter explicitly. That is, it must
-        // /// be a direct match of the test itself or one of its children.
-        // /// </summary>
-        // /// <param name="test">The test to which the filter is applied</param>
-        // /// <returns>True if the test matches the filter explicitly, otherwise false</returns>
-        // bool IsExplicitMatch(ITest test);
+        /// <summary>
+        /// Determine if a test matches the filter explicitly. That is, it must
+        /// be a direct match of the test itself or one of its children.
+        /// </summary>
+        /// <param name="test">The test to which the filter is applied</param>
+        /// <returns>True if the test matches the filter explicitly, otherwise false</returns>
+        bool IsExplicitMatch(ITest test);
 	}
 }

@@ -99,7 +99,7 @@ namespace TCLite.Framework.Internal
         /// <value></value>
         public string FullName { get; set; }
 
-        /// <summary>
+                /// <summary>
         /// Gets the name of the class where this test was declared.
         /// Returns null if the test is not associated with a class.
         /// </summary>
@@ -117,7 +117,21 @@ namespace TCLite.Framework.Internal
         /// Gets the name of the method implementing this test.
         /// Returns null if the test is not implemented as a method.
         /// </summary>
-        public string MethodName { get; protected set; }
+        public virtual string MethodName
+        {
+            get { return null; }
+        }
+
+        /// <summary>
+        /// The arguments to use in creating the test or empty array if none required.
+        /// </summary>
+        public abstract object[] Arguments { get; }
+
+        /// <summary>
+        /// Gets a MethodInfo for the method implementing this test.
+        /// Returns null if the test is not implemented as a method.
+        /// </summary>
+        public MethodInfo Method { get; set; } // public setter needed by NUnitTestCaseBuilder
 
         /// <summary>
         /// Gets the Type of the fixture used in running this test

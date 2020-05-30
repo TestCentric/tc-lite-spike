@@ -28,11 +28,6 @@ namespace TCLite.Framework.Internal
         }
 
         /// <summary>
-        /// Gets the MethodInfo for which this suite is being built.
-        /// </summary>
-        public MethodInfo Method { get; }
-
-        /// <summary>
         /// Gets a string representing the type of test
         /// </summary>
         /// <value></value>
