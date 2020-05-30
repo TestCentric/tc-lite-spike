@@ -21,27 +21,6 @@ namespace TCLite.Framework.Internal
     /// </summary>
 	public class TestMethod : Test
 	{
-		#region Fields
-
-		/// <summary>
-		/// The test method
-		/// </summary>
-		internal MethodInfo method;
-
-        /// <summary>
-        /// A list of all decorators applied to the test by attributes or parameterset arguments
-        /// </summary>
-        private List<ICommandDecorator> decorators = new List<ICommandDecorator>();
-
-        /// <summary>
-        /// The ParameterSet used to create this test method
-        /// </summary>
-        internal ParameterSet parms;
-
-        #endregion
-
-		#region Constructor
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TestMethod"/> class.
         /// </summary>
@@ -50,13 +29,13 @@ namespace TCLite.Framework.Internal
         public TestMethod(MethodInfo method, ITest parentSuite) 
 			: base( method.ReflectedType ) 
 		{
-            this.Name = method.Name;
-            this.FullName += "." + this.Name;
+            Name = method.Name;
+            FullName += "." + Name;
 
             // Disambiguate call to base class methods
             // TODO: This should not be here - it's a presentation issue
             if( method.DeclaringType != method.ReflectedType)
-                this.Name = method.DeclaringType.Name + "." + method.Name;
+                Name = method.DeclaringType.Name + "." + method.Name;
 
             // Needed to give proper fullname to test in a parameterized fixture.
             // Without this, the arguments to the fixture are not included.
@@ -64,59 +43,37 @@ namespace TCLite.Framework.Internal
             if (parentSuite != null)
             {
                 prefix = parentSuite.FullName;
-                this.FullName = prefix + "." + this.Name;
+                FullName = prefix + "." + Name;
             }
 
-            this.method = method;
+            Method = method;
         }
-
-		#endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets the method.
+        /// Gets a MethodInfo for the method implementing this test.
+        /// Returns null if the test is not implemented as a method.
         /// </summary>
-        /// <value>The method that performs the test.</value>
-		public MethodInfo Method
-		{
-			get { return method; }
-		}
+        public MethodInfo Method { get; set; } // public setter needed by NUnitTestCaseBuilder
+
+        /// <summary>
+        /// The ParameterSet used to create this test method
+        /// </summary>
+        internal ParameterSet TestCaseParameters { get; set; }
 
         /// <summary>
         /// Gets a list of custom decorators for this test.
         /// </summary>
-        public IList<ICommandDecorator> CustomDecorators
-        {
-            get { return decorators; }
-        }
+        public IList<ICommandDecorator> CustomDecorators { get; } = new List<ICommandDecorator>();
 
-        internal bool HasExpectedResult
-        {
-            get { return parms != null && parms.HasExpectedResult; }
-        }
+        internal bool HasExpectedResult => TestCaseParameters?.HasExpectedResult ?? false;
 
-        internal object ExpectedResult
-        {
-            get { return parms != null ? parms.ExpectedResult : null; }
-        }
+        internal object ExpectedResult => TestCaseParameters?.ExpectedResult;
 
-        internal object[] Arguments
-        {
-            get { return parms != null ? parms.Arguments : null; }
-        }
+        public object[] Arguments => TestCaseParameters?.Arguments;
 
-        internal bool IsAsync
-        {
-            get
-            {
-#if NET_4_5
-                return method.IsDefined(typeof(System.Runtime.CompilerServices.AsyncStateMachineAttribute), false);
-#else
-                return false;
-#endif
-            }
-        }
+        // NYI: internal bool IsAsync => Method.IsDefined(typeof(System.Runtime.CompilerServices.AsyncStateMachineAttribute), false);
 
         #endregion
 
@@ -144,7 +101,7 @@ namespace TCLite.Framework.Internal
 
             PopulateTestNode(thisNode, recursive);
 
-            thisNode.AddAttribute("seed", this.Seed.ToString());
+            thisNode.AddAttribute("seed", Seed.ToString());
 
             return thisNode;
         }
@@ -171,7 +128,7 @@ namespace TCLite.Framework.Internal
 
             command = ApplyDecoratorsToCommand(command);
 
-            IApplyToContext[] changes = (IApplyToContext[])this.Method.GetCustomAttributes(typeof(IApplyToContext), true);
+            IApplyToContext[] changes = (IApplyToContext[])Method.GetCustomAttributes(typeof(IApplyToContext), true);
             if (changes.Length > 0)
                 command = new ApplyChangesToContextCommand(command, changes);
 

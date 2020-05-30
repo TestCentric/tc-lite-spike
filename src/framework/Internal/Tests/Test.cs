@@ -30,9 +30,9 @@ namespace TCLite.Framework.Internal
 		/// <param name="name">The name of the test</param>
 		protected Test( string name )
 		{
-			FullName = name;
-			Name = name;
-            Id = GetNextId();
+            Guard.ArgumentNotNullOrEmpty(name, nameof(name));
+
+            Initialize(name);
 		}
 
 		/// <summary>
@@ -42,26 +42,43 @@ namespace TCLite.Framework.Internal
 		/// <param name="pathName">The parent tests full name</param>
 		/// <param name="name">The name of the test</param>
 		protected Test( string pathName, string name ) 
+            : this(name)
 		{ 
-			FullName = pathName == null || pathName == string.Empty 
-				? name : pathName + "." + name;
-			Name = name;
-            Id = GetNextId();
+            Guard.ArgumentNotNullOrEmpty(pathName, nameof(pathName));
+            Guard.ArgumentNotNullOrEmpty(name, nameof(name));
+
+            Initialize(name);
+
+            FullName = $"{pathName}.{name}";
 		}
 
-        private string GetNextId()
+        /// <summary>
+        /// Constructs a test for a specific type.
+        /// </summary>
+        protected Test(Type type)
         {
-            return unchecked(_nextID++).ToString();
+            Initialize(type.Name);
+            FixtureType = type;
+            FullName = type.FullName;
+        }
+
+        private void Initialize(string name)
+        {
+            FullName = Name = name;
+            Id = GetNextId();
+            RunState = RunState.Runnable;
+        }
+
+        private static string GetNextId()
+        {
+            return IdPrefix + unchecked(_nextID++);
         }
 
         /// <summary>
-        ///  TODO: Documentation needed for constructor
+        /// Static prefix used for ids in this AppDomain.
+        /// Set by FrameworkController.
         /// </summary>
-        /// <param name="fixtureType"></param>
-        protected Test(Type fixtureType) : this(fixtureType.FullName)
-        {
-            FixtureType = fixtureType;
-        }
+        public static string IdPrefix { get; set; }
 
 		#region ITest Members
 
@@ -81,6 +98,26 @@ namespace TCLite.Framework.Internal
         /// </summary>
         /// <value></value>
         public string FullName { get; set; }
+
+        /// <summary>
+        /// Gets the name of the class where this test was declared.
+        /// Returns null if the test is not associated with a class.
+        /// </summary>
+        public string ClassName
+        {
+            get
+            {
+                return FixtureType.IsGenericType
+                    ? FixtureType.GetGenericTypeDefinition().FullName
+                    : FixtureType.FullName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the method implementing this test.
+        /// Returns null if the test is not implemented as a method.
+        /// </summary>
+        public string MethodName { get; protected set; }
 
         /// <summary>
         /// Gets the Type of the fixture used in running this test

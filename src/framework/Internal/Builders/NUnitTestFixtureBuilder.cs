@@ -209,7 +209,7 @@ namespace TCLite.Framework.Builders
                 return;
             }
 
-            if( !IsStaticClass(fixtureType)  && !HasValidConstructor(fixtureType, fixture.arguments) )
+            if( !IsStaticClass(fixtureType)  && !HasValidConstructor(fixtureType, fixture.Arguments) )
             {
                 SetNotRunnable(fixture, "No suitable constructor was found");
                 return;

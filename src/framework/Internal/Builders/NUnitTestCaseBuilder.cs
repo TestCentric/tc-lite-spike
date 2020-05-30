@@ -30,23 +30,23 @@ namespace TCLite.Framework.Builders
     /// </summary>
     public class NUnitTestCaseBuilder : ITestCaseBuilder2
 	{
-        private Randomizer randomizer;
+        private Randomizer _randomizer;
 
-        private ITestCaseProvider testCaseProvider = new TestCaseProviders();
+        private ITestCaseProvider _testCaseProvider = new TestCaseProviders();
 
         /// <summary>
         /// Default no argument constructor for NUnitTestCaseBuilder
         /// </summary>
         public NUnitTestCaseBuilder()
         {
-            randomizer = Randomizer.CreateRandomizer();
+            _randomizer = Randomizer.CreateRandomizer();
         }
 
         #region ITestCaseBuilder Methods
         /// <summary>
         /// Determines if the method can be used to build an NUnit test
         /// test method of some kind. The method must normally be marked
-        /// with an identifying attriute for this to be true.
+        /// with an identifying attribute for this to be true.
         /// 
         /// Note that this method does not check that the signature
         /// of the method for validity. If we did that here, any
@@ -84,7 +84,7 @@ namespace TCLite.Framework.Builders
         /// <summary>
         /// Determines if the method can be used to build an NUnit test
         /// test method of some kind. The method must normally be marked
-        /// with an identifying attriute for this to be true.
+        /// with an identifying attribute for this to be true.
         /// 
         /// Note that this method does not check that the signature
         /// of the method for validity. If we did that here, any
@@ -112,7 +112,7 @@ namespace TCLite.Framework.Builders
         /// <returns>A Test representing one or more method invocations</returns>
         public Test BuildFrom(MethodInfo method, ITest parentSuite)
         {
-            return testCaseProvider.HasTestCasesFor(method)
+            return _testCaseProvider.HasTestCasesFor(method)
                 ? BuildParameterizedMethodSuite(method, parentSuite)
                 : BuildSingleTestMethod(method, parentSuite, null);
         }
@@ -122,7 +122,7 @@ namespace TCLite.Framework.Builders
         #region Implementation
 
         /// <summary>
-        /// Builds a ParameterizedMetodSuite containing individual
+        /// Builds a ParameterizedMethodSuite containing individual
         /// test cases for each set of parameters provided for
         /// this method.
         /// </summary>
@@ -134,13 +134,13 @@ namespace TCLite.Framework.Builders
             ParameterizedMethodSuite methodSuite = new ParameterizedMethodSuite(method);
             methodSuite.ApplyAttributesToTest(method);
 
-            foreach (ITestCaseData testcase in testCaseProvider.GetTestCasesFor(method))
+            foreach (ITestCaseData testcase in _testCaseProvider.GetTestCasesFor(method))
             {
-                ParameterSet parms = testcase as ParameterSet;
-                if (parms == null)
-                    parms = new ParameterSet(testcase);
+                ParameterSet parameterSet = testcase as ParameterSet;
+                if (parameterSet == null)
+                    parameterSet = new ParameterSet(testcase);
 
-                TestMethod test = BuildSingleTestMethod(method, parentSuite, parms);
+                TestMethod test = BuildSingleTestMethod(method, parentSuite, parameterSet);
 
                 methodSuite.Add(test);
             }
@@ -154,13 +154,13 @@ namespace TCLite.Framework.Builders
         /// </summary>
         /// <param name="method">The MethodInfo from which to construct the TestMethod</param>
         /// <param name="parentSuite">The suite or fixture to which the new test will be added</param>
-        /// <param name="parms">The ParameterSet to be used, or null</param>
+        /// <param name="parameterSet">The ParameterSet to be used, or null</param>
         /// <returns></returns>
-        private TestMethod BuildSingleTestMethod(MethodInfo method, ITest parentSuite, ParameterSet parms)
+        private TestMethod BuildSingleTestMethod(MethodInfo method, ITest parentSuite, ParameterSet parameterSet)
         {
             TestMethod testMethod = new TestMethod(method, parentSuite);
 
-            testMethod.Seed = randomizer.Next();
+            testMethod.Seed = _randomizer.Next();
 
             string prefix = method.ReflectedType.FullName;
 
@@ -172,35 +172,35 @@ namespace TCLite.Framework.Builders
                 //testMethod.FullName = prefix + "." + testMethod.Name;
             }
 
-            if (CheckTestMethodSignature(testMethod, parms))
+            if (CheckTestMethodSignature(testMethod, parameterSet))
             {
-                if (parms == null)
+                if (parameterSet == null)
                     testMethod.ApplyAttributesToTest(method);
 
                 foreach (ICommandDecorator decorator in method.GetCustomAttributes(typeof(ICommandDecorator), true))
                     testMethod.CustomDecorators.Add(decorator);
             }
 
-            if (parms != null)
+            if (parameterSet != null)
             {
                 // NOTE: After the call to CheckTestMethodSignature, the Method
                 // property of testMethod may no longer be the same as the
                 // original MethodInfo, so we reassign it here.
                 method = testMethod.Method;
 
-                if (parms.TestName != null)
+                if (parameterSet.TestName != null)
                 {
-                    testMethod.Name = parms.TestName;
-                    testMethod.FullName = prefix + "." + parms.TestName;
+                    testMethod.Name = parameterSet.TestName;
+                    testMethod.FullName = prefix + "." + parameterSet.TestName;
                 }
-                else if (parms.OriginalArguments != null)
+                else if (parameterSet.OriginalArguments != null)
                 {
-                    string name = MethodHelper.GetDisplayName(method, parms.OriginalArguments);
+                    string name = MethodHelper.GetDisplayName(method, parameterSet.OriginalArguments);
                     testMethod.Name = name;
                     testMethod.FullName = prefix + "." + name;
                 }
 
-                parms.ApplyToTest(testMethod);
+                parameterSet.ApplyToTest(testMethod);
             }
 
             return testMethod;
@@ -224,9 +224,9 @@ namespace TCLite.Framework.Builders
         /// </summary>
         /// <param name="testMethod">The TestMethod to be checked. If it
         /// is found to be non-runnable, it will be modified.</param>
-        /// <param name="parms">Parameters to be used for this test, or null</param>
+        /// <param name="parameterSet">Parameters to be used for this test, or null</param>
         /// <returns>True if the method signature is valid, false if not</returns>
-        private static bool CheckTestMethodSignature(TestMethod testMethod, ParameterSet parms)
+        private static bool CheckTestMethodSignature(TestMethod testMethod, ParameterSet parameterSet)
 		{
             if (testMethod.Method.IsAbstract)
             {
@@ -252,12 +252,12 @@ namespace TCLite.Framework.Builders
             object[] arglist = null;
             int argsProvided = 0;
 
-            if (parms != null)
+            if (parameterSet != null)
             {
-                testMethod.parms = parms;
-                testMethod.RunState = parms.RunState;
+                testMethod.TestCaseParameters = parameterSet;
+                testMethod.RunState = parameterSet.RunState;
 
-                arglist = parms.Arguments;
+                arglist = parameterSet.Arguments;
 
                 if (arglist != null)
                     argsProvided = arglist.Length;
@@ -269,7 +269,7 @@ namespace TCLite.Framework.Builders
             Type returnType = testMethod.Method.ReturnType;
             if (returnType.Equals(typeof(void)))
             {
-                if (parms != null && parms.HasExpectedResult)
+                if (parameterSet != null && parameterSet.HasExpectedResult)
                     return MarkAsNotRunnable(testMethod, "Method returning void cannot have an expected result");
             }
             else
@@ -285,7 +285,7 @@ namespace TCLite.Framework.Builders
                 }
                 else 
 #endif
-                if (parms == null || !parms.HasExpectedResult)
+                if (parameterSet == null || !parameterSet.HasExpectedResult)
                     return MarkAsNotRunnable(testMethod, "Method has non-void return value, but no result is expected");
             }
 
@@ -314,7 +314,7 @@ namespace TCLite.Framework.Builders
                         return MarkAsNotRunnable(testMethod, "Unable to determine type arguments for method");
                     }
 
-                testMethod.method = testMethod.Method.MakeGenericMethod(typeArguments);
+                testMethod.Method = testMethod.Method.MakeGenericMethod(typeArguments);
                 parameters = testMethod.Method.GetParameters();
            }
 #endif

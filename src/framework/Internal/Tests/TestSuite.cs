@@ -17,11 +17,6 @@ namespace TCLite.Framework.Internal
 	public class TestSuite : Test
 	{
         /// <summary>
-        /// Argument list for use in creating the fixture.
-        /// </summary>
-        internal object[] arguments;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TestSuite"/> class.
         /// </summary>
         /// <param name="name">The name of the suite.</param>
@@ -40,15 +35,8 @@ namespace TCLite.Framework.Internal
         /// Initializes a new instance of the <see cref="TestSuite"/> class.
         /// </summary>
         /// <param name="fixtureType">Type of the fixture.</param>
-        public TestSuite(Type fixtureType)
-            : this(fixtureType, null) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestSuite"/> class.
-        /// </summary>
-        /// <param name="fixtureType">Type of the fixture.</param>
         /// <param name="arguments">The arguments.</param>
-        public TestSuite(Type fixtureType, object[] arguments)
+        public TestSuite(Type fixtureType, object[] arguments = null)
             : base(fixtureType)
         {
             string name = TypeHelper.GetDisplayName(fixtureType, arguments);
@@ -58,7 +46,7 @@ namespace TCLite.Framework.Internal
             string nspace = fixtureType.Namespace;
             if (nspace != null && nspace != "")
                 this.FullName = nspace + "." + name;
-            this.arguments = arguments;
+            Arguments = arguments;
         }
 
         /// <summary>
@@ -123,6 +111,11 @@ namespace TCLite.Framework.Internal
 				return count;
 			}
 		}
+
+        /// <summary>
+        /// The arguments to use in creating the fixture, or empty array if none are provided.
+        /// </summary>
+        public object[] Arguments { get; }
 
         /// <summary>
         /// Overridden to return a TestSuiteResult.

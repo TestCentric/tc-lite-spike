@@ -27,15 +27,25 @@ namespace TCLite.Framework.Api
         string Name { get; }
 
         /// <summary>
+        /// Gets the type of the test
+        /// </summary>
+        string TestType { get; }
+        /// <summary>
         /// Gets the fully qualified name of the test
         /// </summary>
         string FullName { get; }
 
         /// <summary>
-        /// Gets the Type of the test fixture, if applicable, or
-        /// null if no fixture type is associated with this test.
+        /// Gets the name of the class containing this test. Returns
+        /// null if the test is not associated with a class.
         /// </summary>
-        Type FixtureType { get; }
+        string ClassName { get; }
+
+        /// <summary>
+        /// Gets the name of the method implementing this test.
+        /// Returns null if the test is not implemented as a method.
+        /// </summary>
+        string MethodName { get; }
 
         /// <summary>
         /// Indicates whether the test can be run using

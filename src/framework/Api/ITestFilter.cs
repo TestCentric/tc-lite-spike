@@ -12,13 +12,8 @@ namespace TCLite.Framework.Api
 	/// The filter applies when running the test, after it has been
 	/// loaded, since this is the only time an ITest exists.
 	/// </summary>
-	public interface ITestFilter
+	public interface ITestFilter //: IXmlNodeBuilder
 	{
-        /// <summary>
-        /// Indicates whether this is the EmptyFilter
-        /// </summary>
-        bool IsEmpty { get; }
-
 		/// <summary>
 		/// Determine if a particular test passes the filter criteria. Pass
 		/// may examine the parents and/or descendants of a test, depending
@@ -27,5 +22,13 @@ namespace TCLite.Framework.Api
 		/// <param name="test">The test to which the filter is applied</param>
 		/// <returns>True if the test passes the fFilter, otherwise false</returns>
 		bool Pass( ITest test );
+
+        // /// <summary>
+        // /// Determine if a test matches the filter explicitly. That is, it must
+        // /// be a direct match of the test itself or one of its children.
+        // /// </summary>
+        // /// <param name="test">The test to which the filter is applied</param>
+        // /// <returns>True if the test matches the filter explicitly, otherwise false</returns>
+        // bool IsExplicitMatch(ITest test);
 	}
 }

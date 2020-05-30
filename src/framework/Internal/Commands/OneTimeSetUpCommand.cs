@@ -26,7 +26,7 @@ namespace TCLite.Framework.Internal.Commands
         {
             this.suite = suite;
             this.fixtureType = suite.FixtureType;
-            this.arguments = suite.arguments;
+            this.arguments = suite.Arguments;
         }
 
         /// <summary>
