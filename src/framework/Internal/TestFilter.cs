@@ -151,27 +151,27 @@ namespace TCLite.Framework.Internal
                     return new NotFilter(FromXml(node.FirstChild));
 
                 case "id":
-                    return new IdFilter(node.Value);
+                    return new IdFilter(node.InnerText);
 
                 case "test":
-                    return new FullNameFilter(node.Value) { IsRegex = isRegex };
+                    return new FullNameFilter(node.InnerText) { IsRegex = isRegex };
 
                 case "method":
-                    return new MethodNameFilter(node.Value) { IsRegex = isRegex };
+                    return new MethodNameFilter(node.InnerText) { IsRegex = isRegex };
 
                 case "class":
-                    return new ClassNameFilter(node.Value) { IsRegex = isRegex };
+                    return new ClassNameFilter(node.InnerText) { IsRegex = isRegex };
 
                 case "namespace":
-                    return new NamespaceFilter(node.Value) { IsRegex = isRegex };
+                    return new NamespaceFilter(node.InnerText) { IsRegex = isRegex };
 
                 case "cat":
-                    return new CategoryFilter(node.Value) { IsRegex = isRegex };
+                    return new CategoryFilter(node.InnerText) { IsRegex = isRegex };
 
                 case "prop":
                     string name = node.GetAttribute("name");
                     if (name != null)
-                        return new PropertyFilter(name, node.Value) { IsRegex = isRegex };
+                        return new PropertyFilter(name, node.InnerText) { IsRegex = isRegex };
                     break;
             }
 

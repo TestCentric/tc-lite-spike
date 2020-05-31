@@ -12,7 +12,7 @@ namespace TCLite.Framework.Internal.Filters
 	/// <summary>
 	/// SimpleName filter selects tests based on their name
 	/// </summary>
-    internal class FullNameFilter : ValueMatchFilter
+    public class FullNameFilter : ValueMatchFilter
     {
         /// <summary>
         /// Construct a FullNameFilter for a single name

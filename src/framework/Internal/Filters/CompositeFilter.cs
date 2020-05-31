@@ -13,7 +13,7 @@ namespace TCLite.Framework.Internal.Filters
     /// <summary>
     /// A base class for multi-part filters
     /// </summary>
-    internal abstract class CompositeFilter : TestFilter
+    public abstract class CompositeFilter : TestFilter
     {
         /// <summary>
         /// Constructs an empty CompositeFilter

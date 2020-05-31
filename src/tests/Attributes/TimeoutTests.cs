@@ -18,7 +18,7 @@ namespace TCLite.Framework.Attributes
         Thread parentThread;
         Thread setupThread;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void GetParentThreadInfo()
         {
 			this.parentThread = Thread.CurrentThread;

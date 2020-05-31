@@ -16,8 +16,7 @@ namespace TCLite.Framework.Internal.Filters
 	/// based on their categories.
 	/// </summary>
 	/// 
-	[Serializable]
-	internal class CategoryFilter : ValueMatchFilter
+	public class CategoryFilter : ValueMatchFilter
 	{
         List<string> categories = new List<string>();
 

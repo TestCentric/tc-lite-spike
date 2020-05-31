@@ -11,7 +11,7 @@ namespace TCLite.Framework.Internal.Filters
     /// <summary>
     /// FullName filter selects tests based on their FullName
     /// </summary>
-    internal class MethodNameFilter : ValueMatchFilter
+    public class MethodNameFilter : ValueMatchFilter
     {
         /// <summary>
         /// Construct a MethodNameFilter for a single name

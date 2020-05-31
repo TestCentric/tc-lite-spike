@@ -283,7 +283,7 @@ namespace TCLite.Framework.Attributes
     [TestFixture]
     class ChangesMadeInFixtureSetUp
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             GenericIdentity identity = new GenericIdentity("foo");

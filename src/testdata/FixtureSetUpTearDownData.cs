@@ -14,13 +14,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 		public int setUpCount = 0;
 		public int tearDownCount = 0;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void Init()
 		{
 			setUpCount++;
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public virtual void Destroy()
 		{
 			tearDownCount++;
@@ -39,13 +39,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public int setUpCount = 0;
         public int tearDownCount = 0;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void Init()
         {
             setUpCount++;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public virtual void Destroy()
         {
             tearDownCount++;
@@ -74,13 +74,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public int derivedSetUpCount;
         public int derivedTearDownCount;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public override void Init()
         {
             derivedSetUpCount++;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public override void Destroy()
         {
             derivedTearDownCount++;
@@ -102,14 +102,14 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public bool baseSetUpCalledFirst;
         public bool baseTearDownCalledLast;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Init2()
         {
             derivedSetUpCount++;
             baseSetUpCalledFirst = this.setUpCount > 0;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void Destroy2()
         {
             derivedTearDownCount++;
@@ -129,13 +129,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public static int setUpCount = 0;
         public static int tearDownCount = 0;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public static void Init()
         {
             setUpCount++;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public static void Destroy()
         {
             tearDownCount++;
@@ -152,14 +152,14 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public static bool baseTearDownCalledLast;
 
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public static void Init2()
         {
             derivedSetUpCount++;
             baseSetUpCalledFirst = setUpCount > 0;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public static void Destroy2()
         {
             derivedTearDownCount++;
@@ -173,13 +173,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
         public static int setUpCount = 0;
         public static int tearDownCount = 0;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public static void Init()
         {
             setUpCount++;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public static void Destroy()
         {
             tearDownCount++;
@@ -204,7 +204,7 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 			blowUpInTearDown = false;
 		}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void BlowUpInSetUp() 
 		{
 			setUpCount++;
@@ -212,7 +212,7 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 				throw new Exception("This was thrown from fixture setup");
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void BlowUpInTearDown()
 		{
 			tearDownCount++;
@@ -243,7 +243,7 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 	[TestFixture]
 	public class IgnoreInFixtureSetUp
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetUpCallsIgnore() 
 		{
 			Assert.Ignore( "TestFixtureSetUp called Ignore" );
@@ -261,13 +261,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 		public int setUpCount = 0;
 		public int tearDownCount = 0;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void TestFixtureSetUp()
 		{
 			setUpCount++;
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public virtual void TestFixtureTearDown()
 		{
 			tearDownCount++;
@@ -286,13 +286,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 		public bool setupCalled = false;
 		public bool teardownCalled = false;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void ShouldNotRun()
 		{
 			setupCalled = true;
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public virtual void NeitherShouldThis()
 		{
 			teardownCalled = true;
@@ -311,13 +311,13 @@ namespace TCLite.TestData.FixtureSetUpTearDownData
 		public bool setupCalled = false;
 		public bool teardownCalled = false;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public virtual void Init()
 		{
 			setupCalled = true;
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public virtual void Destroy()
 		{
 			teardownCalled = true;

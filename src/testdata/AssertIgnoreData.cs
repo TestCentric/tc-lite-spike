@@ -21,7 +21,7 @@ namespace TCLite.TestData.AssertIgnoreData
 	[TestFixture]
 	public class IgnoredTestSuiteFixture
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureSetUp()
 		{
 			Assert.Ignore("Ignore this fixture");

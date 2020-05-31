@@ -8,11 +8,12 @@ namespace TCLite.Framework
 	using System;
 
 	/// <summary>
-	/// Attribute used to identify a method that is 
-	/// called before any tests in a fixture are run.
+	/// Attribute used to identify a method that is called after
+	/// all the tests in a fixture have run. The method is 
+	/// guaranteed to be called, even if an exception is thrown.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true)]
-	public class TestFixtureSetUpAttribute : TCLiteAttribute
+	public class OneTimeTearDownAttribute : TCLiteAttribute
 	{
 	}
 }

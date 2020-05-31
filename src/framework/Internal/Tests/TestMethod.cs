@@ -47,6 +47,7 @@ namespace TCLite.Framework.Internal
             }
 
             Method = method;
+            MethodName = Method.Name;
         }
 
         #region Properties

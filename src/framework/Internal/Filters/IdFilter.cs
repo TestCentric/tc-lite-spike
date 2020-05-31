@@ -10,7 +10,7 @@ namespace TCLite.Framework.Internal.Filters
     /// <summary>
     /// IdFilter selects tests based on their id
     /// </summary>
-    internal class IdFilter : ValueMatchFilter
+    public class IdFilter : ValueMatchFilter
     {
         /// <summary>
         /// Construct an IdFilter for a single value

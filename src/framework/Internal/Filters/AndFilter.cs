@@ -12,10 +12,8 @@ namespace TCLite.Framework.Internal.Filters
 	/// Combines multiple filters so that a test must pass all 
 	/// of them in order to pass this filter.
     /// </summary>
-    internal class AndFilter : CompositeFilter
+    public class AndFilter : CompositeFilter
 	{
-		private List<ITestFilter> filters = new List<ITestFilter>();
-
 		/// <summary>
 		/// Constructs an empty AndFilter
 		/// </summary>
@@ -34,7 +32,7 @@ namespace TCLite.Framework.Internal.Filters
 		/// <returns>True if all the component filters pass, otherwise false</returns>
 		public override bool Pass( ITest test )
 		{
-			foreach( ITestFilter filter in filters )
+			foreach( ITestFilter filter in Filters )
 				if ( !filter.Pass( test ) )
 					return false;
 
@@ -48,7 +46,7 @@ namespace TCLite.Framework.Internal.Filters
 		/// <returns>True if all the component filters match, otherwise false</returns>
 		public override bool Match( ITest test )
 		{
-			foreach( TestFilter filter in filters )
+			foreach( TestFilter filter in Filters )
 				if ( !filter.Match( test ) )
 					return false;
 

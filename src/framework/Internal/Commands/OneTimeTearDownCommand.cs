@@ -42,7 +42,7 @@ namespace TCLite.Framework.Internal.Commands
             if (fixtureType != null)
             {
                 MethodInfo[] teardownMethods =
-                    Reflect.GetMethodsWithAttribute(fixtureType, typeof(TestFixtureTearDownAttribute), true);
+                    Reflect.GetMethodsWithAttribute(fixtureType, typeof(OneTimeTearDownAttribute), true);
 
                 try
                 {

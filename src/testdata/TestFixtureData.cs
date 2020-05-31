@@ -193,11 +193,11 @@ namespace TCLite.TestData.TestFixtureData
     [TestFixture]
 	public class MultipleFixtureSetUpAttributes
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init1()
 		{}
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Init2()
 		{}
 
@@ -208,11 +208,11 @@ namespace TCLite.TestData.TestFixtureData
 	[TestFixture]
 	public class MultipleFixtureTearDownAttributes
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void Destroy1()
 		{}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void Destroy2()
 		{}
 
@@ -300,28 +300,28 @@ namespace TCLite.TestData.TestFixtureData
 	[TestFixture]
 	public class PrivateFixtureSetUp : OneTestBase
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		private void Setup()	{}
 	}
 
 	[TestFixture]
 	public class ProtectedFixtureSetUp : OneTestBase
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		protected void Setup()	{}
 	}
 
 	[TestFixture]
 	public class StaticFixtureSetUp : OneTestBase
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public static void Setup() {}
 	}
 
 	[TestFixture]
 	public class FixtureSetUpWithReturnValue : OneTestBase
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public int Setup() { return 0; }
 	}
 
@@ -335,35 +335,35 @@ namespace TCLite.TestData.TestFixtureData
 	[TestFixture]
 	public class PrivateFixtureTearDown : OneTestBase
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		private void Teardown()	{}
 	}
 
 	[TestFixture]
 	public class ProtectedFixtureTearDown : OneTestBase
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		protected void Teardown()	{}
 	}
 
 	[TestFixture]
 	public class StaticFixtureTearDown : OneTestBase
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public static void Teardown() {}
 	}
 
 	[TestFixture]
 	public class FixtureTearDownWithReturnValue : OneTestBase
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public int Teardown() { return 0; }
 	}
 
 	[TestFixture]
 	public class FixtureTearDownWithParameters : OneTestBase
 	{
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void Teardown(int j) { }
 	}
 

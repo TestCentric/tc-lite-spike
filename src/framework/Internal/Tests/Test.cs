@@ -107,9 +107,11 @@ namespace TCLite.Framework.Internal
         {
             get
             {
-                return FixtureType.IsGenericType
-                    ? FixtureType.GetGenericTypeDefinition().FullName
-                    : FixtureType.FullName;
+                return FixtureType != null
+                    ? FixtureType.IsGenericType
+                        ? FixtureType.GetGenericTypeDefinition().FullName
+                        : FixtureType.FullName
+                    : null;
             }
         }
 
@@ -117,10 +119,7 @@ namespace TCLite.Framework.Internal
         /// Gets the name of the method implementing this test.
         /// Returns null if the test is not implemented as a method.
         /// </summary>
-        public virtual string MethodName
-        {
-            get { return null; }
-        }
+        public virtual string MethodName { get; protected set; }
 
         /// <summary>
         /// The arguments to use in creating the test or empty array if none required.

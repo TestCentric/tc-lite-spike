@@ -34,8 +34,6 @@ namespace TCLite.Runner
         private ITestAssemblyRunner _runner;
         private string _workDirectory;
 
-        private bool ShowHelp;
-
         public TestRunner()
         {
             _testAssembly = Assembly.GetCallingAssembly();

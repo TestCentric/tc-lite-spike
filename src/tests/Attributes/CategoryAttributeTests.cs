@@ -62,10 +62,10 @@ namespace TCLite.Framework.Attributes
         }
 
         [Test]
-        public void TestWithInvalidCategoryNameIsNotRunnable()
+        public void CategoryNameMayContainSpeckalCharacters()
         {
             Test test4 = (Test)fixture.Tests[3];
-            Assert.That(test4.RunState, Is.EqualTo(RunState.NotRunnable));
+            Assert.That(test4.RunState, Is.EqualTo(RunState.Runnable));
         }
 	}
 }

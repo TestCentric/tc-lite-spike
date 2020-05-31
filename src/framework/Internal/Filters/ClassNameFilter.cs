@@ -11,7 +11,7 @@ namespace TCLite.Framework.Internal.Filters
     /// <summary>
     /// ClassName filter selects tests based on the class FullName
     /// </summary>
-    internal class ClassNameFilter : ValueMatchFilter
+    public class ClassNameFilter : ValueMatchFilter
     {
         /// <summary>
         /// Construct a FullNameFilter for a single name

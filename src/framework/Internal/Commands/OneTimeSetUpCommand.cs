@@ -41,7 +41,7 @@ namespace TCLite.Framework.Internal.Commands
                 if (context.TestObject == null && !IsStaticClass(fixtureType))
                     context.TestObject = Reflect.Construct(fixtureType, arguments);
 
-                foreach (MethodInfo method in  Reflect.GetMethodsWithAttribute(fixtureType, typeof(TestFixtureSetUpAttribute), true))
+                foreach (MethodInfo method in  Reflect.GetMethodsWithAttribute(fixtureType, typeof(OneTimeSetUpAttribute), true))
                     Reflect.InvokeMethod(method, method.IsStatic ? null : context.TestObject);
             }
 

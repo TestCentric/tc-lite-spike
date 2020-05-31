@@ -32,13 +32,13 @@ namespace TCLite.Framework.Internal
         IPrincipal currentPrincipal;
 #endif
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             fixtureContext = TestExecutionContext.CurrentContext;
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void OneTimeTearDown()
         {
             // TODO: We put some tests in one time teardown to verify that

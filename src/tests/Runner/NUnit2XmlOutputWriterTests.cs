@@ -17,7 +17,7 @@ namespace TCLite.Runner.Tests
         private XmlNode cultureNode;
         private XmlNode suiteNode;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void RunMockAssemblyTests()
         {
             TestResult result = TCLite.TestUtilities.TestBuilder.RunTestFixture(typeof(MockTestFixture));

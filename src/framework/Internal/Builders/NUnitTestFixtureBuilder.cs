@@ -219,9 +219,9 @@ namespace TCLite.Framework.Builders
                 return;
             if (!CheckSetUpTearDownMethods(fixture, fixture.TearDownMethods))
                 return;
-            if (!CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(TestFixtureSetUpAttribute), true)))
+            if (!CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(OneTimeSetUpAttribute), true)))
                 return;
-            CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(TestFixtureTearDownAttribute), true));
+            CheckSetUpTearDownMethods(fixture, Reflect.GetMethodsWithAttribute(fixture.FixtureType, typeof(OneTimeTearDownAttribute), true));
         }
 
         private static bool HasValidConstructor(Type fixtureType, object[] args)
