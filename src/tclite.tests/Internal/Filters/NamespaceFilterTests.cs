@@ -34,12 +34,12 @@ namespace TCLite.Framework.Internal.Filters
         [Test]
         public void PassTest()
         {
-            //Assert.That(_filter.Pass(_nestingFixture), Is.EqualTo(_shouldMatch));
-            //Assert.That(_filter.Pass(_nestedFixture), Is.EqualTo(_shouldMatch));
-            //Assert.That(_filter.Pass(_emptyNestedFixture), Is.EqualTo(_shouldMatch));
+            Assert.That(_filter.Pass(_nestingFixture), Is.EqualTo(_shouldMatch));
+            Assert.That(_filter.Pass(_nestedFixture), Is.EqualTo(_shouldMatch));
+            Assert.That(_filter.Pass(_emptyNestedFixture), Is.EqualTo(_shouldMatch));
 
-            //Assert.That(_filter.Pass(_topLevelSuite), Is.EqualTo(_shouldMatch));
-            //Assert.That(_filter.Pass(_dummyFixture), Is.EqualTo(_shouldMatch));
+            Assert.That(_filter.Pass(_topLevelSuite), Is.EqualTo(_shouldMatch));
+            Assert.That(_filter.Pass(_dummyFixture), Is.EqualTo(_shouldMatch));
             Assert.That(_filter.Pass(_dummyFixture.Tests[0]), Is.EqualTo(_shouldMatch));
         }
 
