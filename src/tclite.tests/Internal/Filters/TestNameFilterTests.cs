@@ -7,11 +7,11 @@ namespace TCLite.Framework.Internal.Filters
 {
     [TestFixture(TestFilterTests.DUMMY_CLASS, false)]
     [TestFixture("Dummy", true)]
-    public class FullNameFilterTests : TestFilterTests
+    public class TestNameFilterTests : TestFilterTests
     {
         private readonly TestFilter _filter;
 
-        public FullNameFilterTests(string value, bool isRegex)
+        public TestNameFilterTests(string value, bool isRegex)
         {
             _filter = new FullNameFilter(value) { IsRegex = isRegex };
         }

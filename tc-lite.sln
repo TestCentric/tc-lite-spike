@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{020ACD8E-F468-423C-8563-C5ED57C49C60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tclite", "src\framework\tclite.csproj", "{772CC60B-5DB5-4EFD-AAED-1E37D9315CC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tclite", "src\tclite\tclite.csproj", "{772CC60B-5DB5-4EFD-AAED-1E37D9315CC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tclite.tests", "src\tests\tclite.tests.csproj", "{3B881F3A-A4EA-4F49-8101-FC6006474039}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tclite.tests", "src\tclite.tests\tclite.tests.csproj", "{3B881F3A-A4EA-4F49-8101-FC6006474039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
