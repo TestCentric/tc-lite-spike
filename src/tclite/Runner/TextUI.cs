@@ -115,7 +115,14 @@ namespace TCLite.Runner
             _writer.WriteLine(ColorStyle.Default, "    " + assemblyPath);
         }
 
-         /// <summary>
+        public void DisplayTestFilter(string whereClause)
+        {
+            WriteSectionHeader("Test Filter");
+            WriteLabelLine("    Where: ", whereClause.Trim());
+            _writer.WriteLine();
+        }
+
+        /// <summary>
         /// Prints the Summary Report
         /// </summary>
         public void DisplaySummaryReport(ResultSummary summary)

@@ -27,7 +27,20 @@ namespace TCLite.Framework.Internal.Filters
 		/// <returns>True if it matches, otherwise false</returns>
 		public override bool Match( ITest test )
 		{
-            return Match(test.FullName);
+            if(Match(test.FullName))
+                return true;
+
+            if (IsRegex)
+                return false; // Base class will have handled this
+
+            // Extra checks because the tree of tests does not contain
+            // any nodes for namespaces, only fixtures.
+            if (!test.FullName.StartsWith(ExpectedValue))
+                return false;
+
+            var ch = test.FullName[ExpectedValue.Length];
+
+            return ch == '.' || ch == '(';
 		}
 
         /// <summary>

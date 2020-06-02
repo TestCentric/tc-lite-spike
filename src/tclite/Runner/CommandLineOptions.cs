@@ -32,7 +32,7 @@ namespace TCLite.Runner
                 "",
                 "Select Tests:",
                 "",
-                { "where=", "(NYI) {TSL} expression indicating which tests will be run. See Test Selection Language note below. If omitted, all tests are run.",
+                { "where=", "{TSL} expression indicating which tests will be run. If omitted, all tests are run.",
                     v => WhereClause = RequiredValue(v, "--where") },
                 "",
                 "Determine HOW Tests are Run:",

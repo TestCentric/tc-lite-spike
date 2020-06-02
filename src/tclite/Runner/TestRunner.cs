@@ -9,10 +9,10 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Mono.Options;
+using TCLite.Framework;
 using TCLite.Framework.Api;
 using TCLite.Framework.Internal;
-using TCLite.Framework.Internal.Filters;
+using TCLite.Runner.TestSelection;
 
 namespace TCLite.Runner
 {
@@ -80,7 +80,14 @@ namespace TCLite.Runner
 
             var runSettings = MakeRunSettings(_options);
 
-            ITestFilter filter = TestFilter.Empty;
+            // We display the filters at this point so that any exception message
+            // thrown by CreateTestFilter will be understandable.
+            if (_options.WhereClauseSpecified)
+                _textUI.DisplayTestFilter(_options.WhereClause);
+
+            ITestFilter filter = _options.WhereClauseSpecified
+                ? CreateTestFilter(_options.WhereClause)
+                : TestFilter.Empty;
 
             try
             {
@@ -236,6 +243,14 @@ namespace TCLite.Runner
                 runSettings[FrameworkPackageSettings.TestParametersDictionary] = options.TestParameters;
 
             return runSettings;
+        }
+
+        public ITestFilter CreateTestFilter(string whereClause)
+        {
+            Guard.ArgumentNotNull(whereClause, nameof(whereClause));
+
+            string xmlText =  new TestSelectionParser().Parse(whereClause);
+            return TestFilter.FromXml($"<filter>{xmlText}</filter>");
         }
 
         #region ITestListener Members

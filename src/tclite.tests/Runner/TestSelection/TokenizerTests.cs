@@ -77,6 +77,16 @@ namespace TCLite.Runner.TestSelection
         }
 
         [Test]
+        public void StringMayContainParentheses()
+        {
+            var tokenizer = new Tokenizer("/string at start/ /Some.Method.With.Args(1, 2, 3)/ /string at end/");
+            Assert.That(tokenizer.NextToken(), Is.EqualTo(new Token(TokenKind.String, "string at start")));
+            Assert.That(tokenizer.NextToken(), Is.EqualTo(new Token(TokenKind.String, "Some.Method.With.Args(1, 2, 3)")));
+            Assert.That(tokenizer.NextToken(), Is.EqualTo(new Token(TokenKind.String, "string at end")));
+            Assert.That(tokenizer.NextToken(), Is.EqualTo(new Token(TokenKind.Eof)));
+        }
+
+        [Test]
         public void StringsMayContainEscapedQuoteChar()
         {
             var tokenizer = new Tokenizer("/abc\\/xyz/   'abc\\'xyz'  \"abc\\\"xyz\"");

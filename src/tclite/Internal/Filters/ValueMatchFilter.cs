@@ -57,7 +57,7 @@ namespace TCLite.Framework.Internal.Filters
         /// <returns>The added XML node</returns>
         public override XmlNode AddToXml(XmlNode parentNode, bool recursive)
         {
-            XmlNode result = XmlHelper.CreateTopLevelElement(ElementName);
+            XmlNode result = parentNode.AddElement(ElementName);
             result.InnerText = ExpectedValue;
             if (IsRegex)
                 result.AddAttribute("re", "1");
