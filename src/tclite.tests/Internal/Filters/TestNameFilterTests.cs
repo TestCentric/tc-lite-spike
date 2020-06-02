@@ -13,7 +13,7 @@ namespace TCLite.Framework.Internal.Filters
 
         public TestNameFilterTests(string value, bool isRegex)
         {
-            _filter = new FullNameFilter(value) { IsRegex = isRegex };
+            _filter = new TestNameFilter(value) { IsRegex = isRegex };
         }
 
         [Test]

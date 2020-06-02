@@ -99,7 +99,7 @@ namespace TCLite.Framework.Internal.Filters
             TestFilter filter = TestFilter.FromXml(
                 "<filter><test>" + TestFilterTests.DUMMY_CLASS + "</test></filter>");
 
-            Assert.That(filter, Is.TypeOf<FullNameFilter>());
+            Assert.That(filter, Is.TypeOf<TestNameFilter>());
             Assert.That(filter.Match(_dummyFixture));
             Assert.False(filter.Match(_anotherFixture));
         }
@@ -107,7 +107,7 @@ namespace TCLite.Framework.Internal.Filters
         [Test]
         public void FullNameFilter_ToXml()
         {
-            TestFilter filter = new FullNameFilter("FULLNAME");
+            TestFilter filter = new TestNameFilter("FULLNAME");
             Assert.That(filter.ToXml(false).OuterXml, Is.EqualTo("<test>FULLNAME</test>"));
         }
 
@@ -117,7 +117,7 @@ namespace TCLite.Framework.Internal.Filters
             TestFilter filter = TestFilter.FromXml(
                 "<filter><test re='1'>Dummy</test></filter>");
 
-            Assert.That(filter, Is.TypeOf<FullNameFilter>());
+            Assert.That(filter, Is.TypeOf<TestNameFilter>());
             Assert.That(filter.Match(_dummyFixture));
             Assert.False(filter.Match(_anotherFixture));
         }
@@ -125,7 +125,7 @@ namespace TCLite.Framework.Internal.Filters
         [Test]
         public void FullNameFilter_ToXml_Regex()
         {
-            TestFilter filter = new FullNameFilter("FULLNAME") { IsRegex = true };
+            TestFilter filter = new TestNameFilter("FULLNAME") { IsRegex = true };
             Assert.That(filter.ToXml(false).OuterXml, Is.EqualTo("<test re=\"1\">FULLNAME</test>"));
         }
 
