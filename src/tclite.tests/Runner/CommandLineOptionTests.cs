@@ -110,51 +110,23 @@ namespace TCLite.Runner.Tests
             Assert.That(_options.ErrorMessages[0], Is.EqualTo($"Missing required value for option '{option}'."));
         }
 
-#if !SILVERLIGHT && !NETCF
-        [Test, Ignore("NYI")]
+        [Test]
         public void TestExploreOptionWithNoFileName()
         {
-            _options.Parse("-explore");
+            _options.Parse("--explore");
             Assert.That(_options.Error, Is.False);
             Assert.That(_options.Explore, Is.True);
-            Assert.That(_options.ExploreFile, Is.EqualTo(Path.GetFullPath("tests.xml")));
+            Assert.That(_options.ExploreFile, Is.Null);
         }
 
-        [Test, Ignore("NYI")]
+        [Test]
         public void TestExploreOptionWithGoodFileName()
         {
             _options.Parse("-explore=MyFile.xml");
             Assert.That(_options.Error, Is.False);
             Assert.That(_options.Explore, Is.True);
-            Assert.That(_options.ExploreFile, Is.EqualTo(Path.GetFullPath("MyFile.xml")));
+            Assert.That(_options.ExploreFile, Is.EqualTo("MyFile.xml"));
         }
-
-        [Test, Ignore("NYI")]
-        public void TestExploreOptionWithBadFileName()
-        {
-            _options.Parse("--explore=MyFile*.xml");
-            Assert.That(_options.Error, Is.True);
-            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -explore=MyFile*.xml"));
-        }
-
-        [Test, Ignore("NYI")]
-        public void TestResultOptionWithBadFileName()
-        {
-            _options.Parse("-result=MyResult*.xml");
-            Assert.That(_options.Error, Is.True);
-            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -result=MyResult*.xml"));
-        }
-#endif
-
-#if !SILVERLIGHT && !NETCF
-        [Test, Ignore("NYI")]
-        public void TestOutOptionWithBadFileName()
-        {
-            _options.Parse("-out=my*file.txt");
-            Assert.True(_options.Error);
-            Assert.That(_options.ErrorMessages[0], Is.EqualTo("Invalid option: -out=my*file.txt"));
-        }
-#endif
 
         [Test]
         public void InvalidOptionProducesError()

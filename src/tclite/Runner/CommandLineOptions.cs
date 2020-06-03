@@ -79,7 +79,7 @@ namespace TCLite.Runner
                 "Test Output:",
                 "",
                 { "work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
-                    v => WorkDirectory = RequiredValue(v, "--work") },
+                    v =>  WorkDirectory = RequiredValue(v, "--work") },
 
                 { "out=", "(NYI) File {PATH} to contain text output from the tests.",
                     v => OutFile = RequiredValue(v, "--output") },
@@ -90,10 +90,11 @@ namespace TCLite.Runner
                 // { "result=", "An output {SPEC} for saving the test results. This option may be repeated.",
                 //     v => ResolveOutputSpecification(RequiredValue(v, "--resultxml"), resultOutputSpecifications) },
 
-                { "explore:", "(NYI) Explore tests rather than running them. The optional file PATH is used for the XML report describing the tests.", //Optionally provide an output {SPEC} for saving the test info. This option may be repeated.",
+                { "explore:", "Explore tests rather than running them. The optional {PATH} is used for the XML report describing the tests. It defaults to 'tests.xml'.", //Optionally provide an output {SPEC} for saving the test info. This option may be repeated.",
                     v =>
                     {
                         Explore = true;
+                        ExploreFile = v;
                         //ResolveOutputSpecification(v, ExploreOutputSpecifications);
                     } },
                 
@@ -185,10 +186,6 @@ namespace TCLite.Runner
 
         // private string workDirectory = null;
         public string WorkDirectory { get; private set; }
-        // {
-        //     get { return workDirectory ?? DEFAULT_WORK_DIRECTORY; }
-        // }
-        // public bool WorkDirectorySpecified { get { return workDirectory != null; } }
 
         public string InternalTraceLevel { get; private set; }
         public bool InternalTraceLevelSpecified { get { return InternalTraceLevel != null; } }
@@ -266,7 +263,10 @@ namespace TCLite.Runner
         protected string RequiredValue(string val, string option, params string[] validValues)
         {
             if (string.IsNullOrEmpty(val))
+            {
                 ErrorMessages.Add("Missing required value for option '" + option + "'.");
+                return null;
+            }
 
             bool isValid = true;
 

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Xml;
 using TCLite.Framework;
 using TCLite.Framework.Api;
@@ -189,23 +188,21 @@ namespace TCLite.Runner
         {
             XmlNode testNode = _runner.LoadedTest.ToXml(true);
 
-            // string listFile = _options.ExploreFile;
-            // TextWriter textWriter = listFile != null && listFile.Length > 0
-            //     ? new StreamWriter(listFile)
-            //     : Console.Out;
+            string exploreFile = _options.ExploreFile ?? "tests.xml";
+            if (!Path.IsPathRooted(exploreFile))
+                exploreFile = Path.Combine(_workDirectory, exploreFile);
 
-            TextWriter textWriter = Console.Out;
-
-            System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+            XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = System.Text.Encoding.UTF8;
-            System.Xml.XmlWriter testWriter = System.Xml.XmlWriter.Create(textWriter, settings);
+
+            XmlWriter testWriter = System.Xml.XmlWriter.Create(new StreamWriter(exploreFile), settings);
 
             testNode.WriteTo(testWriter);
             testWriter.Close();
 
             Console.WriteLine();
-            // Console.WriteLine("Test info saved as {0}.", listFile);
+            Console.WriteLine("Test info saved as {0}.", exploreFile);
 
             return OK;
         }
